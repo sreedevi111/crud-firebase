@@ -5,6 +5,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeScreen from './src/Screens/AfterLogin/HomeScreen';
 import DetailScreen from './src/Screens/AfterLogin/DetailScreen';
 import EditScreen from './src/Screens/AfterLogin/EditScreen';
+import AddPostScreen from './src/Screens/AfterLogin/AddPostScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -16,6 +17,7 @@ const App = () => {
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Detail" component={DetailScreen} />
           <Stack.Screen name="Edit" component={EditScreen} />
+          <Stack.Screen name="Add" component={AddPostScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaView>
