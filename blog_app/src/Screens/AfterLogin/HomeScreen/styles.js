@@ -4,6 +4,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: 'white',
+    padding: 10,
   },
   title: {
     color: 'black',
@@ -15,6 +16,11 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 10,
   },
+  image: {
+    width: 240,
+    height: 180,
+    color: 'black',
+  },
   comments: {
     color: 'blue',
   },
@@ -22,8 +28,22 @@ const styles = StyleSheet.create({
   renderContainer: {
     borderBottomWidth: 1,
     borderBottomColor: 'grey',
-    paddingVertical:10,
-    
+    paddingVertical: 10,
+    flexDirection: 'row',
+  },
+  details: {
+    flex: 2,
+  },
+  icons: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  plus: {
+    justifyContent: 'flex-end',
+    left: 300,
+    bottom: 10,
+    position: 'absolute',
   },
 });
 

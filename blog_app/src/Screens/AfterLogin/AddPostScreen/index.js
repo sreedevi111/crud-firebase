@@ -10,7 +10,7 @@ import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
 import firestore from '@react-native-firebase/firestore'
 
-const AddPostScreen = () => {
+const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
     Title: '',
     Name: '',
@@ -23,6 +23,7 @@ const AddPostScreen = () => {
     firestore().collection('Contacts').add({Title: state.Title, Name: state.Name, Email:state.Email, Phone:state.Phone})
     .then(res =>{
         console.log('Data entered', res);
+        navigation.navigate('Home')
     })
     .catch(error =>{
         console.log('Error occured', error);

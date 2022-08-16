@@ -1,14 +1,24 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import {StyleSheet, Text, View, Image, Button, TouchableOpacity} from 'react-native';
+import React from 'react';
+import {styles} from './styles';
 
-const index = () => {
+const LandingScreen = ({navigation}) => {
   return (
-    <View>
-      <Text>index</Text>
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        <Text style={styles.heading}>QUOTES LIBRARY</Text>
+        <Image
+          source={require('../../../Assets/Images/quotepic.png')}
+          style={styles.quoteIcon}
+        />
+       
+       <TouchableOpacity style={styles.readmore} onPress={()=>navigation.navigate('Home')}>
+        <Text style={styles.read}>READ MORE</Text>
+       </TouchableOpacity>
+      </View>
+
     </View>
-  )
-}
+  );
+};
 
-export default index
-
-const styles = StyleSheet.create({})
+export default LandingScreen;
