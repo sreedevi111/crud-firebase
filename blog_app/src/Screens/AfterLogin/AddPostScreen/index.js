@@ -1,14 +1,9 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  TouchableOpacity,
-  Button,
-} from 'react-native';
-import React, {useState, useEffect} from 'react';
+import {View, TextInput, Button} from 'react-native';
+import React, {useState} from 'react';
 import {styles} from './styles';
-import firestore from '@react-native-firebase/firestore'
+import firestore from '@react-native-firebase/firestore';
+import ImagePicker from 'react-native-image-crop-picker'
+
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -20,14 +15,21 @@ const AddPostScreen = ({navigation}) => {
 
   const submit = () => {
     console.log('triggered');
-    firestore().collection('Contacts').add({Title: state.Title, Name: state.Name, Email:state.Email, Phone:state.Phone})
-    .then(res =>{
+    firestore()
+      .collection('Contacts')
+      .add({
+        Title: state.Title,
+        Name: state.Name,
+        Email: state.Email,
+        Phone: state.Phone,
+      })
+      .then(res => {
         console.log('Data entered', res);
-        navigation.navigate('Home')
-    })
-    .catch(error =>{
+        navigation.navigate('Home');
+      })
+      .catch(error => {
         console.log('Error occured', error);
-    })
+      });
   };
   return (
     <View style={styles.container}>

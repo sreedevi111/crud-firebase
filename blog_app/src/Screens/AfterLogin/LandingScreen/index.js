@@ -1,4 +1,9 @@
-import {StyleSheet, Text, View, Image, Button, TouchableOpacity} from 'react-native';
+import {
+  Text,
+  View,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import React from 'react';
 import {styles} from './styles';
 
@@ -11,12 +16,13 @@ const LandingScreen = ({navigation}) => {
           source={require('../../../Assets/Images/quotepic.png')}
           style={styles.quoteIcon}
         />
-       
-       <TouchableOpacity style={styles.readmore} onPress={()=>navigation.navigate('Home')}>
-        <Text style={styles.read}>READ MORE</Text>
-       </TouchableOpacity>
-      </View>
 
+        <TouchableOpacity
+          style={styles.readmore}
+          onPress={() => navigation.navigate('Home')}>
+          <Text style={styles.read}>READ MORE</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };

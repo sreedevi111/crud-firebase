@@ -15,7 +15,7 @@ const App = () => {
     <SafeAreaView style={styles.mainContainer}>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Landing" component={LandingScreen} />
+          <Stack.Screen options={{ headerShown: false }} name="Landing" component={LandingScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Detail" component={DetailScreen} />
           <Stack.Screen name="Edit" component={EditScreen} />
