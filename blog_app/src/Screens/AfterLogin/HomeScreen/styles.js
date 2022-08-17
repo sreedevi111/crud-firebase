@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
   image: {
     width: 240,
     height: 180,
-    resizeMode: 'cover',
   },
   comments: {
     color: 'blue',

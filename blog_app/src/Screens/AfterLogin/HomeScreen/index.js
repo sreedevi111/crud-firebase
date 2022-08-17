@@ -44,7 +44,7 @@ const HomeScreen = ({navigation}) => {
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
-          <Image source={item.Image} style={styles.image} />
+          <Image style={styles.image} source={item.Image}  />
         </View>
 
         <TouchableOpacity

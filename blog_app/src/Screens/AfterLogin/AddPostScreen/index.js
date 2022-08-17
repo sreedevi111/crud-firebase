@@ -1,17 +1,34 @@
 import {View, TextInput, Button} from 'react-native';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
 import firestore from '@react-native-firebase/firestore';
 import ImagePicker from 'react-native-image-crop-picker'
 
 
 const AddPostScreen = ({navigation}) => {
+
+  
   const [state, setState] = useState({
     Title: '',
     Name: '',
     Email: '',
     Phone: '',
   });
+
+  useEffect(()=>{
+   
+  }, [])
+
+
+// const openCamera = () =>{
+//   ImagePicker.openCamera({
+//     width: 300,
+//     height: 400,
+//     cropping: true,
+//   }).then(image => {
+//     console.log(image);
+//   });
+// }
 
   const submit = () => {
     console.log('triggered');
