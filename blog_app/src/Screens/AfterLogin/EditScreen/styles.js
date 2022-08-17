@@ -25,6 +25,16 @@ const styles = StyleSheet.create({
     color: 'black',
     paddingVertical: 20,
   },
+  imagePicker:{
+    width:250,
+    height:250,
+    borderRadius:30,
+    borderColor: 'grey',
+    borderWidth: 1,
+    justifyContent:'center',
+    alignItems:'center'
+
+  },
 });
 
 export {styles};

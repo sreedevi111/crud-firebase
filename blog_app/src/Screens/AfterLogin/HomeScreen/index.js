@@ -36,7 +36,9 @@ const HomeScreen = ({navigation}) => {
   };
 
   const renderItem = ({item}) => {
+    // console.log('Item in renderlist', item);
     console.log('Item in renderlist', item);
+
     return (
       <View style={styles.renderContainer}>
         <View style={styles.details}>
@@ -62,6 +64,7 @@ const HomeScreen = ({navigation}) => {
               Name: item.Name,
               Email: item.Email,
               Phone: item.Phone,
+              Image: item.Image,
               reload: getData(),
             })
           }>

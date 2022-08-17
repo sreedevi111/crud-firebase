@@ -2,6 +2,8 @@ import {
   View,
   TextInput,
   Button,
+  Text,
+  TouchableOpacity
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -9,7 +11,7 @@ import firestore from '@react-native-firebase/firestore';
 import Toast from 'react-native-simple-toast';
 
 const EditScreen = ({navigation, route}) => {
-  console.log('Route of edit:', route);
+  console.log('Route of edit:', route.params);
   const [state, setState] = useState({
     Title: route.params.Title,
     Name: route.params.Name,
@@ -70,6 +72,13 @@ const EditScreen = ({navigation, route}) => {
         onChangeText={Phone => setState(prev => ({...prev, Phone}))}
         style={styles.name}
       />
+
+      <View>
+      <Text style={{color: 'black', left:50}}>Edit Image &#128247;</Text>
+      <TouchableOpacity style={styles.imagePicker}>
+      </TouchableOpacity>
+      </View>
+
 
       <Button onPress={submit} title="Submit" />
     </View>
