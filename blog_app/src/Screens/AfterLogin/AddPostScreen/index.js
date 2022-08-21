@@ -56,74 +56,36 @@ const AddPostScreen = ({navigation}) => {
       });
   };
 
-  const submit = () => {
+  const submit = async () => {
     if (String(state.Title).length < 3) {
       Toast.show('Title should contain min 4 characters');
     }
 
     var tmpID = null;
     var imagename = '';
-    firestore()
-      .collection('Contacts')
-      .add({
+    try {
+      var res = await firestore().collection('Contacts').add({
         Title: state.Title,
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
-      })
-      .then(res => {
-        console.log('Step1: res:', res.id);
-        tmpID = res.id;
+      });
+      if (res) {
         var extension = '';
         if (selectedImage.mime === 'image/jpeg') {
           extension = 'jpg';
         } else if (selectedImage.mime === 'image/png') {
           extension = 'png';
         }
-
-        imagename = `${tmpID}.${extension}`;
-        console.log('Image name:', imagename);
-
-        return storage().ref('sample.jpeg').putFile(selectedImage.path);
-      })
-      .then(uploadedFile => {
-        return storage().ref('sample.jpeg').getDownloadURL();
-      })
-      .then(url => {
-        console.log('Url image:', url);
-        firestore().collection('Contacts').doc(tmpID).update({Image: url});
-      })
-      .then(() => {
-        console.log('Whole Process is done');
-        Toast.show('Post updated successfully!!');
-      })
-      .catch(error => {
-        console.log('Error of image: ', error);
-      });
-    // console.log('triggered');
-    // firestore()
-    //   .collection('Contacts')
-    //   .add({
-    //     Title: state.Title,
-    //     Name: state.Name,
-    //     Email: state.Email,
-    //     Phone: state.Phone,
-    //     Image: state.Image,
-    //     // Image:
-    //     //   'https://firebasestorage.googleapis.com/v0/b/crud-app-3cd08.appspot.com/o/hd-photo.jpeg?alt=media&token=f3d34a9e-3791-44ef-8754-ade36234fa9a',
-    //   })
-    //   .then(res => {
-    //     console.log('Data entered', res);
-    //     console.log('Data entered response id', res.id);
-    //     console.log(' Checking selected image ', selectedImage);
-    //     console.log(' Checking selected image path ', selectedImage.path);
-
-    //     // storage().ref('sample.jpeg').putFile(selectedImage.path);
-    //     navigation.navigate('Home');
-    //   })
-    //   .catch(error => {
-    //     console.log('Error occured', error);
-    //   });
+        imagename = `${res.id}.${extension}`;
+        await storage().ref('sample.jpeg').putFile(selectedImage.path);
+        var url = await storage().ref('sample.jpeg').getDownloadURL();
+        firestore().collection('Contacts').doc(res.id).update({Image: url});
+      }
+    } catch (error) {
+      console.log('Image failed to upload', error);
+      Toast.show('Image failed to upload');
+    }
   };
 
   const openActionSheet = () => {
