@@ -17,8 +17,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   image: {
-    width: 240,
+    width: 200,
     height: 180,
+    borderRadius:20
     // backgroundColor:'black'
   },
   comments: {
@@ -26,18 +27,23 @@ const styles = StyleSheet.create({
   },
 
   renderContainer: {
-    borderBottomWidth: 1,
-    borderBottomColor: 'grey',
+    borderWidth: 1,
+    width:'100%',
+borderRadius:20,
+padding:10,
+    borderColor: 'grey',
     paddingVertical: 10,
     flexDirection: 'row',
+    marginBottom:20
   },
   details: {
     flex: 2,
   },
   icons: {
     flex: 1,
-    alignItems: 'center',
+    alignItems: 'flex-end',
     justifyContent: 'center',
+   
   },
   plus: {
     justifyContent: 'flex-end',

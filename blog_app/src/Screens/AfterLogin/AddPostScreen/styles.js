@@ -34,6 +34,15 @@ const styles = StyleSheet.create({
     alignItems:'center'
 
   },
+  imageUpload:{
+width:240,
+height:240,
+// margin:30,
+// alignItems:'center',
+borderRadius:30,
+
+
+  },
   button:{
     width:100,
     height:50,

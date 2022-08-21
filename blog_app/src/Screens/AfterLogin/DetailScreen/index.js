@@ -1,14 +1,16 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ScrollView } from 'react-native'
 import React, {useState, useEffect} from 'react'
+import { styles } from './styles'
 
 const DetailScreen = () => {
   return (
-    <View>
-      <Text>DetailScreen</Text>
+    <View style={styles.container}>
+      <ScrollView>
+        
+      </ScrollView>
     </View>
   )
 }
 
 export default DetailScreen
 
-const styles = StyleSheet.create({})

@@ -1,9 +1,19 @@
-import {View, TextInput, Button, TouchableOpacity, Text, Platform} from 'react-native';
+import {
+  View,
+  TextInput,
+  Button,
+  TouchableOpacity,
+  Text,
+  Platform,
+  Image,
+} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
-import firestore from '@react-native-firebase/firestore';
+import firestore from '@react-native-firebase/firestore'; //for db
+import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
+import Toast from 'react-native-simple-toast';
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -11,7 +21,9 @@ const AddPostScreen = ({navigation}) => {
     Name: '',
     Email: '',
     Phone: '',
+    Image: '',
   });
+  const [selectedImage, setSelectedImage] = useState(null);
 
   useEffect(() => {}, []);
 
@@ -19,10 +31,11 @@ const AddPostScreen = ({navigation}) => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
-      cropping: true,
+      // cropping: true,
     })
       .then(image => {
         console.log(image);
+        setSelectedImage(image);
       })
       .catch(error => {
         console.log('Error in catching image', error);
@@ -36,6 +49,7 @@ const AddPostScreen = ({navigation}) => {
     })
       .then(image => {
         console.log(image);
+        setSelectedImage(image);
       })
       .catch(error => {
         console.log('Error in catching image', error);
@@ -43,7 +57,12 @@ const AddPostScreen = ({navigation}) => {
   };
 
   const submit = () => {
-    console.log('triggered');
+    if (String(state.Title).length < 3) {
+      Toast.show('Title should contain min 4 characters');
+    }
+
+    var tmpID = null;
+    var imagename = '';
     firestore()
       .collection('Contacts')
       .add({
@@ -51,48 +70,85 @@ const AddPostScreen = ({navigation}) => {
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
-        Image:
-          'https://firebasestorage.googleapis.com/v0/b/crud-app-3cd08.appspot.com/o/hd-photo.jpeg?alt=media&token=f3d34a9e-3791-44ef-8754-ade36234fa9a',
       })
       .then(res => {
-        console.log('Data entered', res);
-        state();
-        navigation.navigate('Home');
+        console.log('Step1: res:', res.id);
+        tmpID = res.id;
+        var extension = '';
+        if (selectedImage.mime === 'image/jpeg') {
+          extension = 'jpg';
+        } else if (selectedImage.mime === 'image/png') {
+          extension = 'png';
+        }
+
+        imagename = `${tmpID}.${extension}`;
+        console.log('Image name:', imagename);
+
+        return storage().ref('sample.jpeg').putFile(selectedImage.path);
+      })
+      .then(uploadedFile => {
+        return storage().ref('sample.jpeg').getDownloadURL();
+      })
+      .then(url => {
+        console.log('Url image:', url);
+        firestore().collection('Contacts').doc(tmpID).update({Image: url});
+      })
+      .then(() => {
+        console.log('Whole Process is done');
+        Toast.show('Post updated successfully!!');
       })
       .catch(error => {
-        console.log('Error occured', error);
+        console.log('Error of image: ', error);
       });
+    // console.log('triggered');
+    // firestore()
+    //   .collection('Contacts')
+    //   .add({
+    //     Title: state.Title,
+    //     Name: state.Name,
+    //     Email: state.Email,
+    //     Phone: state.Phone,
+    //     Image: state.Image,
+    //     // Image:
+    //     //   'https://firebasestorage.googleapis.com/v0/b/crud-app-3cd08.appspot.com/o/hd-photo.jpeg?alt=media&token=f3d34a9e-3791-44ef-8754-ade36234fa9a',
+    //   })
+    //   .then(res => {
+    //     console.log('Data entered', res);
+    //     console.log('Data entered response id', res.id);
+    //     console.log(' Checking selected image ', selectedImage);
+    //     console.log(' Checking selected image path ', selectedImage.path);
+
+    //     // storage().ref('sample.jpeg').putFile(selectedImage.path);
+    //     navigation.navigate('Home');
+    //   })
+    //   .catch(error => {
+    //     console.log('Error occured', error);
+    //   });
   };
 
+  const openActionSheet = () => {
+    var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
 
-const openActionSheet =() =>{
-  var BUTTONSiOS = [
-    'Camera',
-    'CameraRoll',
-    'Cancel'
-  ];
-   
-  var BUTTONSandroid = [
-    'Camera',
-    'ImageGallery',
-    'Cancel'
-  
-  ];
-   
- 
-  var CANCEL_INDEX = 2;
-   
-  ActionSheet.showActionSheetWithOptions({
-    options: (Platform.OS == 'ios') ? BUTTONSiOS : BUTTONSandroid,
-    cancelButtonIndex: CANCEL_INDEX,
-    tintColor: 'blue'
-  },
-  (buttonIndex) => {
-    console.log('button clicked :', buttonIndex);
-  });
-  
-}
+    var BUTTONSandroid = ['Camera', 'ImageGallery', 'Cancel'];
 
+    var CANCEL_INDEX = 2;
+
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: Platform.OS == 'ios' ? BUTTONSiOS : BUTTONSandroid,
+        cancelButtonIndex: CANCEL_INDEX,
+        tintColor: 'blue',
+      },
+      buttonIndex => {
+        console.log('button clicked :', buttonIndex);
+        if (buttonIndex == 0) {
+          openCamera();
+        } else if (buttonIndex == 1) {
+          openGallery();
+        }
+      },
+    );
+  };
 
   return (
     <View style={styles.container}>
@@ -127,7 +183,15 @@ const openActionSheet =() =>{
       />
 
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
-        <Text style={{color: 'black'}}>Upload an Image &#128247;</Text>
+        <Text style={{color: 'black', zIndex: 0}}>
+          Upload an Image &#128247;
+        </Text>
+        {selectedImage != null && (
+          <Image
+            source={{uri: selectedImage.path}}
+            style={styles.imageUpload}
+          />
+        )}
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.button} onPress={submit}>

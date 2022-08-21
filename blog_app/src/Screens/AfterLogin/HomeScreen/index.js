@@ -14,6 +14,7 @@ import {styles} from './styles';
 
 const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
+  
 
   useEffect(() => {
     getData();
@@ -40,13 +41,14 @@ const HomeScreen = ({navigation}) => {
     console.log('Item in renderlist', item);
 
     return (
-      <View style={styles.renderContainer}>
-        <View style={styles.details}>
+      <View style={styles.renderContainer} >
+        <View style={styles.details} onPress={() => navigation.navigate('Detail')}>
           <Text style={styles.title}>{item.Title}</Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
-          <Image style={styles.image} source={item.Image}  />
+          {/* <Image style={styles.image} source={item.Image}  /> */}
+          <Image style={styles.image} source={{uri:item.Image}}  />
         </View>
 
         <TouchableOpacity
@@ -68,7 +70,7 @@ const HomeScreen = ({navigation}) => {
               reload: getData(),
             })
           }>
-          <AntDesign name="edit" color="blue" size={18} />
+          <AntDesign name="edit" color="blue" size={20} />
         </TouchableOpacity>
       </View>
     );
