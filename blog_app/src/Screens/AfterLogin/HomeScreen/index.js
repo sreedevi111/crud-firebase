@@ -41,20 +41,34 @@ const HomeScreen = ({navigation}) => {
     console.log('Item in renderlist', item);
 
     return (
-      <View style={styles.renderContainer} >
-        <View style={styles.details} onPress={() => navigation.navigate('Detail')}>
-          <Text style={styles.title}>{item.Title}</Text>
+      <View style={styles.renderContainer}>
+        <View
+          style={styles.details}
+         >
+          <Text style={styles.title}  onPress={() =>
+            navigation.navigate('Detail', {
+              id: item.id,
+              Title: item.Title,
+              Name: item.Name,
+              Email: item.Email,
+              Phone: item.Phone,
+              Image: item.Image,
+            })
+          }>{item.Title}</Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
           {/* <Image style={styles.image} source={item.Image}  /> */}
-          <Image style={styles.image} source={{uri:item.Image}}  />
+          <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 
         <TouchableOpacity
           style={styles.icons}
           onPress={() => preDelete(item.id)}>
-          <AntDesign name="delete" color="red" size={18} />
+            <View style={styles.deleteButton}>
+            <AntDesign name="delete" color="red" size={18} />
+            </View>
+          
         </TouchableOpacity>
 
         <TouchableOpacity
@@ -70,7 +84,10 @@ const HomeScreen = ({navigation}) => {
               reload: getData(),
             })
           }>
-          <AntDesign name="edit" color="blue" size={20} />
+            <View style={styles.editButton}>
+            <AntDesign name="edit" color="blue" size={20} />
+            </View>
+          
         </TouchableOpacity>
       </View>
     );

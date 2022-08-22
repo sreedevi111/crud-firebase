@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   image: {
     width: 200,
     height: 180,
-    borderRadius:20
+    borderRadius: 20,
     // backgroundColor:'black'
   },
   comments: {
@@ -28,13 +28,13 @@ const styles = StyleSheet.create({
 
   renderContainer: {
     borderWidth: 1,
-    width:'100%',
-borderRadius:20,
-padding:10,
+    width: '100%',
+    borderRadius: 20,
+    padding: 10,
     borderColor: 'grey',
     paddingVertical: 10,
     flexDirection: 'row',
-    marginBottom:20
+    marginBottom: 20,
   },
   details: {
     flex: 2,
@@ -43,13 +43,21 @@ padding:10,
     flex: 1,
     alignItems: 'flex-end',
     justifyContent: 'center',
-   
+    // height:20,
   },
   plus: {
     justifyContent: 'flex-end',
     left: 300,
     bottom: 10,
     position: 'absolute',
+  },
+  deleteButton: {
+    height: 20,
+    width: 20,
+  },
+  editButton: {
+    height: 20,
+    width: 20,
   },
 });
 
