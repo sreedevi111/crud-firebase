@@ -6,6 +6,7 @@ import {
   Text,
   Platform,
   Image,
+  ActivityIndicator
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -24,6 +25,7 @@ const AddPostScreen = ({navigation}) => {
     Image: '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {}, []);
 
@@ -61,6 +63,8 @@ const AddPostScreen = ({navigation}) => {
       Toast.show('Title should contain min 4 characters');
     }
 
+    setLoading(true);
+
     var tmpID = null;
     var imagename = '';
     try {
@@ -71,6 +75,9 @@ const AddPostScreen = ({navigation}) => {
         Phone: state.Phone,
       });
       if (res) {
+      //  console.log("Selected image path", selectedImage.path)
+        // if(selectedImage !== null && typeof selectedImage.path !== undefined){
+          if(selectedImage?.path){
         var extension = '';
         if (selectedImage.mime === 'image/jpeg') {
           extension = 'jpg';
@@ -80,7 +87,14 @@ const AddPostScreen = ({navigation}) => {
         imagename = `${res.id}.${extension}`;
         await storage().ref('sample.jpeg').putFile(selectedImage.path);
         var url = await storage().ref('sample.jpeg').getDownloadURL();
-        firestore().collection('Contacts').doc(res.id).update({Image: url});
+        await firestore().collection('Contacts').doc(res.id).update({Image: url});
+        setLoading(false)
+        Toast.show("Image updated successfully!!!")
+      }
+      else {
+        setLoading(false)
+        Toast.show("Image updated successfully!!!")
+      }
       }
     } catch (error) {
       console.log('Image failed to upload', error);
@@ -114,6 +128,10 @@ const AddPostScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
+      {
+        loading &&   <ActivityIndicator animating size={'large'}/>
+      }
+     
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Title"
