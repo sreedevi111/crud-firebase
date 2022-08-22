@@ -14,6 +14,7 @@ import {styles} from './styles';
 
 const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
+  const [visited, setVisited] = useState([])
   
 
   useEffect(() => {
@@ -36,6 +37,20 @@ const HomeScreen = ({navigation}) => {
       });
   };
 
+  useEffect(() =>{
+    console.log("Visited current is >", visited)
+  }, [visited])
+
+  const visitDetail = (id) =>{
+    var tempVisited = visited;
+    if(tempVisited.indexOf(id) == -1){
+      tempVisited.push(id)
+    }
+    setVisited([...tempVisited])
+    tempVisited.push(id)
+
+  }
+
   const renderItem = ({item}) => {
     // console.log('Item in renderlist', item);
     console.log('Item in renderlist', item);
@@ -45,7 +60,8 @@ const HomeScreen = ({navigation}) => {
         <View
           style={styles.details}
          >
-          <Text style={styles.title}  onPress={() =>
+          <Text style={[styles.title, {color:visited.indexOf(item.id) !==-1 ? '#3e67ed' : 'black' }]}  onPress={() =>
+          {visitDetail(item.id);
             navigation.navigate('Detail', {
               id: item.id,
               Title: item.Title,
@@ -54,7 +70,7 @@ const HomeScreen = ({navigation}) => {
               Phone: item.Phone,
               Image: item.Image,
             })
-          }>{item.Title}</Text>
+          }}>{item.Title}</Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
