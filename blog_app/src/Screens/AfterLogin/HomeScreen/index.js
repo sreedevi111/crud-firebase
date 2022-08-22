@@ -11,6 +11,7 @@ import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
@@ -18,8 +19,23 @@ const HomeScreen = ({navigation}) => {
   
 
   useEffect(() => {
-    getData();
+    getVisitedData()
+    getData()
   }, []);
+
+const getVisitedData =  async () =>{
+  try {
+    let jsonValue = await AsyncStorage.getItem('@visited')
+    console.log("JSON VALUE", jsonValue);
+    if(jsonValue!=null){
+      jsonValue = JSON.parse(jsonValue)
+      setVisited(jsonValue)
+    }
+  } catch(e) {
+    // error reading value
+    console.log("ERROR:", e);
+  }
+}
 
   const getData = () => {
     const dataArray = [];
@@ -41,19 +57,28 @@ const HomeScreen = ({navigation}) => {
     console.log("Visited current is >", visited)
   }, [visited])
 
-  const visitDetail = (id) =>{
+  const visitDetail = async (id) =>{
     var tempVisited = visited;
     if(tempVisited.indexOf(id) == -1){
       tempVisited.push(id)
     }
     setVisited([...tempVisited])
-    tempVisited.push(id)
+    try {
+      var convertToString = JSON.stringify(tempVisited)
+      await AsyncStorage.setItem('@visited', convertToString)
+     console.log("WE UPDATED STORAGE TOOO");
+    } 
+    catch(e) {
+      // error reading value
+      console.log("ERROR TO SAVE DATA::", e);
+    }
+   
 
   }
 
   const renderItem = ({item}) => {
     // console.log('Item in renderlist', item);
-    console.log('Item in renderlist', item);
+    // console.log('Item in renderlist', item);
 
     return (
       <View style={styles.renderContainer}>
