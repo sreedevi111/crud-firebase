@@ -6,7 +6,8 @@ import HomeScreen from './src/Screens/AfterLogin/HomeScreen';
 import DetailScreen from './src/Screens/AfterLogin/DetailScreen';
 import EditScreen from './src/Screens/AfterLogin/EditScreen';
 import AddPostScreen from './src/Screens/AfterLogin/AddPostScreen';
-import LandingScreen from './src/Screens/AfterLogin/LandingScreen';
+import LandingScreen from './src/Screens/BeforeLogin/LandingScreen';
+import LoginScreen from './src/Screens/BeforeLogin/LoginScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,6 +16,7 @@ const App = () => {
     <SafeAreaView style={styles.mainContainer}>
       <NavigationContainer>
         <Stack.Navigator>
+          <Stack.Screen options={{ headerShown: false }} name='Login' component={LoginScreen} />
           <Stack.Screen options={{ headerShown: false }} name="Landing" component={LandingScreen} />
           <Stack.Screen name="Home" component={HomeScreen} />
           <Stack.Screen name="Detail" component={DetailScreen} />

@@ -4,11 +4,11 @@ import {styles} from './styles';
 
 const DetailScreen = ({navigation, route}) => {
   const [state, setState] = useState({
-    Title: route.params.Title,
-    Name: route.params.Name,
-    Email: route.params.Email,
-    Phone: route.params.Phone,
-    Image: route.params.Image,
+    Title: route.params.item.Title,
+    Name: route.params.item.Name,
+    Email: route.params.item.Email,
+    Phone: route.params.item.Phone,
+    Image: route.params.item.Image,
   });
   return (
     <View style={styles.container}>

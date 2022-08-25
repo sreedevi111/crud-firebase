@@ -88,12 +88,14 @@ const getVisitedData =  async () =>{
           <Text style={[styles.title, {color:visited.indexOf(item.id) !==-1 ? '#3e67ed' : 'black' }]}  onPress={() =>
           {visitDetail(item.id);
             navigation.navigate('Detail', {
-              id: item.id,
-              Title: item.Title,
-              Name: item.Name,
-              Email: item.Email,
-              Phone: item.Phone,
-              Image: item.Image,
+              // id: item.id,
+              // Title: item.Title,
+              // Name: item.Name,
+              // Email: item.Email,
+              // Phone: item.Phone,
+              // Image: item.Image,
+              // item:item
+              item
             })
           }}>{item.Title}</Text>
           <Text style={styles.name}>Author:{item.Name}</Text>

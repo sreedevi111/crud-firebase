@@ -14,6 +14,7 @@ const styles = StyleSheet.create({
     color: 'yellow',
     fontWeight: '700',
     fontSize: 30,
+    
   },
   quoteIcon: {
     height: 120,
