@@ -1,7 +1,10 @@
-import {Text, TextInput, View, TouchableOpacity, Pressable, Modal} from 'react-native';
+import {Text, TextInput, View, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import ModalView from '../../../Components/ModalView';
+// import CheckBox from '@react-native-community/checkbox';
+import CheckBox from '@react-native-community/checkbox';
 
 const LoginScreen = () => {
   const [state, setState] = useState({
@@ -13,7 +16,8 @@ const LoginScreen = () => {
     passwordTestFail: null,
   });
 
-  const[modalVisible, setModalVisible] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selected, setSelected] = useState(false);
 
   const onChangeEmail = text => {
     setState(prev => ({...prev, email: text}));
@@ -45,10 +49,6 @@ const LoginScreen = () => {
     <View style={styles.container}>
       <View style={styles.loginContainer}>
         <Text style={styles.LoginText}>Login</Text>
-        <Text style={styles.conditionText}>
-          By signing in you are agreeing {'\n'} our
-          <Text style={{color: 'blue'}}   onPress={() => setModalVisible(true)}> Term and privacy policy</Text>
-        </Text>
 
         <View style={styles.email_container}>
           <View>
@@ -70,7 +70,6 @@ const LoginScreen = () => {
             The input is not a valid email address
           </Text>
         )}
-
 
         <View style={styles.password_container}>
           <View>
@@ -101,38 +100,42 @@ const LoginScreen = () => {
             />
           </TouchableOpacity>
 
-{state.passwordTestFail === false && (
-    <Text style={styles.error_msg}> Invalid Password</Text>
-)}
-
+          {state.passwordTestFail === false && (
+            <Text style={styles.error_msg}> Invalid Password</Text>
+          )}
         </View>
 
+        <View style={styles.checkboxContainer}> 
+         {/* <CheckBox
+            value={selected}
+            onValueChange={setSelected}
+            style={styles.checkbox}
+          />  */}
+
+          <Text style={styles.conditionText}>
+            By signing in you are agreeing {'\n'} our
+            <Text
+              style={{color: 'blue'}}
+              onPress={() => {
+                console.log('jhfhkgjgvj');
+                setModalVisible(true);
+                console.log('::', modalVisible);
+              }}>
+              {' '}
+              Term and privacy policy
+            </Text>
+          </Text>
+        </View>
 
         <TouchableOpacity style={styles.submit_button}>
           <Text style={styles.login_button}>Login</Text>
         </TouchableOpacity>
       </View>
-      <Modal
-        animationType="slide"
-        transparent={true}
+      <ModalView
+        modalContent={'You are moving to privacy policy page'}
         visible={modalVisible}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisible(!modalVisible);
-        }}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}>
-            <Text style={styles.modalText}>Hello World!</Text>
-            <Pressable
-              style={[styles.button, styles.buttonClose]}
-              onPress={() => setModalVisible(!modalVisible)}
-            >
-              <Text style={styles.textStyle}>Hide Modal</Text>
-            </Pressable>
-          </View>
-        </View>
-      </Modal>
+        setModalVisible={setModalVisible}
+      />
     </View>
   );
 };
