@@ -13,7 +13,7 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 30,
     left: '40%',
-    fontFamily: 'Lato-Thin'
+    fontFamily: 'Aboreto-Regular'
   },
   conditionText: {
     color: 'black',
@@ -67,12 +67,20 @@ const styles = StyleSheet.create({
     color: '#FCFCFC' 
   },
  checkbox:{
-  alignSelf:'center'
+  alignSelf:'center',
+  padding:20,
+  left:50
+  
  },
  checkboxContainer: {
   flexDirection: "row",
   marginBottom: 20,
+  justifyContent:'center',
+  alignItems:'center',
+  marginVertical:20,
+  marginHorizontal:40
 },
+
 });
 
 export {styles};

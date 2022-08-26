@@ -19,7 +19,7 @@ const LandingScreen = ({navigation}) => {
 
         <TouchableOpacity
           style={styles.readmore}
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.navigate('Login')}>
           <Text style={styles.read}>Login</Text>
         </TouchableOpacity>
       </View>

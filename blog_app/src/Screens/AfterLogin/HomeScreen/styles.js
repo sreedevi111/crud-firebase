@@ -59,6 +59,20 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
+  user_icon:{
+    width: 30,
+    
+    borderRadius: 15 ,
+    left: 300,
+    borderWidth:2,
+    borderColor:'grey',
+    border:10,
+    marginBottom:10,
+
+  height:30,
+
+
+  }
 });
 
 export {styles};
