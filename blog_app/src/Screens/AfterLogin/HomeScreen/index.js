@@ -9,15 +9,17 @@ import {
 import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as storage from '../../../Services/AsyncStorageConfig';
 import auth from '@react-native-firebase/auth';
 
 
 const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
   const [visited, setVisited] = useState([]);
+  const [filter, setFilter] = useState(false)
 
   useEffect(() => {
     getVisitedData();
@@ -26,7 +28,7 @@ const HomeScreen = ({navigation}) => {
 
   const getVisitedData = async () => {
     try {
-      let jsonValue = await AsyncStorage.getItem('@visited');
+      let jsonValue = await storage.getItem('@visited');
       console.log('JSON VALUE', jsonValue);
       if (jsonValue != null) {
         jsonValue = JSON.parse(jsonValue);
@@ -66,7 +68,7 @@ const HomeScreen = ({navigation}) => {
     setVisited([...tempVisited]);
     try {
       var convertToString = JSON.stringify(tempVisited);
-      await AsyncStorage.setItem('@visited', convertToString);
+      await storage.setItem('@visited', convertToString);
       console.log('WE UPDATED STORAGE TOOO');
     } catch (e) {
       // error reading value
@@ -166,22 +168,17 @@ const HomeScreen = ({navigation}) => {
       });
   };
 
-  // const alert_logout = () =>{
-  //   Alert.alert('Alert', 'Are you sure want to logout?', [
-  //     {
-  //       text: 'Cancel',
-  //       onPress: () => console.log('Cancel Pressed'),
-  //       style: 'cancel',
-  //     },
-  //     {text: 'Yes', onPress: () => deleteData(id)},
-  //   ]);
-  // }
-
   return (
     <View style={styles.container}>
+      <View style={styles.tabIcon}>
+      <TouchableOpacity style={styles.user_icon} >
+<Icon name='filter' color={'#361614'} size={25}/>
+      </TouchableOpacity>
       <TouchableOpacity style={styles.user_icon}  onPress={()=>auth().signOut()}>
         <AntDesign name="user" color={'purple'} size={25} />
       </TouchableOpacity>
+      </View>
+      
       <FlatList
         data={data}
         renderItem={renderItem}

@@ -6,7 +6,14 @@ import ModalView from '../../../Components/ModalView';
 import auth from '@react-native-firebase/auth';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-simple-toast';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+// import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as storage from  '../../../Services/AsyncStorageConfig'
+
+import {
+  GoogleSignin,
+  GoogleSigninButton,
+  statusCodes,
+} from '@react-native-google-signin/google-signin';
 
 const LoginScreen = ({navigation, route}) => {
   const [state, setState] = useState({
@@ -80,7 +87,7 @@ const LoginScreen = ({navigation, route}) => {
         console.log('uid::', response.user.uid);
         var uid = response.user.uid;
         Toast.show('You are logged in successfully!!');
-        AsyncStorage.setItem('@uid', uid);
+        storage.setItem('@uid', uid);
         setTimeout(() => {
           navigation.navigate('Home');
         }, 1500);
@@ -190,6 +197,9 @@ const LoginScreen = ({navigation, route}) => {
         visible={modalVisible}
         setModalVisible={setModalVisible}
       />
+      <View>
+        <Text style={{color: 'black'}}>or connect with</Text>
+      </View>
     </View>
   );
 };
