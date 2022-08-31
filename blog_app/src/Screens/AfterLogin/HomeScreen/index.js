@@ -91,13 +91,6 @@ const HomeScreen = ({navigation}) => {
             onPress={() => {
               visitDetail(item.id);
               navigation.navigate('Detail', {
-                // id: item.id,
-                // Title: item.Title,
-                // Name: item.Name,
-                // Email: item.Email,
-                // Phone: item.Phone,
-                // Image: item.Image,
-                // item:item
                 item,
               });
             }}>
@@ -106,7 +99,6 @@ const HomeScreen = ({navigation}) => {
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
-          {/* <Image style={styles.image} source={item.Image}  /> */}
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 

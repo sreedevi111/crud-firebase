@@ -1,13 +1,12 @@
-import {Text, TextInput, View, TouchableOpacity} from 'react-native';
-import React, {useState} from 'react';
+import {Text, TextInput, View, TouchableOpacity, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModalView from '../../../Components/ModalView';
 import auth from '@react-native-firebase/auth';
 import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-simple-toast';
-// import AsyncStorage from '@react-native-async-storage/async-storage';
-import * as storage from  '../../../Services/AsyncStorageConfig'
+import * as storage from '../../../Services/AsyncStorageConfig';
 
 import {
   GoogleSignin,
@@ -24,6 +23,30 @@ const LoginScreen = ({navigation, route}) => {
     emailTestFail: null,
     passwordTestFail: null,
   });
+
+  const [userData, setUserData] = useState(null)
+  const [currentUser, setCurrentUser] = useState(null)
+
+  useEffect (()=>{
+ const currentUser = auth().currentUser
+ console.log("currentUser>>>" , currentUser);
+ setCurrentUser(currentUser)
+  }, [])
+
+
+  GoogleSignin.configure({
+    scopes: [], // what API you want to access on behalf of the user, default is email and profile
+    webClientId: '733180122973-d6d16ctbk9s7hlet162mps2v3tu3hs63.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
+    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
+    hostedDomain: '', // specifies a hosted domain restriction
+    forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
+    accountName: '', // [Android] specifies an account name on the device that should be used
+    iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
+    googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
+    openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
+    profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
+  });
+  
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -99,6 +122,45 @@ const LoginScreen = ({navigation, route}) => {
 
     //------------PASSWORD VALIDATION--------------------
   };
+
+  const isGoogleSigned = async () =>{
+    // const isSignedIn = await GoogleSignin.isSignedIn();
+    // console.log("isSignedIn>>>" , isSignedIn);
+
+    try {
+      await GoogleSignin.hasPlayServices();
+      const userInfo = await GoogleSignin.signIn();
+      console.log("UserInfo:::", userInfo);
+      setUserData({ userInfo });
+      const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken)
+
+      //sign with credential in firebase
+      auth().signInWithCredential(googleCredential)
+      .then(signedinUser =>{
+        setCurrentUser(signedinUser.user.uid)
+        console.log("Signed in user:::", signedinUser);
+        setTimeout(() => {
+          navigation.navigate('Home');
+        }, 1500);
+
+      })
+    } 
+    catch (error) {
+      if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        // user cancelled the login flow
+        console.log("user cancelled the login flow::", error);
+      } else if (error.code === statusCodes.IN_PROGRESS) {
+        // operation (e.g. sign in) is in progress already
+        console.log("operation (e.g. sign in) is in progress already::", error);
+      } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        // play services not available or outdated
+        console.log("play services not available or outdated::", error);
+      } else {
+        // some other error happened
+        console.log("Some other error to sign in::", error);
+      }
+    }
+  }
 
   return (
     <View style={styles.container}>
@@ -197,9 +259,29 @@ const LoginScreen = ({navigation, route}) => {
         visible={modalVisible}
         setModalVisible={setModalVisible}
       />
+      
+
       <View>
-        <Text style={{color: 'black'}}>or connect with</Text>
+        {currentUser != null ? (
+          <>
+          <Button onPress={signout} title="sign out" />
+          </>
+
+        )
+      :
+      <GoogleSigninButton
+      style={{ width: 192, height: 48 }}
+      size={GoogleSigninButton.Size.Wide}
+      color={GoogleSigninButton.Color.Dark}
+      onPress={isGoogleSigned}
+      //disabled={this.state.isSigninInProgress}
+    />
+      }
       </View>
+      
+       
+       
+     
     </View>
   );
 };
