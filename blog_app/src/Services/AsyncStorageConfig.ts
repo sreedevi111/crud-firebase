@@ -5,13 +5,13 @@ export async function setItem(key: string, value: string) {
 }
 
 export async function getItem(key: string) {
-  let val = await AsyncStorage.getItem(key);
+  const val = await AsyncStorage.getItem(key);
   try {
-    if (val != null || val != '') {
+    // if (val != null) {
+    if (!val) {
       return val;
-    } else {
-      return false;
     }
+    return false;
   } catch (error) {
     console.log('Error in getItem:', error);
   }

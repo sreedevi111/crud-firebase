@@ -9,12 +9,13 @@ import Toast from 'react-native-simple-toast';
 import * as storage from '../../../Services/AsyncStorageConfig';
 
 import {
-  GoogleSignin,
   GoogleSigninButton,
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
-const LoginScreen = ({navigation, route}) => {
+import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
+
+const LoginScreen = ({navigation}) => {
   const [state, setState] = useState({
     email: '',
     password: '',
@@ -33,20 +34,6 @@ const LoginScreen = ({navigation, route}) => {
  setCurrentUser(currentUser)
   }, [])
 
-
-  GoogleSignin.configure({
-    scopes: [], // what API you want to access on behalf of the user, default is email and profile
-    webClientId: '733180122973-d6d16ctbk9s7hlet162mps2v3tu3hs63.apps.googleusercontent.com', // client ID of type WEB for your server (needed to verify user ID and offline access)
-    offlineAccess: true, // if you want to access Google API on behalf of the user FROM YOUR SERVER
-    hostedDomain: '', // specifies a hosted domain restriction
-    forceCodeForRefreshToken: true, // [Android] related to `serverAuthCode`, read the docs link below *.
-    accountName: '', // [Android] specifies an account name on the device that should be used
-    iosClientId: '<FROM DEVELOPER CONSOLE>', // [iOS] if you want to specify the client ID of type iOS (otherwise, it is taken from GoogleService-Info.plist)
-    googleServicePlistPath: '', // [iOS] if you renamed your GoogleService-Info file, new name here, e.g. GoogleService-Info-Staging
-    openIdRealm: '', // [iOS] The OpenID2 realm of the home web server. This allows Google to include the user's OpenID Identifier in the OpenID Connect ID token.
-    profileImageSize: 120, // [iOS] The desired height (and width) of the profile image. Defaults to 120px
-  });
-  
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -111,9 +98,9 @@ const LoginScreen = ({navigation, route}) => {
         var uid = response.user.uid;
         Toast.show('You are logged in successfully!!');
         storage.setItem('@uid', uid);
-        setTimeout(() => {
-          navigation.navigate('Home');
-        }, 1500);
+        // setTimeout(() => {
+        //   navigation.navigate('Home');
+        // }, 1500);
         //console.log("type of response.user::", typeof(response.user));
       })
       .catch(error => {
@@ -138,10 +125,15 @@ const LoginScreen = ({navigation, route}) => {
       auth().signInWithCredential(googleCredential)
       .then(signedinUser =>{
         setCurrentUser(signedinUser.user.uid)
+        console.log("Name of user:::", signedinUser.user.displayName);
+        console.log("Photo of user:::", signedinUser.user.photoURL);
         console.log("Signed in user:::", signedinUser);
-        setTimeout(() => {
-          navigation.navigate('Home');
-        }, 1500);
+        // setTimeout(() => {
+          // navigation.navigate('Home',{
+          //   name: signedinUser.user.displayName,
+          //   photoURL: signedinUser.user.photoURL
+          // });
+        // }, 1500);
 
       })
     } 
@@ -261,14 +253,15 @@ const LoginScreen = ({navigation, route}) => {
       />
       
 
-      <View>
-        {currentUser != null ? (
-          <>
-          <Button onPress={signout} title="sign out" />
-          </>
+      {/* <View>
+        {currentUser != null 
+      //   ? (
+      //     <>
+      //     <Button onPress={signout} title="sign out" />
+      //     </>
 
-        )
-      :
+      //   )
+      // :
       <GoogleSigninButton
       style={{ width: 192, height: 48 }}
       size={GoogleSigninButton.Size.Wide}
@@ -277,6 +270,18 @@ const LoginScreen = ({navigation, route}) => {
       //disabled={this.state.isSigninInProgress}
     />
       }
+      </View> */}
+
+      <View>
+        {currentUser == null && 
+          <GoogleSigninButton
+          style={{ width: 192, height: 48 }}
+          size={GoogleSigninButton.Size.Wide}
+          color={GoogleSigninButton.Color.Dark}
+          onPress={isGoogleSigned}
+          //disabled={this.state.isSigninInProgress}
+        />
+        }
       </View>
       
        

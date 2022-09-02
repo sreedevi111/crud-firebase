@@ -20,6 +20,7 @@
     "@react-native-google-signin/google-signin": "^8.0.0",
     "@react-navigation/native": "^6.0.11",
     "@react-navigation/native-stack": "^6.7.0",
+    "axios": "^0.27.2",
     "react": "18.0.0",
     "react-native": "0.69.4",
     "react-native-action-sheet": "^2.2.0",

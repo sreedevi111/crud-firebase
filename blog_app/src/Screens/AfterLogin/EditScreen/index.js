@@ -1,10 +1,4 @@
-import {
-  View,
-  TextInput,
-  Button,
-  Text,
-  TouchableOpacity
-} from 'react-native';
+import {View, TextInput, Button, Text, TouchableOpacity} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
 import firestore from '@react-native-firebase/firestore';
@@ -74,11 +68,9 @@ const EditScreen = ({navigation, route}) => {
       />
 
       <View>
-      <Text style={{color: 'black', left:50}}>Edit Image &#128247;</Text>
-      <TouchableOpacity style={styles.imagePicker}>
-      </TouchableOpacity>
+        <Text style={{color: 'black', left: 50}}>Edit Image &#128247;</Text>
+        <TouchableOpacity style={styles.imagePicker}></TouchableOpacity>
       </View>
-
 
       <Button onPress={submit} title="Submit" />
     </View>

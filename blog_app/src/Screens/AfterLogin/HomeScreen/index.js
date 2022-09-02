@@ -6,7 +6,7 @@ import {
   Alert,
   Image,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useRef} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,12 +14,21 @@ import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
 import * as storage from '../../../Services/AsyncStorageConfig';
 import auth from '@react-native-firebase/auth';
+import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
+import axios from 'axios';
+
+const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
 
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, route}) => {
+  console.log('Route of Home:', route.params);
   const [data, setData] = useState([]);
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false)
+  // const [userInfo, setUserInfo] = useState({
+  //   Name: route.params.displayName,
+  //   Photo: route.params.PhotoURL
+  // })
 
   useEffect(() => {
     getVisitedData();
@@ -40,21 +49,34 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  // const getData = () => {
+  //   const dataArray = [];
+  //   firestore()
+  //     .collection('Contacts')
+  //     .get()
+  //     .then(snapShot => {
+  //       snapShot.docs.map(each => {
+  //         dataArray.push({...each.data(), id: each.id});
+  //       });
+  //       setData(dataArray);
+  //     })
+  //     .catch(error => {
+  //       console.log('Some error in listing data', error);
+  //     });
+  // };
+
+
   const getData = () => {
-    const dataArray = [];
-    firestore()
-      .collection('Contacts')
-      .get()
-      .then(snapShot => {
-        snapShot.docs.map(each => {
-          dataArray.push({...each.data(), id: each.id});
-        });
-        setData(dataArray);
-      })
-      .catch(error => {
-        console.log('Some error in listing data', error);
-      });
-  };
+  axios.get(`${API_URL}/getData`)
+  .then(response => {
+    console.log('response:::', response);
+    response.data.data
+    setData(response.data.data);
+  })
+  .catch(e=>{
+    console.log("Some error", e);
+  })
+}
 
   useEffect(() => {
     console.log('Visited current is >', visited);
@@ -166,8 +188,13 @@ const HomeScreen = ({navigation}) => {
       <TouchableOpacity style={styles.user_icon} >
 <Icon name='filter' color={'#361614'} size={25}/>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.user_icon}  onPress={()=>auth().signOut()}>
-        <AntDesign name="user" color={'purple'} size={25} />
+      <TouchableOpacity style={styles.user_icon}  onPress={()=>
+        {
+        auth().signOut()
+        GoogleSignin.signOut();
+        }
+        }>
+        {/* <Image style={styles.image} source={{uri: userInfo.Image}} /> */}
       </TouchableOpacity>
       </View>
       
