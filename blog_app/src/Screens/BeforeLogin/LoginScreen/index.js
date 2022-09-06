@@ -125,15 +125,6 @@ const LoginScreen = () => {
       auth().signInWithCredential(googleCredential)
       .then(signedinUser =>{
         setCurrentUser(signedinUser.user.uid)
-        console.log("Name of user:::", signedinUser.user.displayName);
-        console.log("Photo of user:::", signedinUser.user.photoURL);
-        console.log("Signed in user:::", signedinUser);
-        // setTimeout(() => {
-          // navigation.navigate('Home',{
-          //   name: signedinUser.user.displayName,
-          //   photoURL: signedinUser.user.photoURL
-          // });
-        // }, 1500);
 
       })
     } 
