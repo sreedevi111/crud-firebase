@@ -15,7 +15,7 @@ import {
 
 import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
 
-const LoginScreen = ({navigation}) => {
+const LoginScreen = () => {
   const [state, setState] = useState({
     email: '',
     password: '',

@@ -153,6 +153,8 @@ const HomeScreen = ({navigation, route}) => {
     );
   };
 
+  
+
   const preDelete = id => {
     Alert.alert('Alert', 'Are you sure to delete?', [
       {

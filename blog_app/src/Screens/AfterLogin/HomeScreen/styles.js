@@ -59,21 +59,20 @@ const styles = StyleSheet.create({
     height: 20,
     width: 20,
   },
-  user_icon:{
+  user_icon: {
     width: 30,
-    borderRadius: 15 ,
-    borderWidth:2,
-    borderColor:'grey',
-    border:10,
-    marginBottom:10,
-  height:30,
+    borderRadius: 15,
+    borderWidth: 2,
+    borderColor: 'grey',
+    border: 10,
+    marginBottom: 10,
+    height: 30,
   },
-  tabIcon:{
-    justifyContent:'flex-end',
-    flexDirection:'row',
-    marginBottom:10,
-    
-  }
+  tabIcon: {
+    justifyContent: 'flex-end',
+    flexDirection: 'row',
+    marginBottom: 10,
+  },
 });
 
 export {styles};

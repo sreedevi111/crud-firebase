@@ -4,14 +4,12 @@ const styles = StyleSheet.create({
 
     container:{
         flex:1,
-        backgroundColor:'white',
-       
+        backgroundColor:'white',    
     },
     
     title:{
         color:'black',
         fontSize:24,
-    
     },
     name:{
         color:'black'
@@ -22,18 +20,13 @@ const styles = StyleSheet.create({
     phone:{
         color:'black'
     }, 
-    detail:{
-        // justifyContent:'center',
+    detail:{    
         alignItems:'center',
         borderWidth:2,
         borderColor:'grey',
-        // 
-        // paddingTop:20
         marginTop:50,
         marginHorizontal:40,
-        backgroundColor:'#93ba9d'
-    
-        
+        backgroundColor:'#93ba9d'   
     }
     
 })
