@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, Image, ActivityIndicator, StatusBar } from "react-native";
 import axios from "axios";
 import styles from "./styles";
+// import Spinner from "react-native-loading-spinner-overlay";
 
 const Pagination = () => {
   const [users, setUsers] = useState([]);

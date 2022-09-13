@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     },
     txtNameStyle: {
       fontSize: 16,
+      color: "#777",
     },
     txtEmailStyle: {
       color: "#777",
