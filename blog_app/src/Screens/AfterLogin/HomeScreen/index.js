@@ -17,11 +17,11 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
 import axios from 'axios';
 
-const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
+const GETDATA_API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
 
 
 const HomeScreen = ({navigation, route}) => {
-  console.log('Route of Home:', route.params);
+  // console.log('Route of Home:', route.params);
   const [data, setData] = useState([]);
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false)
@@ -67,7 +67,7 @@ const HomeScreen = ({navigation, route}) => {
 
 
   const getData = () => {
-  axios.get(`${API_URL}/getData`)
+  axios.get(`${ GETDATA_API_URL}/getData`)
   .then(response => {
     console.log('response:::', response);
     response.data.data

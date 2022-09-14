@@ -1394,6 +1394,11 @@
   resolved "https://registry.yarnpkg.com/@react-native-firebase/firestore/-/firestore-15.4.0.tgz#9941cc2e256a11c1ea0d7614776fae54ed3a17d0"
   integrity sha512-7Kiqn9c4uzQyURFQ4LGCZ4waeZb/hZb/IWl6MlpfkCtII9PnpdqbvQwEKKKg8RQMocP5sbw0qPsKEdYEYUNKhg==
 
+"@react-native-firebase/messaging@^15.4.0":
+  version "15.4.0"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/messaging/-/messaging-15.4.0.tgz#1a6834cebe90c520a8b23180dcd52bf38dc90e08"
+  integrity sha512-irmmkAWwD0PqZc3Nua4vdDS5liPfJzis5/zC1XxZw/AS4AfoEj2yv3+r273bqx/E9aZ2Udl1GBPV2nWBDDR/yA==
+
 "@react-native-google-signin/google-signin@^8.0.0":
   version "8.0.0"
   resolved "https://registry.yarnpkg.com/@react-native-google-signin/google-signin/-/google-signin-8.0.0.tgz#f8202c121b4df185eb165dc58b35544c643af25f"
@@ -5599,6 +5604,11 @@ react-native-gradle-plugin@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/react-native-gradle-plugin/-/react-native-gradle-plugin-0.0.6.tgz#b61a9234ad2f61430937911003cddd7e15c72b45"
   integrity sha512-eIlgtsmDp1jLC24dRn43hB3kEcZVqx6DUQbR0N1ABXGnMEafm9I3V3dUUeD1vh+Dy5WqijSoEwLNUPLgu5zDMg==
+
+react-native-permissions@^3.6.1:
+  version "3.6.1"
+  resolved "https://registry.yarnpkg.com/react-native-permissions/-/react-native-permissions-3.6.1.tgz#73adcc1cef8cd57a9ef167b4507405f4ff5749c4"
+  integrity sha512-fzPpPQXeD34inUccqtoResSwYubfrwUguP4qrVUUv8+KSMjYSaHGoS5HaIJLZHlN9gO+TvLJZ2L5ZljTsb6qnQ==
 
 react-native-safe-area-context@^4.3.3:
   version "4.3.3"

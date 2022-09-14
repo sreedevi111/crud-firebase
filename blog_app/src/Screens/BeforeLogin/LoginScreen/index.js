@@ -53,7 +53,8 @@ const LoginScreen = () => {
     //    const pattern= /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
     const pattern =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    console.log('Checking email pattern correct:', pattern.test(state.email));
+      // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      console.log('Checking email pattern correct:', pattern.test(state.email));
     setState(prev => ({...prev, emailTestFail: !pattern.test(state.email)}));
   };
 
@@ -69,7 +70,9 @@ const LoginScreen = () => {
     const email = String(state.email).trim().toLowerCase();
     const pattern =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
-    var email_test = pattern.test(email);
+    
+      // /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+      var email_test = pattern.test(email);
     if (email_test === false) {
       setState(prev => ({...prev, emailTestFail: true}));
       return;
@@ -88,24 +91,25 @@ const LoginScreen = () => {
     if (password.length >= 6) {
       setState(prev => ({...prev, passwordTestFail: false}));
     }
+    //-----------------------------
 
-    auth()
-      .signInWithEmailAndPassword(email, password)
-      .then(response => {
-        console.log('Successfully logged in::', response);
-        // console.log("uid::>>>>", auth().currentUser._user.uid);
-        console.log('uid::', response.user.uid);
-        var uid = response.user.uid;
-        Toast.show('You are logged in successfully!!');
-        storage.setItem('@uid', uid);
-        // setTimeout(() => {
-        //   navigation.navigate('Home');
-        // }, 1500);
-        //console.log("type of response.user::", typeof(response.user));
-      })
-      .catch(error => {
-        console.log('Error to login::', error);
-      });
+    // auth()
+    //   .signInWithEmailAndPassword(email, password)
+    //   .then(response => {
+    //     console.log('Successfully logged in::', response);
+    //     // console.log("uid::>>>>", auth().currentUser._user.uid);
+    //     console.log('uid::', response.user.uid);
+    //     var uid = response.user.uid;
+    //     Toast.show('You are logged in successfully!!');
+    //     storage.setItem('@uid', uid);
+    //     // setTimeout(() => {
+    //     //   navigation.navigate('Home');
+    //     // }, 1500);
+    //     //console.log("type of response.user::", typeof(response.user));
+    //   })
+    //   .catch(error => {
+    //     console.log('Error to login::', error);
+    //   });
 
     //------------PASSWORD VALIDATION--------------------
   };
