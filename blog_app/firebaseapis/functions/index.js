@@ -20,14 +20,14 @@ admin.initializeApp({
 // TODO:: add this function
 exports.sendPushToTopic = functions.https.onRequest((request, response) => {
   var topic = request.body.topic // I received topic name here
-    var title = request.body.title
-    var description = request.body.description
+    var title = request.body.Title
+    var name = request.body.Name
     if(typeof topic !== 'undefined'){
 
     const message = {
       notification: {
         title: title,
-        body: description
+        body: name
       },
       topic: topic
     };

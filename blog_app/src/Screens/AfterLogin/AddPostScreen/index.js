@@ -6,7 +6,7 @@ import {
   Text,
   Platform,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -15,6 +15,10 @@ import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
+import ModalCategory from '../../../Components/ModalCategory';
+import axios from 'axios';
+
+const API_URL = 'https://us-central1-crud-app-3cd08.cloudfunctions.net';
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -26,6 +30,8 @@ const AddPostScreen = ({navigation}) => {
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null);
 
   useEffect(() => {}, []);
 
@@ -64,8 +70,11 @@ const AddPostScreen = ({navigation}) => {
     }
 
     setLoading(true);
+    await addDatatoFirestore();
+  };
 
-    var tmpID = null;
+  const addContactDatatoFirestore = async () => {
+    // var tmpID = null;
     var imagename = '';
     try {
       var res = await firestore().collection('Contacts').add({
@@ -75,32 +84,67 @@ const AddPostScreen = ({navigation}) => {
         Phone: state.Phone,
       });
       if (res) {
-      //  console.log("Selected image path", selectedImage.path)
+        //  console.log("Selected image path", selectedImage.path)
         // if(selectedImage !== null && typeof selectedImage.path !== undefined){
-          if(selectedImage?.path){
-        var extension = '';
-        if (selectedImage.mime === 'image/jpeg') {
-          extension = 'jpg';
-        } else if (selectedImage.mime === 'image/png') {
-          extension = 'png';
+        if (selectedImage?.path) {
+          var extension = '';
+          if (selectedImage.mime === 'image/jpeg') {
+            extension = 'jpg';
+          } else if (selectedImage.mime === 'image/png') {
+            extension = 'png';
+          }
+          imagename = `${res.id}.${extension}`;
+          await storage().ref('sample.jpeg').putFile(selectedImage.path);
+          var url = await storage().ref('sample.jpeg').getDownloadURL();
+          await firestore()
+            .collection('Contacts')
+            .doc(res.id)
+            .update({Image: url});
+          setLoading(false);
+          Toast.show('Image updated successfully!!!');
+axios.post(`${ API_URL}/sendPushToTopic`,{
+  topic: 'customers',
+  Title: state.Title,
+  Name: state.Name,
+
+}
+.then(status=>{
+  console.log('status::', status )
+})
+.catch(e=> {
+  console.log('error::', e)
+})
+)
+
+        } else {
+          setLoading(false);
+          Toast.show('Image updated successfully!!!');
         }
-        imagename = `${res.id}.${extension}`;
-        await storage().ref('sample.jpeg').putFile(selectedImage.path);
-        var url = await storage().ref('sample.jpeg').getDownloadURL();
-        await firestore().collection('Contacts').doc(res.id).update({Image: url});
-        setLoading(false)
-        Toast.show("Image updated successfully!!!")
-      }
-      else {
-        setLoading(false)
-        Toast.show("Image updated successfully!!!")
-      }
       }
     } catch (error) {
       console.log('Image failed to upload', error);
       Toast.show('Image failed to upload');
     }
   };
+
+
+  const addCategoryDataToFirestore  = async() =>{
+ dataCategory = [];
+ try{
+  const snapShot =await firestore().collection('Categories').get()
+  if(snapShot){
+          console.log('doc',snapShot.size)
+          snapShot.docs.map(each => {
+                     dataArray.push({...each.data(), id: each.id});
+           });
+            setData(dataArray);
+        }
+ }
+ catch{
+
+ }
+
+  }
 
   const openActionSheet = () => {
     var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
@@ -128,10 +172,8 @@ const AddPostScreen = ({navigation}) => {
 
   return (
     <View style={styles.container}>
-      {
-        loading &&   <ActivityIndicator animating size={'large'}/>
-      }
-     
+      {loading && <ActivityIndicator animating size={'large'} />}
+
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Title"
@@ -162,6 +204,15 @@ const AddPostScreen = ({navigation}) => {
         style={styles.name}
       />
 
+      <TouchableOpacity
+        style={styles.categorySelection}
+        onPress={() => {
+          setModalVisible(true);
+          console.log('::', modalVisible);
+        }}>
+        <Text style={styles.categorySelectionText}>Select Category</Text>
+      </TouchableOpacity>
+
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
         <Text style={{color: 'black', zIndex: 0}}>
           Upload an Image &#128247;
@@ -177,6 +228,8 @@ const AddPostScreen = ({navigation}) => {
       <TouchableOpacity style={styles.button} onPress={submit}>
         <Text>Submit</Text>
       </TouchableOpacity>
+
+      
 
       {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
     </View>

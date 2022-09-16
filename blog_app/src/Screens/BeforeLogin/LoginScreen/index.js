@@ -93,23 +93,19 @@ const LoginScreen = () => {
     }
     //-----------------------------
 
-    // auth()
-    //   .signInWithEmailAndPassword(email, password)
-    //   .then(response => {
-    //     console.log('Successfully logged in::', response);
-    //     // console.log("uid::>>>>", auth().currentUser._user.uid);
-    //     console.log('uid::', response.user.uid);
-    //     var uid = response.user.uid;
-    //     Toast.show('You are logged in successfully!!');
-    //     storage.setItem('@uid', uid);
-    //     // setTimeout(() => {
-    //     //   navigation.navigate('Home');
-    //     // }, 1500);
-    //     //console.log("type of response.user::", typeof(response.user));
-    //   })
-    //   .catch(error => {
-    //     console.log('Error to login::', error);
-    //   });
+    auth()
+      .signInWithEmailAndPassword(email, password)
+      .then(response => {
+        console.log('Successfully logged in::', response);
+       
+        console.log('uid::', response.user.uid);
+        var uid = response.user.uid;
+        Toast.show('You are logged in successfully!!');
+        storage.setItem('@uid', uid);
+      })
+      .catch(error => {
+        console.log('Error to login::', error);
+      });
 
     //------------PASSWORD VALIDATION--------------------
   };
@@ -225,7 +221,6 @@ const LoginScreen = () => {
             <Text
               style={{color: 'blue'}}
               onPress={() => {
-                console.log('jhfhkgjgvj');
                 setModalVisible(true);
                 console.log('::', modalVisible);
               }}>

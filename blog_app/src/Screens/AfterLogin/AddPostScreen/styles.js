@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     padding: 5,
     color: 'black',
-    paddingVertical: 20,
+    paddingVertical: 10,
   },
   imagePicker:{
     width:250,
@@ -48,13 +48,28 @@ borderRadius:30,
     height:50,
     borderColor: 'blue',
     borderWidth: 1,
-    marginTop:30,
+    marginTop:20,
     marginHorizontal:50,
     left:50,
     borderRadius:30,
     backgroundColor:'grey',
     justifyContent:'center',
     alignItems:'center'
+  },
+  categorySelection:{
+    backgroundColor:'#1e106b',
+   
+    height: 40,
+    width: 120,
+    borderRadius:10,
+    justifyContent:'center',
+    alignItems:'center',
+    left:20,
+    margin:5
+  },
+  categorySelectionText:{
+    color:'white',
+
   }
 });
 

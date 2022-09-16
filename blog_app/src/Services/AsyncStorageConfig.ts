@@ -7,8 +7,8 @@ export async function setItem(key: string, value: string) {
 export async function getItem(key: string) {
   const val = await AsyncStorage.getItem(key);
   try {
-    // if (val != null) {
-    if (!val) {
+    if (val != null) {
+    // if (!val) {
       return val;
     }
     return false;

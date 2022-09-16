@@ -17,7 +17,7 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
 import axios from 'axios';
 
-const GETDATA_API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
+const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
 
 
 const HomeScreen = ({navigation, route}) => {
@@ -25,10 +25,7 @@ const HomeScreen = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false)
-  // const [userInfo, setUserInfo] = useState({
-  //   Name: route.params.displayName,
-  //   Photo: route.params.PhotoURL
-  // })
+  
 
   useEffect(() => {
     getVisitedData();
@@ -38,7 +35,6 @@ const HomeScreen = ({navigation, route}) => {
   const getVisitedData = async () => {
     try {
       let jsonValue = await storage.getItem('@visited');
-      console.log('JSON VALUE', jsonValue);
       if (jsonValue != null) {
         jsonValue = JSON.parse(jsonValue);
         setVisited(jsonValue);
@@ -48,7 +44,23 @@ const HomeScreen = ({navigation, route}) => {
       console.log('ERROR:', e);
     }
   };
+  // const getData = async () => {
+  //   const dataArray = []
+  //   try {
+  //     var snapShot = await firestore().collection('Conects').get()
+  //     if(snapShot){
+  //       console.log('doc',snapShot.size)
+  //       snapShot.docs.map(each => {
+  //                  dataArray.push({...each.data(), id: each.id});
+  //        });
+  //         setData(dataArray);
+  //     }
+  //   } catch(error){
 
+  //   }
+    
+    
+  // }
   // const getData = () => {
   //   const dataArray = [];
   //   firestore()
@@ -66,23 +78,24 @@ const HomeScreen = ({navigation, route}) => {
   // };
 
 
-  const getData = () => {
-  axios.get(`${ GETDATA_API_URL}/getData`)
-  .then(response => {
-    console.log('response:::', response);
+  const getData = async() => {
+  const response = await axios.get(`${ API_URL}/getData`)
+  try{
     response.data.data
     setData(response.data.data);
-  })
-  .catch(e=>{
-    console.log("Some error", e);
-  })
+  }
+ catch{
+  e=>{
+    console.log("Error::", e)
+  }
+ }
 }
 
   useEffect(() => {
     console.log('Visited current is >', visited);
   }, [visited]);
 
-  const visitDetail = async id => {
+  const visitDetail = async( id) => {
     var tempVisited = visited;
     if (tempVisited.indexOf(id) == -1) {
       tempVisited.push(id);
@@ -96,26 +109,27 @@ const HomeScreen = ({navigation, route}) => {
       // error reading value
       console.log('ERROR TO SAVE DATA::', e);
     }
+    // console.log("Visited::::::11111", visited.indexOf(item.id))
   };
 
-  const renderItem = ({item}) => {
-    // console.log('Item in renderlist', item);
-    // console.log('Item in renderlist', item);
-
+  const renderItem = ({item, index}) => {
     return (
       <View style={styles.renderContainer}>
         <View style={styles.details}>
           <Text
+            
+            onPress={() => {
+              visitDetail(item.id);
+              console.log("Item:::")
+              navigation.navigate('Detail', {
+                item,
+              });
+            }}
             style={[
               styles.title,
               {color: visited.indexOf(item.id) !== -1 ? '#3e67ed' : 'black'},
             ]}
-            onPress={() => {
-              visitDetail(item.id);
-              navigation.navigate('Detail', {
-                item,
-              });
-            }}>
+            >
             {item.Title}
           </Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
@@ -126,7 +140,7 @@ const HomeScreen = ({navigation, route}) => {
 
         <TouchableOpacity
           style={styles.icons}
-          onPress={() => preDelete(item.id)}>
+          onPress={() => deleteData(item.id)}>
           <View style={styles.deleteButton}>
             <AntDesign name="delete" color="red" size={18} />
           </View>
@@ -155,20 +169,18 @@ const HomeScreen = ({navigation, route}) => {
 
   
 
-  const preDelete = id => {
-    Alert.alert('Alert', 'Are you sure to delete?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Yes', onPress: () => {
-        auth()
-        .signOut()
-        .then(() => console.log('User signed out!'));
-      }},
-    ]);
-  };
+  // const preDelete = id => {
+  //   Alert.alert('Alert', 'Are you sure to delete?', [
+  //     {
+  //       text: 'Cancel',
+  //       onPress: () => console.log('Cancel Pressed'),
+  //       style: 'cancel',
+  //     },
+  //     {text: 'Yes', onPress: () => {
+  //  deleteData();
+  //     }},
+  //   ]);
+  // };
 
   const deleteData = id => {
     firestore()
@@ -196,7 +208,6 @@ const HomeScreen = ({navigation, route}) => {
         GoogleSignin.signOut();
         }
         }>
-        {/* <Image style={styles.image} source={{uri: userInfo.Image}} /> */}
       </TouchableOpacity>
       </View>
       
