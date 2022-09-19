@@ -1,12 +1,10 @@
 import {
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   Text,
   Platform,
   Image,
-  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -18,7 +16,7 @@ import Toast from 'react-native-simple-toast';
 import ModalCategory from '../../../Components/ModalCategory';
 import axios from 'axios';
 
-const API_URL = 'https://us-central1-crud-app-3cd08.cloudfunctions.net';
+import {API_URL} from '@env';
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -27,19 +25,18 @@ const AddPostScreen = ({navigation}) => {
     Email: '',
     Phone: '',
     Image: '',
+    Category: '',
   });
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null);
 
+  
+  //To select image
   useEffect(() => {}, []);
-
   const openCamera = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
-      // cropping: true,
     })
       .then(image => {
         console.log(image);
@@ -64,17 +61,20 @@ const AddPostScreen = ({navigation}) => {
       });
   };
 
+
+
+// submit fuction
   const submit = async () => {
     if (String(state.Title).length < 3) {
       Toast.show('Title should contain min 4 characters');
     }
-
     setLoading(true);
-    await addDatatoFirestore();
+    await addContactDatatoFirestore();
   };
 
+
+
   const addContactDatatoFirestore = async () => {
-    // var tmpID = null;
     var imagename = '';
     try {
       var res = await firestore().collection('Contacts').add({
@@ -82,10 +82,9 @@ const AddPostScreen = ({navigation}) => {
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
+        Category: selectedCategory,
       });
       if (res) {
-        //  console.log("Selected image path", selectedImage.path)
-        // if(selectedImage !== null && typeof selectedImage.path !== undefined){
         if (selectedImage?.path) {
           var extension = '';
           if (selectedImage.mime === 'image/jpeg') {
@@ -102,49 +101,43 @@ const AddPostScreen = ({navigation}) => {
             .update({Image: url});
           setLoading(false);
           Toast.show('Image updated successfully!!!');
-axios.post(`${ API_URL}/sendPushToTopic`,{
-  topic: 'customers',
-  Title: state.Title,
-  Name: state.Name,
 
-}
-.then(status=>{
-  console.log('status::', status )
-})
-.catch(e=> {
-  console.log('error::', e)
-})
-)
+          //For push notification
+          const response = axios.post(
+            `${API_URL}/sendPushToTopic`,
+            {
+              topic: 'customers',
+              Title: state.Title,
+              Name: state.Name,
+            }
+              .then(status => {
+                console.log('status::', status);
+              })
+              .catch(e => {
+                console.log('error::', e);
+              }),
+          );
+          // } else {
+          //   setLoading(false);
+          //   Toast.show('Uploaded successfully!!!');
 
+          // }
+          route.params.reloadData();
+          setTimeout(() => {
+            navigation.navigate('Home');
+          }, 1500);
         } else {
           setLoading(false);
-          Toast.show('Image updated successfully!!!');
+          Toast.show('Uploaded Successfully');
+          route.params.reloadData();
+          navigation.navigate('Home');
         }
       }
     } catch (error) {
       console.log('Image failed to upload', error);
-      Toast.show('Image failed to upload');
+      // Toast.show('Image failed to upload');
     }
   };
-
-
-  const addCategoryDataToFirestore  = async() =>{
- dataCategory = [];
- try{
-  const snapShot =await firestore().collection('Categories').get()
-  if(snapShot){
-          console.log('doc',snapShot.size)
-          snapShot.docs.map(each => {
-                     dataArray.push({...each.data(), id: each.id});
-           });
-            setData(dataArray);
-        }
- }
- catch{
-
- }
-
-  }
 
   const openActionSheet = () => {
     var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
@@ -170,10 +163,69 @@ axios.post(`${ API_URL}/sendPushToTopic`,{
     );
   };
 
+  // For Modal category
+  const [modalVisible, setModalVisible] = useState(false);
+  const [category, setCategory] = useState({data: []});
+  const [selectedCategory, setSelectedCategory] = useState({
+    name: 'Select Category',
+    id: null,
+  });
+
+  useEffect(() => {
+    SelectCategories(category);
+  }, []);
+
+  const onSelectItem = item => {
+    setSelectedCategory(item);
+    console.log('selected Category::', item);
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const SelectCategories = () => {
+    firestore()
+      .collection('Categories')
+      .get()
+      .then(response => {
+        var categorylist = [];
+        console.log('response check::::::', response.docs);
+        response.docs.map(each => {
+          categorylist.push({...each.data(), id: each.id});
+        });
+        console.log('Category List::', categorylist);
+        setCategory(prev => ({...prev, data: categorylist}));
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
+
+  const renderItem = ({item}) => {
+    console.log('Item inrender Item::', item);
+    return (
+      <View style={{backgroundColor: 'white'}}>
+        <TouchableOpacity
+          onPress={() => onSelectItem(item)}
+          style={{height: 60}}>
+          <Text
+            style={{
+              color: 'black',
+              padding: 10,
+              fontSize: 16,
+              marginLeft: 30,
+            }}>
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
   return (
     <View style={styles.container}>
-      {loading && <ActivityIndicator animating size={'large'} />}
-
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Title"
@@ -207,10 +259,12 @@ axios.post(`${ API_URL}/sendPushToTopic`,{
       <TouchableOpacity
         style={styles.categorySelection}
         onPress={() => {
-          setModalVisible(true);
+          toggleModal();
           console.log('::', modalVisible);
         }}>
-        <Text style={styles.categorySelectionText}>Select Category</Text>
+        <Text style={styles.categorySelectionText}>
+          {selectedCategory.name}
+        </Text>
       </TouchableOpacity>
 
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
@@ -229,9 +283,12 @@ axios.post(`${ API_URL}/sendPushToTopic`,{
         <Text>Submit</Text>
       </TouchableOpacity>
 
-      
-
-      {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
+      <ModalCategory
+        visible={modalVisible}
+        setModalVisible={setModalVisible}
+        data={category.data}
+        renderItem={renderItem}
+      />
     </View>
   );
 };

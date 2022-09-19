@@ -17,12 +17,12 @@ import auth from '@react-native-firebase/auth';
 import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
 import axios from 'axios';
 
-const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
-
+import {API_URL} from "@env"
 
 const HomeScreen = ({navigation, route}) => {
   // console.log('Route of Home:', route.params);
   const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(false);
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false)
   
@@ -135,6 +135,8 @@ const HomeScreen = ({navigation, route}) => {
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
+          <Text style={styles.name}>Category:{item.Category.name}</Text>
+
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 
@@ -156,10 +158,11 @@ const HomeScreen = ({navigation, route}) => {
               Email: item.Email,
               Phone: item.Phone,
               Image: item.Image,
+              Category: item.Category.name,
               reload: getData(),
             })
           }>
-          <View style={styles.editButton}>
+          <View style={styles.editButton} >
             <AntDesign name="edit" color="blue" size={20} />
           </View>
         </TouchableOpacity>
@@ -198,6 +201,9 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+       {loading && (
+        <ActivityIndicator size="large" color="blue" animating={true} />
+      )}
       <View style={styles.tabIcon}>
       <TouchableOpacity style={styles.user_icon} >
 <Icon name='filter' color={'#361614'} size={25}/>
@@ -219,7 +225,7 @@ const HomeScreen = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
-          navigation.navigate('Add');
+          navigation.navigate('Add',{ reload: getData(),} );
         }}>
         <Text>
           <AntDesign name="pluscircleo" color="blue" size={25} />;

@@ -11,6 +11,7 @@ const EditScreen = ({navigation, route}) => {
     Name: route.params.Name,
     Email: route.params.Email,
     Phone: route.params.Phone,
+    Category: route.params.Category
   });
 
   const submit = () => {
@@ -23,11 +24,12 @@ const EditScreen = ({navigation, route}) => {
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
+        Category: state.Category
       })
       .then(res => {
         console.log('Data entered', res);
         Toast.show('Item added successfully!');
-        route.params.reload();
+        // route.params.reload();
         navigation.navigate('Home');
       })
       .catch(error => {
@@ -64,6 +66,13 @@ const EditScreen = ({navigation, route}) => {
         keyboardType="numeric"
         value={state.Phone}
         onChangeText={Phone => setState(prev => ({...prev, Phone}))}
+        style={styles.name}
+      />
+      <TextInput
+        placeholderTextColor={'grey'}
+        placeholder="Category"
+        value={state.Category}
+        onChangeText={Category => setState(prev => ({...prev, Category}))}
         style={styles.name}
       />
 
