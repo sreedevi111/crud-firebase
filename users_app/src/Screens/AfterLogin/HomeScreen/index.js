@@ -3,6 +3,8 @@ import React, {useState, useEffect} from 'react';
 import styles from './styles';
 import firestore from '@react-native-firebase/firestore';
 
+const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
+
 const HomeScreen = ({navigation}) => {
   const [data, setData] = useState([]);
 
@@ -27,10 +29,24 @@ const HomeScreen = ({navigation}) => {
       });
   };
 
-  // console.log('::', data)
+
+  // const getData = async() => {
+  //   const response = await axios.get(`${ API_URL}/getData`)
+  //   try{
+  //     response.data.data
+  //     setData(response.data.data);
+  //   }
+  //  catch{
+  //   e=>{
+  //     console.log("Error::", e)
+  //   }
+  //  }
+  // }
+
   const renderItem = ({item}) => {
     return (
       <View style={styles.renderContainer} >
+        
         <TouchableOpacity style={styles.details} onPress= {() => navigation.navigate('Detail', {
         item
       })}>
@@ -45,6 +61,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View>
+      
       <FlatList
         data={data}
         renderItem={renderItem}

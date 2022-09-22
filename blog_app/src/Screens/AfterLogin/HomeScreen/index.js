@@ -121,6 +121,11 @@ const HomeScreen = ({navigation, route}) => {
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.Email}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
+<<<<<<< Updated upstream
+=======
+          {/* <Text style={styles.name}>Category:{item.Category.name}</Text> */}
+
+>>>>>>> Stashed changes
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 
@@ -142,6 +147,10 @@ const HomeScreen = ({navigation, route}) => {
               Email: item.Email,
               Phone: item.Phone,
               Image: item.Image,
+<<<<<<< Updated upstream
+=======
+              // Category: item.Category.name,
+>>>>>>> Stashed changes
               reload: getData(),
             })
           }>

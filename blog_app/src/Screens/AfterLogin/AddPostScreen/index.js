@@ -15,6 +15,17 @@ import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
+<<<<<<< Updated upstream
+=======
+import ModalCategory from '../../../Components/ModalCategory';
+import axios from 'axios';
+import _ from 'lodash';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Moment from 'moment'
+
+
+import {API_URL} from '@env';
+>>>>>>> Stashed changes
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -27,6 +38,22 @@ const AddPostScreen = ({navigation}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
+<<<<<<< Updated upstream
+=======
+// For dropdown
+  const [open, setOpen] = useState(false); // status of dropdownload status = false, status = true
+  const [value, setValue] = useState(null); //to store select option of dropdown
+  const [items, setItems] = useState([
+   
+   ]);
+
+  useEffect(()=> {
+    console.log('value',value)
+  },[value])
+
+
+  //To select image
+>>>>>>> Stashed changes
   useEffect(() => {}, []);
 
   const openCamera = () => {
@@ -58,12 +85,29 @@ const AddPostScreen = ({navigation}) => {
       });
   };
 
+<<<<<<< Updated upstream
+=======
+  // submit fuction
+>>>>>>> Stashed changes
   const submit = async () => {
     if (String(state.Title).length < 3) {
       Toast.show('Title should contain min 4 characters');
     }
+<<<<<<< Updated upstream
 
     setLoading(true);
+=======
+    setLoading(true);
+    await addContactDatatoFirestore();
+    
+  };
+
+  var catName = _.filter(items, item  => {
+    return item.value == value
+})
+
+console.log('catName',catName[0].label)
+>>>>>>> Stashed changes
 
     var tmpID = null;
     var imagename = '';
@@ -73,8 +117,19 @@ const AddPostScreen = ({navigation}) => {
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
+<<<<<<< Updated upstream
+=======
+        // Category: CatName[0].label,
+        // CatId:
+        catName: catName[0].label, 
+        catID: value,
+        timeCreated: Moment().unix(), 
+        timeinHuman: Moment().format('DD-MM-YYYY')  
+>>>>>>> Stashed changes
       });
+      
       if (res) {
+<<<<<<< Updated upstream
       //  console.log("Selected image path", selectedImage.path)
         // if(selectedImage !== null && typeof selectedImage.path !== undefined){
           if(selectedImage?.path){
@@ -83,6 +138,52 @@ const AddPostScreen = ({navigation}) => {
           extension = 'jpg';
         } else if (selectedImage.mime === 'image/png') {
           extension = 'png';
+=======
+        if (selectedImage?.path) {
+          var extension = '';
+          if (selectedImage.mime === 'image/jpeg') {
+            extension = 'jpg';
+          } else if (selectedImage.mime === 'image/png') {
+            extension = 'png';
+          }
+          imagename = `${res.id}.${extension}`;
+          await storage().ref('sample.jpeg').putFile(selectedImage.path);
+          var url = await storage().ref('sample.jpeg').getDownloadURL();
+          await firestore()
+            .collection('Contacts')
+            .doc(res.id)
+            .update({Image: url});
+          setLoading(false);
+          Toast.show('Image updated successfully!!!');
+
+          
+          
+          //For push notification
+          axios.post(
+            `${API_URL}/sendPushToTopic`,
+            {
+              topic: 'customers',
+              Title: state.Title,
+              Name: state.Name,
+            },
+            )
+            
+              .then(status => {
+                console.log('status::', status);
+              })
+              .catch(e => {
+                console.log('error::', e);
+              }),
+          route.params.reloadData();
+          setTimeout(() => {
+            navigation.navigate('Home');
+          }, 1500);
+        } else {
+          setLoading(false);
+          Toast.show('Uploaded Successfully');
+          route.params.reloadData();
+          navigation.navigate('Home');
+>>>>>>> Stashed changes
         }
         imagename = `${res.id}.${extension}`;
         await storage().ref('sample.jpeg').putFile(selectedImage.path);
@@ -126,6 +227,74 @@ const AddPostScreen = ({navigation}) => {
     );
   };
 
+<<<<<<< Updated upstream
+=======
+  // For Modal category
+  const [modalVisible, setModalVisible] = useState(false);
+  const [category, setCategory] = useState({data: []});
+  const [selectedCategory, setSelectedCategory] = useState({
+    name: 'Select Category',
+    id: null,
+  });
+
+  useEffect(() => {
+    SelectCategories(category);
+  }, []);
+
+  const onSelectItem = item => {
+    setSelectedCategory(item);
+    console.log('selected Category::', item);
+    toggleModal();
+  };
+
+  const toggleModal = () => {
+    setModalVisible(!modalVisible);
+  };
+
+  const SelectCategories = () => {
+    firestore()
+      .collection('Categories')
+      .get()
+      .then(response => {
+        var categorylist = [];
+        console.log('response check::::::', response.docs);
+        response.docs.map(each => {
+          // categorylist.push({...each.data(), id: each.id});
+          categorylist.push({label:each.data().name, value: each.id});
+        
+        });
+        categorylist.push({label:"Select Category", value:null});
+        console.log('Category List::', categorylist);
+        // setCategory(prev => ({...prev, data: categorylist}));
+        setItems([...categorylist])
+      })
+      .catch(error => {
+        console.log('error', error);
+      });
+  };
+
+  const renderItem = ({item}) => {
+    console.log('Item inrender Item::', item);
+    return (
+      <View style={{backgroundColor: 'white'}}>
+        <TouchableOpacity
+          onPress={() => onSelectItem(item)}
+          style={{height: 60}}>
+          <Text
+            style={{
+              color: 'black',
+              padding: 10,
+              fontSize: 16,
+              marginLeft: 30,
+            }}>
+            {item.name}
+          </Text>
+        </TouchableOpacity>
+      </View>
+    );
+  };
+
+>>>>>>> Stashed changes
   return (
     <View style={styles.container}>
       {
@@ -162,6 +331,29 @@ const AddPostScreen = ({navigation}) => {
         style={styles.name}
       />
 
+<<<<<<< Updated upstream
+=======
+      {/* <TouchableOpacity
+        style={styles.categorySelection}
+        onPress={() => {
+          toggleModal();
+          console.log('::', modalVisible);
+        }}>
+        <Text style={styles.categorySelectionText}>
+          {selectedCategory.name}
+        </Text>
+      </TouchableOpacity> */}
+
+<DropDownPicker
+      open={open}
+      value={value}
+      items={items}
+      setOpen={setOpen}
+      setValue={setValue}
+      setItems={setItems}
+    />
+
+>>>>>>> Stashed changes
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
         <Text style={{color: 'black', zIndex: 0}}>
           Upload an Image &#128247;
@@ -178,7 +370,19 @@ const AddPostScreen = ({navigation}) => {
         <Text>Submit</Text>
       </TouchableOpacity>
 
+<<<<<<< Updated upstream
       {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
+=======
+      {/* <ModalCategory
+        visible={modalVisible}
+        setModalVisible={setModalVisible}
+        data={category.data}
+        renderItem={renderItem}
+      /> */}
+      
+
+
+>>>>>>> Stashed changes
     </View>
   );
 };
