@@ -7,7 +7,6 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   title: {
-    // color: 'black',
     fontSize: 18,
     fontWeight: 'bold',
   },
@@ -20,7 +19,6 @@ const styles = StyleSheet.create({
     width: 200,
     height: 180,
     borderRadius: 20,
-    // backgroundColor:'black'
   },
   comments: {
     color: 'blue',
@@ -61,15 +59,11 @@ const styles = StyleSheet.create({
   },
   user_icon: {
     width: 30,
-    borderRadius: 15,
-    borderWidth: 2,
-    borderColor: 'grey',
-    border: 10,
-    marginBottom: 10,
+    margin: 20,
     height: 30,
   },
   tabIcon: {
-    justifyContent: 'flex-end',
+    justifyContent: 'space-between',
     flexDirection: 'row',
     marginBottom: 10,
   },

@@ -5,30 +5,29 @@ import {
   TouchableOpacity,
   Alert,
   Image,
+  ActivityIndicator
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import  Icon  from 'react-native-vector-icons/MaterialCommunityIcons';
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
 import * as storage from '../../../Services/AsyncStorageConfig';
 import auth from '@react-native-firebase/auth';
-import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
+import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
 import axios from 'axios';
 
-const API_URL = "https://us-central1-crud-app-3cd08.cloudfunctions.net"
-
+const API_URL = 'https://us-central1-crud-app-3cd08.cloudfunctions.net';
 
 const HomeScreen = ({navigation, route}) => {
   console.log('Route of Home:', route.params);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({loading: true}, []);
   const [visited, setVisited] = useState([]);
-  const [filter, setFilter] = useState(false)
-  // const [userInfo, setUserInfo] = useState({
-  //   Name: route.params.displayName,
-  //   Photo: route.params.PhotoURL
-  // })
+  const [filter, setFilter] = useState(false);
+
+  console.log("data loading:", data.loading)
+  
 
   useEffect(() => {
     getVisitedData();
@@ -44,7 +43,6 @@ const HomeScreen = ({navigation, route}) => {
         setVisited(jsonValue);
       }
     } catch (e) {
-      // error reading value
       console.log('ERROR:', e);
     }
   };
@@ -65,18 +63,18 @@ const HomeScreen = ({navigation, route}) => {
   //     });
   // };
 
-
   const getData = () => {
-  axios.get(`${API_URL}/getData`)
-  .then(response => {
-    console.log('response:::', response);
-    response.data.data
-    setData(response.data.data);
-  })
-  .catch(e=>{
-    console.log("Some error", e);
-  })
-}
+    axios
+      .get(`${API_URL}/getData`)
+      .then(response => {
+        console.log('response:::', response);
+        response.data.data;
+        setData(response.data.data);
+      })
+      .catch(e => {
+        console.log('Some error', e);
+      });
+  };
 
   useEffect(() => {
     console.log('Visited current is >', visited);
@@ -99,11 +97,10 @@ const HomeScreen = ({navigation, route}) => {
   };
 
   const renderItem = ({item}) => {
-    // console.log('Item in renderlist', item);
-    // console.log('Item in renderlist', item);
-
+    
     return (
       <View style={styles.renderContainer}>
+           
         <View style={styles.details}>
           <Text
             style={[
@@ -128,7 +125,7 @@ const HomeScreen = ({navigation, route}) => {
 
         <TouchableOpacity
           style={styles.icons}
-          onPress={() => preDelete(item.id)}>
+          onPress={() => deleteData(item.id)}>
           <View style={styles.deleteButton}>
             <AntDesign name="delete" color="red" size={18} />
           </View>
@@ -156,23 +153,7 @@ const HomeScreen = ({navigation, route}) => {
     );
   };
 
-  
-
-  const preDelete = id => {
-    Alert.alert('Alert', 'Are you sure to delete?', [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'Yes', onPress: () => {
-        auth()
-        .signOut()
-        .then(() => console.log('User signed out!'));
-      }},
-    ]);
-  };
-
+//Delete data
   const deleteData = id => {
     firestore()
       .collection('Contacts')
@@ -189,20 +170,21 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
+       {data.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
-      <TouchableOpacity style={styles.user_icon} >
-<Icon name='filter' color={'#361614'} size={25}/>
-      </TouchableOpacity>
-      <TouchableOpacity style={styles.user_icon}  onPress={()=>
-        {
-        auth().signOut()
-        GoogleSignin.signOut();
-        }
-        }>
-        {/* <Image style={styles.image} source={{uri: userInfo.Image}} /> */}
-      </TouchableOpacity>
+        <TouchableOpacity style={styles.user_icon}>
+          <Icon name="filter" color={'#361614'} size={25} />
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.user_icon}
+          onPress={() => {
+            auth().signOut();
+            GoogleSignin.signOut();
+          }}>
+            <AntDesign name="user" color={'blue'} size={25} />
+        </TouchableOpacity>
       </View>
-      
+
       <FlatList
         data={data}
         renderItem={renderItem}
