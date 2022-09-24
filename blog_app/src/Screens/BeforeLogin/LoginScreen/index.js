@@ -17,8 +17,8 @@ import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
 
 const LoginScreen = () => {
   const [state, setState] = useState({
-    email: '',
-    password: '',
+    email: __DEV__? 'sreedevi123@gmail.com':'',
+    password: __DEV__? '12345678':'',
     passwordHidden: false,
     loader: false,
     emailTestFail: null,

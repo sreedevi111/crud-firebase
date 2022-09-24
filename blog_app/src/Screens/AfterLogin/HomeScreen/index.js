@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   Alert,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState, useRef} from 'react';
 import firestore from '@react-native-firebase/firestore';
@@ -17,8 +17,9 @@ import * as storage from '../../../Services/AsyncStorageConfig';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
 import axios from 'axios';
+import {API_URL} from '@env'
 
-const API_URL = 'https://us-central1-crud-app-3cd08.cloudfunctions.net';
+
 
 const HomeScreen = ({navigation, route}) => {
   console.log('Route of Home:', route.params);
@@ -26,8 +27,7 @@ const HomeScreen = ({navigation, route}) => {
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false);
 
-  console.log("data loading:", data.loading)
-  
+  console.log('data loading:', data.loading);
 
   useEffect(() => {
     getVisitedData();
@@ -46,22 +46,6 @@ const HomeScreen = ({navigation, route}) => {
       console.log('ERROR:', e);
     }
   };
-
-  // const getData = () => {
-  //   const dataArray = [];
-  //   firestore()
-  //     .collection('Contacts')
-  //     .get()
-  //     .then(snapShot => {
-  //       snapShot.docs.map(each => {
-  //         dataArray.push({...each.data(), id: each.id});
-  //       });
-  //       setData(dataArray);
-  //     })
-  //     .catch(error => {
-  //       console.log('Some error in listing data', error);
-  //     });
-  // };
 
   const getData = () => {
     axios
@@ -91,16 +75,13 @@ const HomeScreen = ({navigation, route}) => {
       await storage.setItem('@visited', convertToString);
       console.log('WE UPDATED STORAGE TOOO');
     } catch (e) {
-      // error reading value
       console.log('ERROR TO SAVE DATA::', e);
     }
   };
 
   const renderItem = ({item}) => {
-    
     return (
       <View style={styles.renderContainer}>
-           
         <View style={styles.details}>
           <Text
             style={[
@@ -116,9 +97,9 @@ const HomeScreen = ({navigation, route}) => {
             {item.Title}
           </Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
-          <Text style={styles.name}>{item.Email}</Text>
+          <Text style={styles.name}>{item.Description}</Text>
           <Text style={styles.name}>{item.Phone}</Text>
-          {/* <Text style={styles.name}>Category:{item.Category.name}</Text> */}
+          <Text style={styles.name}>{item.catName}</Text>
 
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
@@ -138,7 +119,7 @@ const HomeScreen = ({navigation, route}) => {
               id: item.id,
               Title: item.Title,
               Name: item.Name,
-              Email: item.Email,
+              Description: item.Description,
               Phone: item.Phone,
               Image: item.Image,
               // Category: item.Category.name,
@@ -153,7 +134,7 @@ const HomeScreen = ({navigation, route}) => {
     );
   };
 
-//Delete data
+  //Delete data
   const deleteData = id => {
     firestore()
       .collection('Contacts')
@@ -170,7 +151,7 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-       {data.loading && <ActivityIndicator size="large" color="blue" />}
+      {data.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
         <TouchableOpacity style={styles.user_icon}>
           <Icon name="filter" color={'#361614'} size={25} />
@@ -181,7 +162,7 @@ const HomeScreen = ({navigation, route}) => {
             auth().signOut();
             GoogleSignin.signOut();
           }}>
-            <AntDesign name="user" color={'blue'} size={25} />
+          <AntDesign name="user" color={'blue'} size={25} />
         </TouchableOpacity>
       </View>
 
@@ -193,7 +174,9 @@ const HomeScreen = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
-          navigation.navigate('Add');
+          navigation.navigate('Add',{
+            reload:getData()
+          });
         }}>
         <Text>
           <AntDesign name="pluscircleo" color="blue" size={25} />;

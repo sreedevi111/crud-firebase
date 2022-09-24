@@ -6,7 +6,7 @@ const DetailScreen = ({navigation, route}) => {
   const [state, setState] = useState({
     Title: route.params.item.Title,
     Name: route.params.item.Name,
-    Email: route.params.item.Email,
+    Description: route.params.item.Description,
     Phone: route.params.item.Phone,
     Image: route.params.item.Image,
   });
@@ -17,7 +17,7 @@ const DetailScreen = ({navigation, route}) => {
         <View style={styles.detail}>
         <Text style={styles.title}>{state.Title} </Text>
         <Text style={styles.name}>{state.Name}</Text>
-        <Text style={styles.email}>{state.Email}</Text>
+        <Text style={styles.email}>{state.Description}</Text>
         <Text style={styles.phone}>{state.Phone}</Text>
         </View>
         

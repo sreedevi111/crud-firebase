@@ -6,6 +6,8 @@ import Toast from 'react-native-simple-toast';
 // import ModalCategory from '../../../Components/ModalCategory';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Moment from 'moment';
+import ImagePicker from 'react-native-image-crop-picker';
+import ActionSheet from 'react-native-action-sheet';
 
 
 
@@ -14,10 +16,43 @@ const EditScreen = ({navigation, route}) => {
   const [state, setState] = useState({
     Title: route.params.Title,
     Name: route.params.Name,
-    Email: route.params.Email,
+    Description: route.params.Description,
     Phone: route.params.Phone,
+    Image: route.params.Image
   });
+//Image selection
 
+const openCamera = () => {
+  ImagePicker.openCamera({
+    width: 300,
+    height: 400,
+  })
+    .then(image => {
+      console.log(image);
+      setState(prev => ({...prev, image}))
+    })
+    .catch(error => {
+      console.log('Error in catching image', error);
+    });
+};
+const openGallery = () => {
+  ImagePicker.openPicker({
+    width: 300,
+    height: 400,
+    cropping: true,
+  })
+    .then(image => {
+      console.log(image);
+      setState(prev => ({...prev, image}))
+    })
+    .catch(error => {
+      console.log('Error in catching image', error);
+    });
+};
+
+
+
+  // submit
   const submit = () => {
     console.log('triggered');
     firestore()
@@ -26,7 +61,7 @@ const EditScreen = ({navigation, route}) => {
       .update({
         Title: state.Title,
         Name: state.Name,
-        Email: state.Email,
+        Description: state.Description,
         Phone: state.Phone,
       })
       .then(res => {
@@ -40,6 +75,33 @@ const EditScreen = ({navigation, route}) => {
         Toast.show('OOPS!!');
       });
   };
+
+  //Function to select image from camera or gallery
+  const openActionSheet = () => {
+    var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
+
+    var BUTTONSandroid = ['Camera', 'ImageGallery', 'Cancel'];
+
+    var CANCEL_INDEX = 2;
+
+    ActionSheet.showActionSheetWithOptions(
+      {
+        options: Platform.OS == 'ios' ? BUTTONSiOS : BUTTONSandroid,
+        cancelButtonIndex: CANCEL_INDEX,
+        tintColor: 'blue',
+      },
+      buttonIndex => {
+        console.log('button clicked :', buttonIndex);
+        if (buttonIndex == 0) {
+          openCamera();
+        } else if (buttonIndex == 1) {
+          openGallery();
+        }
+      },
+    );
+  };
+
+
   return (
     <View style={styles.container}>
       <TextInput
@@ -58,7 +120,7 @@ const EditScreen = ({navigation, route}) => {
       />
       <TextInput
         placeholderTextColor={'grey'}
-        placeholder="Email"
+        placeholder="Description"
         value={state.Email}
         onChangeText={Email => setState(prev => ({...prev, Email}))}
         style={styles.name}
@@ -74,7 +136,9 @@ const EditScreen = ({navigation, route}) => {
 
       <View>
         <Text style={{color: 'black', left: 50}}>Edit Image &#128247;</Text>
-        <TouchableOpacity style={styles.imagePicker}></TouchableOpacity>
+        <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
+          
+        </TouchableOpacity>
       </View>
 
       <Button onPress={submit} title="Submit" />
