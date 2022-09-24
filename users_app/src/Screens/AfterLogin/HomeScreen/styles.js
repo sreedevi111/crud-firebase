@@ -1,8 +1,14 @@
 import {StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   title: {
     color: 'black',
+    fontSize:20,
+    fontWeight:'500'
   },
 
   name: {
@@ -10,18 +16,16 @@ const styles = StyleSheet.create({
     fontStyle: 'italic',
     fontSize: 10,
   },
-
-  renderContainer: {
-    borderWidth: 1,
-    width: '100%',
-    borderRadius: 20,
-    padding: 10,
-    borderColor: 'grey',
-    paddingVertical: 10,
-    flexDirection: 'row',
-    marginBottom: 20,
-    backgroundColor: 'white',
-  },
+container:{
+  flexDirection:'row',
+  alignItems:'center'
+},
+imgContainer:{
+  height:hp(20), 
+  width:hp(20), 
+  margin:20
+}
+  
 });
 
 export default styles;
