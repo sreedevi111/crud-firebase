@@ -12,36 +12,38 @@ const HomeScreen = ({navigation}) => {
     getData();
   }, []);
 
+  // const getData = () => {
+  //   const dataArray = [];
+  //   firestore()
+  //     .collection('Contacts')
+  //     .get()
+  //     .then(snapShot => {
+  //       console.log('Snapshot:::', snapShot);
+  //       snapShot.docs.map(each => {
+  //         dataArray.push({...each.data(), id: each.id});
+  //       });
+  //       setData(dataArray);
+  //     })
+  //     .catch(error => {
+  //       console.log('Some error in listing data', error);
+  //     });
+  // };
+
   const getData = () => {
-    const dataArray = [];
-    firestore()
-      .collection('Contacts')
-      .get()
-      .then(snapShot => {
-        console.log('Snapshot:::', snapShot);
-        snapShot.docs.map(each => {
-          dataArray.push({...each.data(), id: each.id});
-        });
-        setData(dataArray);
+    axios
+      .get(`${API_URL}/getData`)
+      .then(response => {
+        console.log('response:::', response);
+        response.data.data;
+        setData(response.data.data);
       })
-      .catch(error => {
-        console.log('Some error in listing data', error);
+      .catch(e => {
+        console.log('Some error', e);
       });
   };
 
 
-  // const getData = async() => {
-  //   const response = await axios.get(`${ API_URL}/getData`)
-  //   try{
-  //     response.data.data
-  //     setData(response.data.data);
-  //   }
-  //  catch{
-  //   e=>{
-  //     console.log("Error::", e)
-  //   }
-  //  }
-  // }
+  
 
   const renderItem = ({item}) => {
     return (

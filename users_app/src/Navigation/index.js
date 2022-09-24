@@ -1,5 +1,5 @@
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
-import React from 'react'
+import React, {useEffect} from 'react'
 import { NavigationContainer} from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from '../Screens/AfterLogin/HomeScreen';
@@ -11,8 +11,6 @@ const Stack = createNativeStackNavigator();
 
 const Navigation = () => {
 
-<<<<<<< Updated upstream
-=======
   useEffect(()=>{
     getRequest();
     // Foreground state messages
@@ -52,7 +50,6 @@ const Navigation = () => {
     })
   }
 
->>>>>>> Stashed changes
     
   return (
   <SafeAreaView style={styles.container}>
