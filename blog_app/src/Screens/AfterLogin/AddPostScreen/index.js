@@ -7,6 +7,7 @@ import {
   Platform,
   Image,
   ActivityIndicator,
+  ScrollView,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -27,7 +28,7 @@ const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
     Title: '',
     Name: '',
-    Email: '',
+    Description: '',
     Phone: '',
     Image: '',
   });
@@ -42,15 +43,12 @@ const AddPostScreen = ({navigation}) => {
   useEffect(() => {
     console.log('value', value);
   }, [value]);
-
+ 
   //To select image
-  useEffect(() => {}, []);
-
   const openCamera = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
-      // cropping: true,
     })
       .then(image => {
         console.log(image);
@@ -88,18 +86,16 @@ const AddPostScreen = ({navigation}) => {
     return item.value == value;
   });
 
-  console.log('catName', catName[0].label);
+  // console.log('catName', catName[0].label);
 
   const addContactDatatoFirestore = async () => {
-    var tmpID = null;
-    var imagename = '';
     try {
       var res = await firestore()
         .collection('Contacts')
         .add({
           Title: state.Title,
           Name: state.Name,
-          Email: state.Email,
+          Description: state.Description,
           Phone: state.Phone,
           // Category: CatName[0].label,
           // CatId:
@@ -141,14 +137,13 @@ const AddPostScreen = ({navigation}) => {
             .catch(e => {
               console.log('error::', e);
             }),
-            route.params.reloadData();
+           
           setTimeout(() => {
             navigation.navigate('Home');
           }, 1500);
         } else {
           setLoading(false);
           Toast.show('Uploaded Successfully');
-          route.params.reloadData();
           navigation.navigate('Home');
         }
         imagename = `${res.id}.${extension}`;
@@ -160,13 +155,15 @@ const AddPostScreen = ({navigation}) => {
           .update({Image: url});
         setLoading(false);
         Toast.show('Image updated successfully!!!');
+        navigation.navigate('Home');
       } else {
         setLoading(false);
         Toast.show('Image updated successfully!!!');
+        navigation.navigate('Home');
       }
     } catch (error) {
       console.log('Image failed to upload', error);
-      Toast.show('Image failed to upload');
+      // Toast.show('Image failed to upload');
     }
   };
 
@@ -259,10 +256,10 @@ const AddPostScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       {loading && <ActivityIndicator animating size={'large'} />}
-
-      <TextInput
+<>
+<TextInput
         placeholderTextColor={'grey'}
         placeholder="Title"
         value={state.Title}
@@ -278,9 +275,9 @@ const AddPostScreen = ({navigation}) => {
       />
       <TextInput
         placeholderTextColor={'grey'}
-        placeholder="Email"
-        value={state.Email}
-        onChangeText={Email => setState(prev => ({...prev, Email}))}
+        placeholder="Description"
+        value={state.Description}
+        onChangeText={Description => setState(prev => ({...prev, Description}))}
         style={styles.name}
       />
       <TextInput
@@ -303,15 +300,7 @@ const AddPostScreen = ({navigation}) => {
         </Text>
       </TouchableOpacity> */}
 
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-      />
-
+     
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
         <Text style={{color: 'black', zIndex: 0}}>
           Upload an Image &#128247;
@@ -324,6 +313,16 @@ const AddPostScreen = ({navigation}) => {
         )}
       </TouchableOpacity>
 
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+      />
+
+
       <TouchableOpacity style={styles.button} onPress={submit}>
         <Text>Submit</Text>
       </TouchableOpacity>
@@ -335,7 +334,9 @@ const AddPostScreen = ({navigation}) => {
         data={category.data}
         renderItem={renderItem}
       /> */}
-    </View>
+</>
+      
+    </ScrollView>
   );
 };
 export default AddPostScreen;
