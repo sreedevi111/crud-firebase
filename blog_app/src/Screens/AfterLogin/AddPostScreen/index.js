@@ -15,8 +15,6 @@ import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
-<<<<<<< Updated upstream
-=======
 import ModalCategory from '../../../Components/ModalCategory';
 import axios from 'axios';
 import _ from 'lodash';
@@ -25,7 +23,6 @@ import Moment from 'moment'
 
 
 import {API_URL} from '@env';
->>>>>>> Stashed changes
 
 const AddPostScreen = ({navigation}) => {
   const [state, setState] = useState({
@@ -38,8 +35,6 @@ const AddPostScreen = ({navigation}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-<<<<<<< Updated upstream
-=======
 // For dropdown
   const [open, setOpen] = useState(false); // status of dropdownload status = false, status = true
   const [value, setValue] = useState(null); //to store select option of dropdown
@@ -53,7 +48,6 @@ const AddPostScreen = ({navigation}) => {
 
 
   //To select image
->>>>>>> Stashed changes
   useEffect(() => {}, []);
 
   const openCamera = () => {
@@ -85,18 +79,11 @@ const AddPostScreen = ({navigation}) => {
       });
   };
 
-<<<<<<< Updated upstream
-=======
   // submit fuction
->>>>>>> Stashed changes
   const submit = async () => {
     if (String(state.Title).length < 3) {
       Toast.show('Title should contain min 4 characters');
     }
-<<<<<<< Updated upstream
-
-    setLoading(true);
-=======
     setLoading(true);
     await addContactDatatoFirestore();
     
@@ -107,7 +94,6 @@ const AddPostScreen = ({navigation}) => {
 })
 
 console.log('catName',catName[0].label)
->>>>>>> Stashed changes
 
     var tmpID = null;
     var imagename = '';
@@ -117,28 +103,15 @@ console.log('catName',catName[0].label)
         Name: state.Name,
         Email: state.Email,
         Phone: state.Phone,
-<<<<<<< Updated upstream
-=======
         // Category: CatName[0].label,
         // CatId:
         catName: catName[0].label, 
         catID: value,
         timeCreated: Moment().unix(), 
         timeinHuman: Moment().format('DD-MM-YYYY')  
->>>>>>> Stashed changes
       });
       
       if (res) {
-<<<<<<< Updated upstream
-      //  console.log("Selected image path", selectedImage.path)
-        // if(selectedImage !== null && typeof selectedImage.path !== undefined){
-          if(selectedImage?.path){
-        var extension = '';
-        if (selectedImage.mime === 'image/jpeg') {
-          extension = 'jpg';
-        } else if (selectedImage.mime === 'image/png') {
-          extension = 'png';
-=======
         if (selectedImage?.path) {
           var extension = '';
           if (selectedImage.mime === 'image/jpeg') {
@@ -183,7 +156,6 @@ console.log('catName',catName[0].label)
           Toast.show('Uploaded Successfully');
           route.params.reloadData();
           navigation.navigate('Home');
->>>>>>> Stashed changes
         }
         imagename = `${res.id}.${extension}`;
         await storage().ref('sample.jpeg').putFile(selectedImage.path);
@@ -197,11 +169,11 @@ console.log('catName',catName[0].label)
         Toast.show("Image updated successfully!!!")
       }
       }
-    } catch (error) {
+     catch (error) {
       console.log('Image failed to upload', error);
       Toast.show('Image failed to upload');
     }
-  };
+
 
   const openActionSheet = () => {
     var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
@@ -227,8 +199,6 @@ console.log('catName',catName[0].label)
     );
   };
 
-<<<<<<< Updated upstream
-=======
   // For Modal category
   const [modalVisible, setModalVisible] = useState(false);
   const [category, setCategory] = useState({data: []});
@@ -294,7 +264,6 @@ console.log('catName',catName[0].label)
     );
   };
 
->>>>>>> Stashed changes
   return (
     <View style={styles.container}>
       {
@@ -331,8 +300,6 @@ console.log('catName',catName[0].label)
         style={styles.name}
       />
 
-<<<<<<< Updated upstream
-=======
       {/* <TouchableOpacity
         style={styles.categorySelection}
         onPress={() => {
@@ -353,7 +320,6 @@ console.log('catName',catName[0].label)
       setItems={setItems}
     />
 
->>>>>>> Stashed changes
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
         <Text style={{color: 'black', zIndex: 0}}>
           Upload an Image &#128247;
@@ -370,9 +336,7 @@ console.log('catName',catName[0].label)
         <Text>Submit</Text>
       </TouchableOpacity>
 
-<<<<<<< Updated upstream
       {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
-=======
       {/* <ModalCategory
         visible={modalVisible}
         setModalVisible={setModalVisible}
@@ -382,9 +346,8 @@ console.log('catName',catName[0].label)
       
 
 
->>>>>>> Stashed changes
     </View>
   );
-};
+
 
 export default AddPostScreen;
