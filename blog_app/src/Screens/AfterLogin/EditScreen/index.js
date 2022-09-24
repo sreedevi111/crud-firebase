@@ -3,7 +3,7 @@ import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
 import firestore from '@react-native-firebase/firestore';
 import Toast from 'react-native-simple-toast';
-import ModalCategory from '../../../Components/ModalCategory';
+// import ModalCategory from '../../../Components/ModalCategory';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Moment from 'moment';
 

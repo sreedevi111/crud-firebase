@@ -6,7 +6,7 @@ import {
   Text,
   Platform,
   Image,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -15,12 +15,11 @@ import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
-import ModalCategory from '../../../Components/ModalCategory';
+// import ModalCategory from '../../../Components/ModalCategory';
 import axios from 'axios';
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
-import Moment from 'moment'
-
+import Moment from 'moment';
 
 import {API_URL} from '@env';
 
@@ -35,17 +34,14 @@ const AddPostScreen = ({navigation}) => {
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
-// For dropdown
+  // For dropdown
   const [open, setOpen] = useState(false); // status of dropdownload status = false, status = true
   const [value, setValue] = useState(null); //to store select option of dropdown
-  const [items, setItems] = useState([
-   
-   ]);
+  const [items, setItems] = useState([]);
 
-  useEffect(()=> {
-    console.log('value',value)
-  },[value])
-
+  useEffect(() => {
+    console.log('value', value);
+  }, [value]);
 
   //To select image
   useEffect(() => {}, []);
@@ -86,31 +82,33 @@ const AddPostScreen = ({navigation}) => {
     }
     setLoading(true);
     await addContactDatatoFirestore();
-    
   };
 
-  var catName = _.filter(items, item  => {
-    return item.value == value
-})
+  var catName = _.filter(items, item => {
+    return item.value == value;
+  });
 
-console.log('catName',catName[0].label)
+  console.log('catName', catName[0].label);
 
+  const addContactDatatoFirestore = async () => {
     var tmpID = null;
     var imagename = '';
     try {
-      var res = await firestore().collection('Contacts').add({
-        Title: state.Title,
-        Name: state.Name,
-        Email: state.Email,
-        Phone: state.Phone,
-        // Category: CatName[0].label,
-        // CatId:
-        catName: catName[0].label, 
-        catID: value,
-        timeCreated: Moment().unix(), 
-        timeinHuman: Moment().format('DD-MM-YYYY')  
-      });
-      
+      var res = await firestore()
+        .collection('Contacts')
+        .add({
+          Title: state.Title,
+          Name: state.Name,
+          Email: state.Email,
+          Phone: state.Phone,
+          // Category: CatName[0].label,
+          // CatId:
+          catName: catName[0].label,
+          catID: value,
+          timeCreated: Moment().unix(),
+          timeinHuman: Moment().format('DD-MM-YYYY'),
+        });
+
       if (res) {
         if (selectedImage?.path) {
           var extension = '';
@@ -129,25 +127,21 @@ console.log('catName',catName[0].label)
           setLoading(false);
           Toast.show('Image updated successfully!!!');
 
-          
-          
           //For push notification
-          axios.post(
-            `${API_URL}/sendPushToTopic`,
-            {
+          axios
+            .post(`${API_URL}/sendPushToTopic`, {
               topic: 'customers',
               Title: state.Title,
               Name: state.Name,
-            },
-            )
-            
-              .then(status => {
-                console.log('status::', status);
-              })
-              .catch(e => {
-                console.log('error::', e);
-              }),
-          route.params.reloadData();
+            })
+
+            .then(status => {
+              console.log('status::', status);
+            })
+            .catch(e => {
+              console.log('error::', e);
+            }),
+            route.params.reloadData();
           setTimeout(() => {
             navigation.navigate('Home');
           }, 1500);
@@ -160,20 +154,21 @@ console.log('catName',catName[0].label)
         imagename = `${res.id}.${extension}`;
         await storage().ref('sample.jpeg').putFile(selectedImage.path);
         var url = await storage().ref('sample.jpeg').getDownloadURL();
-        await firestore().collection('Contacts').doc(res.id).update({Image: url});
-        setLoading(false)
-        Toast.show("Image updated successfully!!!")
+        await firestore()
+          .collection('Contacts')
+          .doc(res.id)
+          .update({Image: url});
+        setLoading(false);
+        Toast.show('Image updated successfully!!!');
+      } else {
+        setLoading(false);
+        Toast.show('Image updated successfully!!!');
       }
-      else {
-        setLoading(false)
-        Toast.show("Image updated successfully!!!")
-      }
-      }
-     catch (error) {
+    } catch (error) {
       console.log('Image failed to upload', error);
       Toast.show('Image failed to upload');
     }
-
+  };
 
   const openActionSheet = () => {
     var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
@@ -230,13 +225,12 @@ console.log('catName',catName[0].label)
         console.log('response check::::::', response.docs);
         response.docs.map(each => {
           // categorylist.push({...each.data(), id: each.id});
-          categorylist.push({label:each.data().name, value: each.id});
-        
+          categorylist.push({label: each.data().name, value: each.id});
         });
-        categorylist.push({label:"Select Category", value:null});
+        categorylist.push({label: 'Select Category', value: null});
         console.log('Category List::', categorylist);
         // setCategory(prev => ({...prev, data: categorylist}));
-        setItems([...categorylist])
+        setItems([...categorylist]);
       })
       .catch(error => {
         console.log('error', error);
@@ -266,10 +260,8 @@ console.log('catName',catName[0].label)
 
   return (
     <View style={styles.container}>
-      {
-        loading &&   <ActivityIndicator animating size={'large'}/>
-      }
-     
+      {loading && <ActivityIndicator animating size={'large'} />}
+
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Title"
@@ -311,14 +303,14 @@ console.log('catName',catName[0].label)
         </Text>
       </TouchableOpacity> */}
 
-<DropDownPicker
-      open={open}
-      value={value}
-      items={items}
-      setOpen={setOpen}
-      setValue={setValue}
-      setItems={setItems}
-    />
+      <DropDownPicker
+        open={open}
+        value={value}
+        items={items}
+        setOpen={setOpen}
+        setValue={setValue}
+        setItems={setItems}
+      />
 
       <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
         <Text style={{color: 'black', zIndex: 0}}>
@@ -343,11 +335,7 @@ console.log('catName',catName[0].label)
         data={category.data}
         renderItem={renderItem}
       /> */}
-      
-
-
     </View>
   );
-
-
+};
 export default AddPostScreen;
