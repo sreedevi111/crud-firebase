@@ -163,13 +163,12 @@ const HomeScreen = ({navigation, route}) => {
       .get()
       .then(response => {
         var categorylist = [];
-        console.log('response check::::::', response.docs);
         response.docs.map(each => {
           // categorylist.push({...each.data(), id: each.id});
           categorylist.push({label: each.data().name, value: each.id});
         });
         // categorylist.push({label: 'Select Category', value: null});
-        console.log('Category List::', categorylist);
+        // console.log('Category List::', categorylist);
         // setCategory(prev => ({...prev, data: categorylist}));
         setItems([...categorylist]); //?Adding to dropdownlist
       })
@@ -179,8 +178,10 @@ const HomeScreen = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    console.log('Valu:::', value);
-    categoryFilter();
+    // console.log('Valu:::', );
+    if (value) {
+      categoryFilter();
+    }
   });
 
   const categoryFilter = () => {
@@ -188,8 +189,17 @@ const HomeScreen = ({navigation, route}) => {
       .collection('Contacts')
       .where('catID', '==', value)
       .get()
-      .then(response => {
-        console.log('filtered dta:', response);
+      // .then(response => {
+      //   console.log('filtered dta:', response.data);
+      //   SelectArray.push(response.docs.data())
+
+      // });
+      .then(querySnapshot => {
+        querySnapshot.forEach(doc => {
+          // doc.data() is never undefined for query doc snapshots
+          // console.log(doc.id, ' => ', doc.data());
+          setData([doc.data()]);
+        });
       });
   };
 
