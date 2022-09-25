@@ -43,8 +43,8 @@ const AddPostScreen = ({navigation}) => {
   useEffect(() => {
     console.log('value', value);
   }, [value]);
- 
-  //To select image
+
+  //Function to select image from camera and gallery
   const openCamera = () => {
     ImagePicker.openCamera({
       width: 300,
@@ -97,8 +97,6 @@ const AddPostScreen = ({navigation}) => {
           Name: state.Name,
           Description: state.Description,
           Phone: state.Phone,
-          // Category: CatName[0].label,
-          // CatId:
           catName: catName[0].label,
           catID: value,
           timeCreated: Moment().unix(),
@@ -137,10 +135,9 @@ const AddPostScreen = ({navigation}) => {
             .catch(e => {
               console.log('error::', e);
             }),
-           
-          setTimeout(() => {
-            navigation.navigate('Home');
-          }, 1500);
+            setTimeout(() => {
+              navigation.navigate('Home');
+            }, 1500);
         } else {
           setLoading(false);
           Toast.show('Uploaded Successfully');
@@ -163,10 +160,10 @@ const AddPostScreen = ({navigation}) => {
       }
     } catch (error) {
       console.log('Image failed to upload', error);
-      // Toast.show('Image failed to upload');
     }
   };
 
+  //Function to opt Camera and Gallery
   const openActionSheet = () => {
     var BUTTONSiOS = ['Camera', 'CameraRoll', 'Cancel'];
 
@@ -192,26 +189,26 @@ const AddPostScreen = ({navigation}) => {
   };
 
   // For Modal category
-  const [modalVisible, setModalVisible] = useState(false);
-  const [category, setCategory] = useState({data: []});
-  const [selectedCategory, setSelectedCategory] = useState({
-    name: 'Select Category',
-    id: null,
-  });
+  // const [modalVisible, setModalVisible] = useState(false);
+  // const [category, setCategory] = useState({data: []});
+  // const [selectedCategory, setSelectedCategory] = useState({
+  //   name: 'Select Category',
+  //   id: null,
+  // });
 
   useEffect(() => {
-    SelectCategories(category);
+    SelectCategories();
   }, []);
 
-  const onSelectItem = item => {
-    setSelectedCategory(item);
-    console.log('selected Category::', item);
-    toggleModal();
-  };
+  // const onSelectItem = item => {
+  //   setSelectedCategory(item);
+  //   console.log('selected Category::', item);
+  //   toggleModal();
+  // };
 
-  const toggleModal = () => {
-    setModalVisible(!modalVisible);
-  };
+  // const toggleModal = () => {
+  //   setModalVisible(!modalVisible);
+  // };
 
   const SelectCategories = () => {
     firestore()
@@ -227,69 +224,76 @@ const AddPostScreen = ({navigation}) => {
         categorylist.push({label: 'Select Category', value: null});
         console.log('Category List::', categorylist);
         // setCategory(prev => ({...prev, data: categorylist}));
-        setItems([...categorylist]);
+        setItems([...categorylist]); //?Adding to dropdownlist
       })
       .catch(error => {
         console.log('error', error);
       });
   };
+  
 
-  const renderItem = ({item}) => {
-    console.log('Item inrender Item::', item);
-    return (
-      <View style={{backgroundColor: 'white'}}>
-        <TouchableOpacity
-          onPress={() => onSelectItem(item)}
-          style={{height: 60}}>
-          <Text
-            style={{
-              color: 'black',
-              padding: 10,
-              fontSize: 16,
-              marginLeft: 30,
-            }}>
-            {item.name}
-          </Text>
-        </TouchableOpacity>
-      </View>
-    );
-  };
+  
+
+  // //For modal flat list
+  //   const renderItem = ({item}) => {
+  //     console.log('Item inrender Item::', item);
+  //     return (
+  //       <View style={{backgroundColor: 'white'}}>
+  //         <TouchableOpacity
+  //           onPress={() => onSelectItem(item)}
+  //           style={{height: 60}}>
+  //           <Text
+  //             style={{
+  //               color: 'black',
+  //               padding: 10,
+  //               fontSize: 16,
+  //               marginLeft: 30,
+  //             }}>
+  //             {item.name}
+  //           </Text>
+  //         </TouchableOpacity>
+  //       </View>
+  //     );
+  //   };
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {loading && <ActivityIndicator animating size={'large'} />}
-<>
-<TextInput
-        placeholderTextColor={'grey'}
-        placeholder="Title"
-        value={state.Title}
-        onChangeText={Title => setState(prev => ({...prev, Title}))}
-        style={styles.title}
-      />
-      <TextInput
-        placeholderTextColor={'grey'}
-        placeholder="Name"
-        value={state.Name}
-        onChangeText={Name => setState(prev => ({...prev, Name}))}
-        style={styles.name}
-      />
-      <TextInput
-        placeholderTextColor={'grey'}
-        placeholder="Description"
-        value={state.Description}
-        onChangeText={Description => setState(prev => ({...prev, Description}))}
-        style={styles.name}
-      />
-      <TextInput
-        placeholderTextColor={'grey'}
-        placeholder="Phone"
-        keyboardType="numeric"
-        value={state.Phone}
-        onChangeText={Phone => setState(prev => ({...prev, Phone}))}
-        style={styles.name}
-      />
+      <ScrollView>
+        <TextInput
+          placeholderTextColor={'grey'}
+          placeholder="Title"
+          value={state.Title}
+          onChangeText={Title => setState(prev => ({...prev, Title}))}
+          style={styles.title}
+        />
+        <TextInput
+          placeholderTextColor={'grey'}
+          placeholder="Description"
+          value={state.Description}
+          onChangeText={Description =>
+            setState(prev => ({...prev, Description}))
+          }
+          style={styles.name}
+        />
+        <TextInput
+          placeholderTextColor={'grey'}
+          placeholder="Name"
+          value={state.Name}
+          onChangeText={Name => setState(prev => ({...prev, Name}))}
+          style={styles.name}
+        />
 
-      {/* <TouchableOpacity
+        <TextInput
+          placeholderTextColor={'grey'}
+          placeholder="Phone"
+          keyboardType="numeric"
+          value={state.Phone}
+          onChangeText={Phone => setState(prev => ({...prev, Phone}))}
+          style={styles.name}
+        />
+
+        {/* <TouchableOpacity
         style={styles.categorySelection}
         onPress={() => {
           toggleModal();
@@ -300,43 +304,41 @@ const AddPostScreen = ({navigation}) => {
         </Text>
       </TouchableOpacity> */}
 
-     
-      <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
-        <Text style={{color: 'black', zIndex: 0}}>
-          Upload an Image &#128247;
-        </Text>
-        {selectedImage != null && (
-          <Image
-            source={{uri: selectedImage.path}}
-            style={styles.imageUpload}
-          />
-        )}
-      </TouchableOpacity>
+        <DropDownPicker
+          style={{marginBottom: 10}}
+          open={open}
+          value={value}
+          items={items}
+          setOpen={setOpen}
+          setValue={setValue}
+          setItems={setItems}
+        />
 
-      <DropDownPicker
-        open={open}
-        value={value}
-        items={items}
-        setOpen={setOpen}
-        setValue={setValue}
-        setItems={setItems}
-      />
+        <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
+          <Text style={{color: 'black', zIndex: 0}}>
+            Upload an Image &#128247;
+          </Text>
+          {selectedImage != null && (
+            <Image
+              source={{uri: selectedImage.path}}
+              style={styles.imageUpload}
+            />
+          )}
+        </TouchableOpacity>
 
+        <TouchableOpacity style={styles.button} onPress={submit}>
+          <Text>Submit</Text>
+        </TouchableOpacity>
 
-      <TouchableOpacity style={styles.button} onPress={submit}>
-        <Text>Submit</Text>
-      </TouchableOpacity>
-
-      {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
-      {/* <ModalCategory
+        {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
+        {/* <ModalCategory
         visible={modalVisible}
         setModalVisible={setModalVisible}
         data={category.data}
         renderItem={renderItem}
       /> */}
-</>
-      
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 };
 export default AddPostScreen;
