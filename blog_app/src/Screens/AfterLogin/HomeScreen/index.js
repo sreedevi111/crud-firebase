@@ -22,7 +22,7 @@ import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 
 const HomeScreen = ({navigation, route}) => {
-  const [data, setData] = useState({loading: true}, []);
+  const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
   const [filter, setFilter] = useState(false);
 
@@ -101,9 +101,8 @@ const HomeScreen = ({navigation, route}) => {
             {item.Title}
           </Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
-          <Text style={styles.name}>{item.Description}</Text>
-          <Text style={styles.name}>{item.Phone}</Text>
           <Text style={styles.name}>{item.catName}</Text>
+          <Text style={styles.name}>{item.timeinHuman}</Text>
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 
@@ -124,8 +123,8 @@ const HomeScreen = ({navigation, route}) => {
               id: item.id,
               Title: item.Title,
               Name: item.Name,
-              Description: item.Description,
-              Phone: item.Phone,
+              Description:item.Description,
+              timeinHuman: item.timeinHuman,
               Image: item.Image,
               reload: getData(),
             })

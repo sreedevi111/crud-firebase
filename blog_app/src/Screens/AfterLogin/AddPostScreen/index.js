@@ -87,7 +87,6 @@ const AddPostScreen = ({navigation}) => {
   });
 
   // console.log('catName', catName[0].label);
-
   const addContactDatatoFirestore = async () => {
     try {
       var res = await firestore()
@@ -230,9 +229,6 @@ const AddPostScreen = ({navigation}) => {
         console.log('error', error);
       });
   };
-  
-
-  
 
   // //For modal flat list
   //   const renderItem = ({item}) => {

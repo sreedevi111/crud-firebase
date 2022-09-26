@@ -1,46 +1,43 @@
-import { StyleSheet } from "react-native";
+import {StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
-container:{
-    flex:1,
-    backgroundColor:'white',
-   
-},
-image:{
-height:250,
-width:200,
-// justifyContent:'center',
-left:80,
-borderRadius:20,
-marginTop:10
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+  },
+  image: {
+    height: hp(40),
+    width: wp(80),
+    margin: wp(10),
+  },
+  title: {
+    color: 'black',
+    fontSize: 24,
+    fontFamily: 'Lato-Black',
+    margin: wp(2),
+    alignItems: 'center',
+  },
+  name: {
+    color: 'black',
+    fontStyle: 'italic',
+    fontSize:12
+  },
 
-
-},
-title:{
+  phone: {
+    color: 'black',
+    fontStyle: 'italic',
+    fontSize:12
+  },
+  description:{
     color:'black',
-    fontSize:24,
+    fontFamily:'Slabo27px-Regular',
+    fontSize:16,
+    margin:wp(2)
+  }
+});
 
-},
-name:{
-    color:'black'
-},
-email:{
-    color:'black'
-},
-phone:{
-    color:'black'
-}, 
-detail:{
-    alignItems:'center',
-    borderWidth:2,
-    borderColor:'grey',
-    marginTop:50,
-    marginHorizontal:40,
-    backgroundColor:'#93ba9d'
-
-    
-}
-
-})
-
-export {styles}
+export {styles};
