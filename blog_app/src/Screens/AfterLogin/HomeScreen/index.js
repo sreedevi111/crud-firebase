@@ -28,7 +28,7 @@ const HomeScreen = ({navigation, route}) => {
 
   //To Filter
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(null);
+  const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
 
   useEffect(() => {
@@ -107,32 +107,39 @@ const HomeScreen = ({navigation, route}) => {
         </View>
 
         {/* Delete icon */}
-        <TouchableOpacity
-          style={styles.icons}
-          onPress={() => deleteData(item.id)}>
-          <View style={styles.deleteButton}>
-            <AntDesign name="delete" color="red" size={18} />
-          </View>
-        </TouchableOpacity>
 
         {/* Edit icon  */}
-        <TouchableOpacity
-          style={styles.icons}
-          onPress={() =>
-            navigation.navigate('Edit', {
-              id: item.id,
-              Title: item.Title,
-              Name: item.Name,
-              Description:item.Description,
-              timeinHuman: item.timeinHuman,
-              Image: item.Image,
-              reload: getData(),
-            })
-          }>
-          <View style={styles.editButton}>
-            <AntDesign name="edit" color="blue" size={20} />
-          </View>
-        </TouchableOpacity>
+        <View style={[styles.icons, {flexDirection:'row', alignItems:'center', justifyContent:'space-evenly'}]}>
+
+
+        <TouchableOpacity onPress={() => deleteData(item.id)}>
+            <View style={styles.deleteButton}>
+              <AntDesign name="delete" color="red" size={18} />
+            </View>
+          </TouchableOpacity>
+
+
+          <TouchableOpacity
+            onPress={() =>
+              navigation.navigate('Edit', {
+                id: item.id,
+                Title: item.Title,
+                Name: item.Name,
+                Description: item.Description,
+                timeinHuman: item.timeinHuman,
+                Image: item.Image,
+                reload: getData(),
+              })
+            }>
+            <View style={styles.editButton}>
+              <AntDesign name="edit" color="blue" size={20} />
+            </View>
+          </TouchableOpacity>
+
+
+         
+
+        </View>
       </View>
     );
   };
@@ -178,27 +185,35 @@ const HomeScreen = ({navigation, route}) => {
 
   useEffect(() => {
     // console.log('Valu:::', );
-    if (value) {
+    if (value.length != 0) {
       categoryFilter();
+      console.log('Value of Array:', value);
     }
   });
 
   const categoryFilter = () => {
     firestore()
       .collection('Contacts')
-      .where('catID', '==', value)
+      .where('catID', 'in', value)
       .get()
       // .then(response => {
       //   console.log('filtered dta:', response.data);
       //   SelectArray.push(response.docs.data())
 
       // });
+
       .then(querySnapshot => {
+        var a = [];
         querySnapshot.forEach(doc => {
           // doc.data() is never undefined for query doc snapshots
           // console.log(doc.id, ' => ', doc.data());
-          setData([doc.data()]);
+          console.log('QQQQ::', [doc.data()]);
+          a.push(doc.data());
+          // setData([doc.data()]);
         });
+        setData(a);
+        // console.log("tesfvsd:::", querySnapshot.docs())
+        // setData(querySnapshot)
       });
   };
 
@@ -211,6 +226,9 @@ const HomeScreen = ({navigation, route}) => {
         <View style={{width: 150}}>
           <DropDownPicker
             placeholder="Filter"
+            multiple={true}
+            min={0}
+            max={5}
             showBadgeDot={true}
             open={open}
             value={value}
@@ -218,6 +236,16 @@ const HomeScreen = ({navigation, route}) => {
             setOpen={setOpen}
             setValue={setValue}
             setItems={setItems}
+            mode="BADGE"
+            badgeDotColors={[
+              '#e76f51',
+              '#00b4d8',
+              '#e9c46a',
+              '#e76f51',
+              '#8ac926',
+              '#00b4d8',
+              '#e9c46a',
+            ]}
           />
         </View>
 
