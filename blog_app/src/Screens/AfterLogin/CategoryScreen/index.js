@@ -1,7 +1,13 @@
-import {Text, View, FlatList, SectionList} from 'react-native';
+import {
+  Text,
+  View,
+  FlatList,
+  SectionList,
+  TouchableOpacity,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import styles from './styles';
-
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //importing action and reducer
 import {categoryReducer} from '../../../Redux/Reducers/categoryreducer';
@@ -23,9 +29,7 @@ const CategoryScreen = () => {
     }
   }, []);
 
-
   console.log('cat:', categories);
-  
 
   console.log('>>>>>', cat1);
 
@@ -49,26 +53,34 @@ const CategoryScreen = () => {
     return (
       <View
         style={{
-          height: 50,
-          justifyContent: 'center',
+          flexDirection: 'row',
+          alignItems: 'center',
           borderBottomColor: 'black',
           borderBottomWidth: 0.5,
         }}>
-        <Text style={{paddingLeft: 10, color: 'black'}}>{item.item.label}</Text>
+        <View
+          style={{
+            height: 50,
+            justifyContent: 'center',
+          }}>
+          <Text style={{paddingLeft: 10, color: 'black'}}>
+            {item.item.label}
+          </Text>
+        </View>
+        <TouchableOpacity>
+          <View style={{justifyContent: 'flex-end'}}>
+            <AntDesign name="edit" color="blue" size={20} />
+          </View>
+        </TouchableOpacity>
       </View>
     );
   };
   return (
     <View>
-
-      <Text style={{color:'black', fontFamily:'Lato-Black', fontSize:25}}>LIST OF CATEGORIES</Text>
-      {categories !== null && (
-      <FlatList 
-      data={cat1}
-      renderItem={renderItem}
-      />
-
-      )}
+      <Text style={{color: 'black', fontFamily: 'Lato-Black', fontSize: 25}}>
+        LIST OF CATEGORIES
+      </Text>
+      {categories !== null && <FlatList data={cat1} renderItem={renderItem} />}
     </View>
   );
 };
