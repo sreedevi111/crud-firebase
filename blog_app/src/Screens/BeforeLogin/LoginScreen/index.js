@@ -13,27 +13,26 @@ import {
   statusCodes,
 } from '@react-native-google-signin/google-signin';
 
-import {GoogleSignin } from '../../../Services/GoogleAuthConfigure'
+import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
 
 const LoginScreen = () => {
   const [state, setState] = useState({
-    email: __DEV__? 'sreedevi123@gmail.com':'',
-    password: __DEV__? '12345678':'',
+    email: __DEV__ ? 'sreedevi123@gmail.com' : '',
+    password: __DEV__ ? '12345678' : '',
     passwordHidden: false,
     loader: false,
     emailTestFail: null,
     passwordTestFail: null,
   });
 
-  const [userData, setUserData] = useState(null)
-  const [currentUser, setCurrentUser] = useState(null)
+  const [userData, setUserData] = useState(null);
+  const [currentUser, setCurrentUser] = useState(null);
 
-  useEffect (()=>{
- const currentUser = auth().currentUser
- console.log("currentUser>>>" , currentUser);
- setCurrentUser(currentUser)
-  }, [])
-
+  useEffect(() => {
+    const currentUser = auth().currentUser;
+    console.log('currentUser>>>', currentUser);
+    setCurrentUser(currentUser);
+  }, []);
 
   const [modalVisible, setModalVisible] = useState(false);
   const [selected, setSelected] = useState(false);
@@ -110,40 +109,41 @@ const LoginScreen = () => {
     //------------PASSWORD VALIDATION--------------------
   };
 
-  const isGoogleSigned = async () =>{
+  const isGoogleSigned = async () => {
     // const isSignedIn = await GoogleSignin.isSignedIn();
     // console.log("isSignedIn>>>" , isSignedIn);
 
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
-      console.log("UserInfo:::", userInfo);
-      setUserData({ userInfo });
-      const googleCredential = auth.GoogleAuthProvider.credential(userInfo.idToken)
+      console.log('UserInfo:::', userInfo);
+      setUserData({userInfo});
+      const googleCredential = auth.GoogleAuthProvider.credential(
+        userInfo.idToken,
+      );
 
       //sign with credential in firebase
-      auth().signInWithCredential(googleCredential)
-      .then(signedinUser =>{
-        setCurrentUser(signedinUser.user.uid)
-
-      })
-    } 
-    catch (error) {
+      auth()
+        .signInWithCredential(googleCredential)
+        .then(signedinUser => {
+          setCurrentUser(signedinUser.user.uid);
+        });
+    } catch (error) {
       if (error.code === statusCodes.SIGN_IN_CANCELLED) {
         // user cancelled the login flow
-        console.log("user cancelled the login flow::", error);
+        console.log('user cancelled the login flow::', error);
       } else if (error.code === statusCodes.IN_PROGRESS) {
         // operation (e.g. sign in) is in progress already
-        console.log("operation (e.g. sign in) is in progress already::", error);
+        console.log('operation (e.g. sign in) is in progress already::', error);
       } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
         // play services not available or outdated
-        console.log("play services not available or outdated::", error);
+        console.log('play services not available or outdated::', error);
       } else {
         // some other error happened
-        console.log("Some other error to sign in::", error);
+        console.log('Some other error to sign in::', error);
       }
     }
-  }
+  };
 
   return (
     <View style={styles.container}>
@@ -242,7 +242,6 @@ const LoginScreen = () => {
         visible={modalVisible}
         setModalVisible={setModalVisible}
       />
-      
 
       {/* <View>
         {currentUser != null 
@@ -264,20 +263,16 @@ const LoginScreen = () => {
       </View> */}
 
       <View>
-        {currentUser == null && 
+        {currentUser == null && (
           <GoogleSigninButton
-          style={{ width: 192, height: 48 }}
-          size={GoogleSigninButton.Size.Wide}
-          color={GoogleSigninButton.Color.Dark}
-          onPress={isGoogleSigned}
-          //disabled={this.state.isSigninInProgress}
-        />
-        }
+            style={{width: 192, height: 48}}
+            size={GoogleSigninButton.Size.Wide}
+            color={GoogleSigninButton.Color.Dark}
+            onPress={isGoogleSigned}
+            //disabled={this.state.isSigninInProgress}
+          />
+        )}
       </View>
-      
-       
-       
-     
     </View>
   );
 };

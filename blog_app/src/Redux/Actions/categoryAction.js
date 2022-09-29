@@ -10,7 +10,6 @@ export const getcategories = () =>{
                 categoryList.push({
                     label: each.data().name
                 })
-                console.log("CL:", categoryList)
             })
             dispatch ({type: GETCATEGORY, payload: categoryList})
         })
