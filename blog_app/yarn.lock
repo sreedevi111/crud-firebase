@@ -2886,10 +2886,10 @@ electron-to-chromium@^1.4.251:
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.4.261.tgz#31f14ad60c6f95bec404a77a2fd5e1962248e112"
   integrity sha512-fVXliNUGJ7XUVJSAasPseBbVgJIeyw5M1xIkgXdTSRjlmCqBbiSTsEdLOCJS31Fc8B7CaloQ/BFAg8By3ODLdg==
 
-electron@^9.1.0:
-  version "9.4.4"
-  resolved "https://registry.yarnpkg.com/electron/-/electron-9.4.4.tgz#2a74a0655a74bd326216672c5ae6ed3a44451446"
-  integrity sha512-dcPlTrMWQu5xuSm6sYV42KK/BRIqh3erM8v/WtZqaDmG7pkCeJpvw26Dgbqhdt78XmqqGiN96giEe6A3S9vpAQ==
+electron@^11.1.0:
+  version "11.5.0"
+  resolved "https://registry.yarnpkg.com/electron/-/electron-11.5.0.tgz#f1650543b9d8f2047d3807755bdb120153ed210f"
+  integrity sha512-WjNDd6lGpxyiNjE3LhnFCAk/D9GIj1rU3GSDealVShhkkkPR3Vh4q8ErXGDl1OAO/faomVa10KoFPUN/pLbNxg==
   dependencies:
     "@electron/get" "^1.0.1"
     "@types/node" "^12.0.12"
@@ -6415,7 +6415,7 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-devtools-core@4.10.4, react-devtools-core@4.14.0, react-devtools-core@4.24.0:
+react-devtools-core@4.14.0, react-devtools-core@4.24.0, react-devtools-core@4.26.0:
   version "4.14.0"
   resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.14.0.tgz#4b9dc50937ed4cf4c04fa293430cac62d829fa8b"
   integrity sha512-cE7tkSUkGCDxTA79pntDGJCBgzNN/XxA3kgPdXujdfSfEfVhzrItQIEsN0kCN/hJJACDvH2Q8p5+tJb/K4B3qA==
@@ -6423,16 +6423,16 @@ react-devtools-core@4.10.4, react-devtools-core@4.14.0, react-devtools-core@4.24
     shell-quote "^1.6.1"
     ws "^7"
 
-react-devtools@<4.11.0:
-  version "4.10.4"
-  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-4.10.4.tgz#62ecf9fe205f6bb31ed00462848554e5f464e6e8"
-  integrity sha512-Hr/yzBrFI1zbCtViNNiE5z0+PpTyNYXfDOcsTcAKbDmJ/oTuih4WcbU1NRymaLE8bju77qlIWToklNxRpapRZw==
+react-devtools@^4.26.0:
+  version "4.26.0"
+  resolved "https://registry.yarnpkg.com/react-devtools/-/react-devtools-4.26.0.tgz#e8f325062f07123f0413421ec6dfdda1387372bc"
+  integrity sha512-4HH1175pV+F8oqVQHwu4lNlXYF23wTZk1jx8E6nYh2RlTehMUY7lLwyv7wgcSWhDjbmGKzVfJ2P/0qaHn+22/g==
   dependencies:
     cross-spawn "^5.0.1"
-    electron "^9.1.0"
+    electron "^11.1.0"
     ip "^1.1.4"
     minimist "^1.2.3"
-    react-devtools-core "4.10.4"
+    react-devtools-core "4.26.0"
     update-notifier "^2.1.0"
 
 react-freeze@^1.0.0:

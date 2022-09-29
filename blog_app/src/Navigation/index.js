@@ -9,6 +9,7 @@ import AddPostScreen from '../Screens/AfterLogin/AddPostScreen';
 import LandingScreen from '../Screens/BeforeLogin/LandingScreen';
 import LoginScreen from '../Screens/BeforeLogin/LoginScreen';
 import auth from '@react-native-firebase/auth';
+import CategoryScreen from '../Screens/AfterLogin/CategoryScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -56,6 +57,7 @@ const Navigation = () => {
           ) : (
             <>
               <Stack.Screen  options={{headerShown: false}} name="Home" component={HomeScreen} />
+              <Stack.Screen  options={{headerShown: false}} name="Category" component={CategoryScreen} />
               <Stack.Screen name="Detail" component={DetailScreen} />
               <Stack.Screen name="Edit" component={EditScreen} />
               <Stack.Screen name="Add" component={AddPostScreen} />

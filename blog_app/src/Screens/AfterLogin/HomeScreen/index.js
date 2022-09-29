@@ -10,6 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
@@ -106,19 +107,23 @@ const HomeScreen = ({navigation, route}) => {
           <Image style={styles.image} source={{uri: item.Image}} />
         </View>
 
-        {/* Delete icon */}
-
-        {/* Edit icon  */}
-        <View style={[styles.icons, {flexDirection:'row', alignItems:'center', justifyContent:'space-evenly'}]}>
-
-
-        <TouchableOpacity onPress={() => deleteData(item.id)}>
+        <View
+          style={[
+            styles.icons,
+            {
+              flexDirection: 'row',
+              alignItems: 'center',
+              justifyContent: 'space-evenly',
+            },
+          ]}>
+          {/* Delete icon */}
+          <TouchableOpacity onPress={() => deleteData(item.id)}>
             <View style={styles.deleteButton}>
               <AntDesign name="delete" color="red" size={18} />
             </View>
           </TouchableOpacity>
 
-
+          {/* Edit icon  */}
           <TouchableOpacity
             onPress={() =>
               navigation.navigate('Edit', {
@@ -136,9 +141,7 @@ const HomeScreen = ({navigation, route}) => {
             </View>
           </TouchableOpacity>
 
-
-         
-
+          
         </View>
       </View>
     );
@@ -274,6 +277,17 @@ const HomeScreen = ({navigation, route}) => {
         }}>
         <AntDesign name="pluscircleo" color="blue" size={25} />
       </TouchableOpacity>
+
+
+      <TouchableOpacity
+       
+        onPress={() => {
+          navigation.navigate('Category');
+        }}>
+          <MaterialIcon name="category" color="blue" size={25} />
+        
+      </TouchableOpacity>
+
     </View>
   );
 };
