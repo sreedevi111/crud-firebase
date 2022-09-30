@@ -10,7 +10,7 @@ const SplashScreen = ({navigation}) => {
       backgroundColor: '#ffffff'
   }}>
       <Lottie
-        source={require('../../Assets/blog-splash.json')}
+        source={require('../../Assets/blog2.json')}
         autoPlay
         loop={false}
         speed={2}

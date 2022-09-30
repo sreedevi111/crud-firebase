@@ -16,8 +16,7 @@ import {getcategories} from '../../../Redux/Actions/categoryAction';
 //redux hooks
 import {useSelector, useDispatch} from 'react-redux';
 
-const CategoryScreen = () => {
-  const [cat1, setCat1] = useState(null);
+const CategoryScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const categories = useSelector(state => state.category.newscategories);
 
@@ -25,13 +24,11 @@ const CategoryScreen = () => {
     dispatch(getcategories());
     if (categories.length > 0) {
       console.log('cat:', categories);
-      setCat1(categories);
     }
   }, []);
 
   console.log('cat:', categories);
 
-  console.log('>>>>>', cat1);
 
   // useEffect(() => {
   //   if (categories.length > 0) {
@@ -48,8 +45,8 @@ const CategoryScreen = () => {
   // }, [categories]);
 
   // To display Flatlist
-  const renderItem = item => {
-    console.log('item>>', item);
+  const renderItem = ({item}) => {
+    //console.log('item>>', item);
     return (
       <View
         style={{
@@ -57,19 +54,20 @@ const CategoryScreen = () => {
           alignItems: 'center',
           borderBottomColor: 'black',
           borderBottomWidth: 0.5,
-         
+
         }}>
         <View
           style={{
+            flex: 5,
             height: 50,
             justifyContent: 'center',
           }}>
           <Text style={{paddingLeft: 10, color: 'black'}}>
-            {item.item.label}
+            {item.label}
           </Text>
         </View>
-        <View  style={{left:150}}>
-          <TouchableOpacity >
+        <View  style={{flex:1}}>
+          <TouchableOpacity onPress={()=>navigation.navigate('EditCategory', { item } )} >
             <AntDesign name="edit" color="blue" size={20} />
           </TouchableOpacity>
         </View>
@@ -81,7 +79,7 @@ const CategoryScreen = () => {
       <Text style={{color: 'black', fontFamily: 'Lato-Black', fontSize: 25}}>
         LIST OF CATEGORIES
       </Text>
-      {categories !== null && <FlatList data={cat1} renderItem={renderItem} />}
+      {categories.length > 0 && <FlatList data={categories} renderItem={renderItem} />}
     </View>
   );
 };
