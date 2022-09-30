@@ -10,7 +10,7 @@ import {
 import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Toast from 'react-native-simple-toast';
 import {styles} from './styles';
@@ -140,8 +140,6 @@ const HomeScreen = ({navigation, route}) => {
               <AntDesign name="edit" color="blue" size={20} />
             </View>
           </TouchableOpacity>
-
-          
         </View>
       </View>
     );
@@ -278,16 +276,13 @@ const HomeScreen = ({navigation, route}) => {
         <AntDesign name="pluscircleo" color="blue" size={25} />
       </TouchableOpacity>
 
-
       <TouchableOpacity
-       
+        style={{width: 30}}
         onPress={() => {
           navigation.navigate('Category');
         }}>
-          <MaterialIcon name="category" color="blue" size={25} />
-        
+        <MaterialIcon name="category" color="blue" size={25} />
       </TouchableOpacity>
-
     </View>
   );
 };

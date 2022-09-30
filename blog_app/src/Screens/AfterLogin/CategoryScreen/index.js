@@ -47,7 +47,7 @@ const CategoryScreen = () => {
   //   }
   // }, [categories]);
 
-  // To display sectionlist
+  // To display Flatlist
   const renderItem = item => {
     console.log('item>>', item);
     return (
@@ -57,6 +57,7 @@ const CategoryScreen = () => {
           alignItems: 'center',
           borderBottomColor: 'black',
           borderBottomWidth: 0.5,
+         
         }}>
         <View
           style={{
@@ -67,11 +68,11 @@ const CategoryScreen = () => {
             {item.item.label}
           </Text>
         </View>
-        <TouchableOpacity>
-          <View style={{justifyContent: 'flex-end'}}>
+        <View  style={{left:150}}>
+          <TouchableOpacity >
             <AntDesign name="edit" color="blue" size={20} />
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       </View>
     );
   };
