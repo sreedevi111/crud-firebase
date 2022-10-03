@@ -214,7 +214,7 @@ const LoginScreen = () => {
             style={styles.checkbox}
           />
 
-          {/* <CheckBox boxType={'square'}   animationDuration={0}  tintColors={'black'} disabled={false} value={each.checked} onValueChange={(newValue) => setToggleCheckBox(each.value, newValue, false, subid  )} /> */}
+          <CheckBox boxType={'square'}   animationDuration={0}  tintColors={'black'} disabled={false} value={each.checked} onValueChange={(newValue) => setToggleCheckBox(each.value, newValue, false, subid  )} />
 
           <Text style={styles.conditionText}>
             By signing in you are agreeing {'\n'} our

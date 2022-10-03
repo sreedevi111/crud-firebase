@@ -10,7 +10,7 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@react-native-async-storage/async-storage": "^1.17.9",
+    "@react-native-async-storage/async-storage": "^1.17.10",
     "@react-native-community/checkbox": "^0.5.12",
     "@react-native-firebase/app": "^15.3.0",
     "@react-native-firebase/auth": "^15.3.0",
@@ -25,9 +25,9 @@
     "lottie-ios": "3.4.0",
     "lottie-react-native": "^5.1.4",
     "moment": "^2.29.4",
-    "react": "18.1.0",
+    "react": "17.0.2",
     "react-devtools": "^4.26.0",
-    "react-native": "^0.70.1",
+    "react-native": "0.68.2",
     "react-native-action-sheet": "^2.2.0",
     "react-native-dotenv": "^3.3.1",
     "react-native-dropdown-picker": "^5.4.2",

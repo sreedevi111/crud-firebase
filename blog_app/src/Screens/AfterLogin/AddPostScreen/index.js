@@ -22,6 +22,9 @@ import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Moment from 'moment';
 
+//redux hooks
+import {useSelector, useDispatch} from 'react-redux';
+
 import {API_URL} from '@env';
 
 const AddPostScreen = ({navigation}) => {

@@ -10,7 +10,7 @@ import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //importing action and reducer
-import {categoryReducer} from '../../../Redux/Reducers/categoryreducer';
+// import {categoryReducer} from '../../../Redux/Reducers/categoryreducer';
 import {getcategories} from '../../../Redux/Actions/categoryAction';
 
 //redux hooks
@@ -29,20 +29,6 @@ const CategoryScreen = ({ navigation }) => {
 
   console.log('cat:', categories);
 
-
-  // useEffect(() => {
-  //   if (categories.length > 0) {
-  //     var c = [];
-  //     let b = categories.forEach((element, index) => {
-  //       c.push(
-  //         <Text key={index} style={{color: 'black'}}>
-  //           {element.label}
-  //         </Text>,
-  //       );
-  //     });
-  //     setCat1(c);
-  //   }
-  // }, [categories]);
 
   // To display Flatlist
   const renderItem = ({item}) => {

@@ -1,11 +1,11 @@
 import { combineReducers } from "redux";
 
 import { categoryReducer } from "./categoryReducer";
-// import { postReducer } from "./postReducer";
+import { postReducer } from "./postReducer";
 
 const appReducer = combineReducers({
 category: categoryReducer,
-// postReducer
+post: postReducer
 })
 
 export default appReducer;

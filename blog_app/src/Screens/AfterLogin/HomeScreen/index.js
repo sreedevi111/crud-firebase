@@ -22,32 +22,53 @@ import {API_URL} from '@env';
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 
+
+//redux hooks
+import {useSelector, useDispatch} from 'react-redux';
+
+//redux action
+import { getpost, deletepost, addpost } from '../../../Redux/Actions/postAction';
+
 const HomeScreen = ({navigation, route}) => {
   const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
   // const [filter, setFilter] = useState(false);
+
+ 
 
   //To Filter
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
 
+
+  const dispatch = useDispatch();
+  const post = useSelector(state => state.post.post)
+
   useEffect(() => {
     getVisitedData();
-    getData();
+    // getData();
   }, []);
 
-  const getData = async () => {
-    const response = await axios.get(`${API_URL}/getData`);
-    try {
-      console.log('response from getData:', response);
-      setData(response.data.data);
-    } catch {
-      e => {
-        console.log('Some error', e);
-      };
-    }
-  };
+  useEffect(()=>{
+    dispatch(getpost());
+    dispatch(deletepost());
+    // if(post?.length >0 ){
+      console.log("Post in Home Screen : ch:", post)
+    // }
+  }, [])
+
+  // const getData = async () => {
+  //   const response = await axios.get(`${API_URL}/getData`);
+  //   try {
+  //     console.log('response from getData:', response);
+  //     setData(response.data.data);
+  //   } catch {
+  //     e => {
+  //       console.log('Some error', e);
+  //     };
+  //   }
+  // };
 
   //Getting visited detail
   const getVisitedData = async () => {
@@ -262,7 +283,7 @@ const HomeScreen = ({navigation, route}) => {
       </View>
 
       <FlatList
-        data={data}
+        data={post}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
@@ -270,7 +291,7 @@ const HomeScreen = ({navigation, route}) => {
         style={styles.plus}
         onPress={() => {
           navigation.navigate('Add', {
-            reload: getData(),
+            // reload: getData(),
           });
         }}>
         <AntDesign name="pluscircleo" color="blue" size={25} />

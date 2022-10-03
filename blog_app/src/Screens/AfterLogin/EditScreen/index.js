@@ -9,6 +9,11 @@ import Moment from 'moment';
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 
+//redux hooks
+import {useSelector, useDispatch} from 'react-redux';
+
+//redux action
+import { editpost } from '../../../Redux/Actions/postAction';
 
 
 const EditScreen = ({navigation, route}) => {
