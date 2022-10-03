@@ -25,7 +25,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 const HomeScreen = ({navigation, route}) => {
   const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
-  const [filter, setFilter] = useState(false);
+  // const [filter, setFilter] = useState(false);
 
   //To Filter
   const [open, setOpen] = useState(false);

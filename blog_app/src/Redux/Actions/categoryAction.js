@@ -1,5 +1,5 @@
 import firestore from '@react-native-firebase/firestore'
-import { GETCATEGORY } from '../types'
+import { GETCATEGORY, EDITCATEGORY, GETPOST, ADDPOST, EDITPOST, DELETEPOST } from '../types'
 
 export const getcategories = () =>{
     return dispatch => {
@@ -16,6 +16,19 @@ export const getcategories = () =>{
         .catch(err =>{
             console.log("Error:", err)
             dispatch({type:GETCATEGORY, payload:[]})
+        })
+    }
+}
+
+export const getpost = () => {
+    return dispatch => {
+        firestore().collection('Contacts').get()
+        .then(res => {
+            console.log("Get post in redux >>>", res)
+            dispatch ({type: GETPOST, payload:'success'})
+        })
+        .catch(err =>{
+            dispatch ({type: GETPOST, payload: 'error'})
         })
     }
 }

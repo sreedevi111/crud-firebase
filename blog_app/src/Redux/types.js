@@ -1,1 +1,7 @@
 export const GETCATEGORY = 'getcategory'
+export const EDITCATEGORY = 'editcategory'
+export const GETPOST = 'getpost'
+export const ADDPOST = 'addpost'
+export const EDITPOST = 'editpost'
+export const DELETEPOST = 'deletepost'
+export const NULLMSG = 'nullmsg'
