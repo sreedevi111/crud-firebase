@@ -27,14 +27,23 @@ import {useSelector, useDispatch} from 'react-redux';
 
 import {API_URL} from '@env';
 
+//reducer
+import { postReducer } from '../../../Redux/Reducers/postReducer';
+
+
+
 const AddPostScreen = ({navigation}) => {
-  const [state, setState] = useState({
-    Title: '',
-    Name: '',
-    Description: '',
-    Phone: '',
-    Image: '',
-  });
+  // const [state, setState] = useState({
+  //   Title: '',
+  //   Name: '',
+  //   Description: '',
+  //   Phone: '',
+  //   Image: '',
+  // });
+
+  const post = useSelector(state=>state.post)
+  console.log("post:::::", post)
+const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -262,24 +271,24 @@ const AddPostScreen = ({navigation}) => {
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Title"
-          value={state.Title}
-          onChangeText={Title => setState(prev => ({...prev, Title}))}
+          value={post.Title}
+          onChangeText={Title => dispatch({'Title':Title})}
           style={styles.title}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Description"
-          value={state.Description}
+          value={post.Description}
           onChangeText={Description =>
-            setState(prev => ({...prev, Description}))
+            dispatch({'Description': Description})
           }
           style={styles.name}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Name"
-          value={state.Name}
-          onChangeText={Name => setState(prev => ({...prev, Name}))}
+          value={post.Name}
+          onChangeText={Name => dispatch({Name: Name})}
           style={styles.name}
         />
 
@@ -287,8 +296,8 @@ const AddPostScreen = ({navigation}) => {
           placeholderTextColor={'grey'}
           placeholder="Phone"
           keyboardType="numeric"
-          value={state.Phone}
-          onChangeText={Phone => setState(prev => ({...prev, Phone}))}
+          value={post.Phone}
+          onChangeText={Phone => dispatch({Phone:Phone})}
           style={styles.name}
         />
 

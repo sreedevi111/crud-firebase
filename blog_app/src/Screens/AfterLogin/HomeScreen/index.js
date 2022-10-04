@@ -44,6 +44,7 @@ const HomeScreen = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const post = useSelector(state => state.post.post)
+  console.log("Post in home screen check::::", post)
 
   useEffect(() => {
     getVisitedData();
@@ -52,23 +53,13 @@ const HomeScreen = ({navigation, route}) => {
 
   useEffect(()=>{
     dispatch(getpost());
-    dispatch(deletepost());
+    // dispatch(deletepost());
     // if(post?.length >0 ){
       console.log("Post in Home Screen : ch:", post)
     // }
   }, [])
 
-  // const getData = async () => {
-  //   const response = await axios.get(`${API_URL}/getData`);
-  //   try {
-  //     console.log('response from getData:', response);
-  //     setData(response.data.data);
-  //   } catch {
-  //     e => {
-  //       console.log('Some error', e);
-  //     };
-  //   }
-  // };
+  
 
   //Getting visited detail
   const getVisitedData = async () => {

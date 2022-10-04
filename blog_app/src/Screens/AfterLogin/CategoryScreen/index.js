@@ -20,6 +20,8 @@ const CategoryScreen = ({ navigation }) => {
   const dispatch = useDispatch();
   const categories = useSelector(state => state.category.newscategories);
 
+  console.log("Category check::::", categories)
+
   useEffect(() => {
     dispatch(getcategories());
     if (categories.length > 0) {

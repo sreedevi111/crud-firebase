@@ -4,6 +4,7 @@ const initValue = {
   newscategories: [],
   loading: false,
   msg: null,
+ 
 };
 
 export const categoryReducer = (state = initValue, action) => {
@@ -19,6 +20,8 @@ export const categoryReducer = (state = initValue, action) => {
   if(action.type === NULLMSG){
         return {...state, msg: null }
   }
+
+  
 
 
   return state;
