@@ -8,7 +8,7 @@ const initValue = {
 };
 
 export const categoryReducer = (state = initValue, action) => {
-  console.log('Action Category', action);
+  // console.log('Action Category', action);
   if (action.type === GETCATEGORY) {
     return {...state, newscategories: action.payload};
   }

@@ -51,6 +51,10 @@
 		4A39367B12AE4F1CA3AFC2D7 /* SourceSansPro-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 0B1A6C72E9B2421F9C4CE65A /* SourceSansPro-Regular.ttf */; };
 		DA78C5518F624334B7C3AF05 /* SourceSansPro-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 3CCE3B057AEB42E4B4D2E8D9 /* SourceSansPro-SemiBold.ttf */; };
 		5F8B86234F114B298D19E264 /* SourceSansPro-SemiBoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2BBBEA9F52FE420CB9E5AB65 /* SourceSansPro-SemiBoldItalic.ttf */; };
+		0C0716197BDE4D56B9DDD7F6 /* Amiri-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 067A95705F6F44EFA11ED844 /* Amiri-Bold.ttf */; };
+		1E25738DD8E3479E8D2E9959 /* Amiri-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CF27E697E41B4599964A51A8 /* Amiri-BoldItalic.ttf */; };
+		766324D406C94A6E996C3F26 /* Amiri-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B1231D654BF64689B719DE6E /* Amiri-Italic.ttf */; };
+		B272EC1B26444A8CA7E9B76E /* Amiri-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8FBDD6D816324D8EB0235107 /* Amiri-Regular.ttf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -118,6 +122,10 @@
 		0B1A6C72E9B2421F9C4CE65A /* SourceSansPro-Regular.ttf */ = {isa = PBXFileReference; name = "SourceSansPro-Regular.ttf"; path = "../src/Assets/Fonts/SourceSansPro-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		3CCE3B057AEB42E4B4D2E8D9 /* SourceSansPro-SemiBold.ttf */ = {isa = PBXFileReference; name = "SourceSansPro-SemiBold.ttf"; path = "../src/Assets/Fonts/SourceSansPro-SemiBold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		2BBBEA9F52FE420CB9E5AB65 /* SourceSansPro-SemiBoldItalic.ttf */ = {isa = PBXFileReference; name = "SourceSansPro-SemiBoldItalic.ttf"; path = "../src/Assets/Fonts/SourceSansPro-SemiBoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		067A95705F6F44EFA11ED844 /* Amiri-Bold.ttf */ = {isa = PBXFileReference; name = "Amiri-Bold.ttf"; path = "../src/Assets/Fonts/Amiri-Bold.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		CF27E697E41B4599964A51A8 /* Amiri-BoldItalic.ttf */ = {isa = PBXFileReference; name = "Amiri-BoldItalic.ttf"; path = "../src/Assets/Fonts/Amiri-BoldItalic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		B1231D654BF64689B719DE6E /* Amiri-Italic.ttf */ = {isa = PBXFileReference; name = "Amiri-Italic.ttf"; path = "../src/Assets/Fonts/Amiri-Italic.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		8FBDD6D816324D8EB0235107 /* Amiri-Regular.ttf */ = {isa = PBXFileReference; name = "Amiri-Regular.ttf"; path = "../src/Assets/Fonts/Amiri-Regular.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -263,6 +271,10 @@
 				0B1A6C72E9B2421F9C4CE65A /* SourceSansPro-Regular.ttf */,
 				3CCE3B057AEB42E4B4D2E8D9 /* SourceSansPro-SemiBold.ttf */,
 				2BBBEA9F52FE420CB9E5AB65 /* SourceSansPro-SemiBoldItalic.ttf */,
+				067A95705F6F44EFA11ED844 /* Amiri-Bold.ttf */,
+				CF27E697E41B4599964A51A8 /* Amiri-BoldItalic.ttf */,
+				B1231D654BF64689B719DE6E /* Amiri-Italic.ttf */,
+				8FBDD6D816324D8EB0235107 /* Amiri-Regular.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -401,6 +413,10 @@
 				4A39367B12AE4F1CA3AFC2D7 /* SourceSansPro-Regular.ttf in Resources */,
 				DA78C5518F624334B7C3AF05 /* SourceSansPro-SemiBold.ttf in Resources */,
 				5F8B86234F114B298D19E264 /* SourceSansPro-SemiBoldItalic.ttf in Resources */,
+				0C0716197BDE4D56B9DDD7F6 /* Amiri-Bold.ttf in Resources */,
+				1E25738DD8E3479E8D2E9959 /* Amiri-BoldItalic.ttf in Resources */,
+				766324D406C94A6E996C3F26 /* Amiri-Italic.ttf in Resources */,
+				B272EC1B26444A8CA7E9B76E /* Amiri-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

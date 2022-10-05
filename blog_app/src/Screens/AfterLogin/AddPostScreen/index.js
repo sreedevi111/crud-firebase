@@ -29,10 +29,15 @@ import {API_URL} from '@env';
 
 //reducer
 import { postReducer } from '../../../Redux/Reducers/postReducer';
-
+import { STATECHANGE } from '../../../Redux/types';
+import {addpost, statechangeaction, getpost} from '../../../Redux/Actions/postAction';
 
 
 const AddPostScreen = ({navigation}) => {
+  const postData = useSelector(state=>state.post)
+
+  // console.log("statechange:::", dispatch(getpost('dcsvdv')))
+  // console.log("value:::::::::", titleCheck)
   // const [state, setState] = useState({
   //   Title: '',
   //   Name: '',
@@ -41,8 +46,15 @@ const AddPostScreen = ({navigation}) => {
   //   Image: '',
   // });
 
-  const post = useSelector(state=>state.post)
-  console.log("post:::::", post)
+  // const post = useSelector(state=>state.post.post)
+  // const addPostData = useSelector(state=>state.post)
+
+  useEffect(()=>{
+    // console.log("Inside addPostData redux::", addPostData)
+    // console.log("Title check in addpost::", titleCheck)
+  })
+
+  // console.log("post::::: Addd", post)
 const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -54,6 +66,7 @@ const dispatch = useDispatch();
 
   useEffect(() => {
     console.log('value', value);
+    // console.log("What is inside addPost::", addpost)
   }, [value]);
 
   //Function to select image from camera and gallery
@@ -87,11 +100,13 @@ const dispatch = useDispatch();
 
   // submit fuction
   const submit = async () => {
-    if (String(state.Title).length < 3) {
-      Toast.show('Title should contain min 4 characters');
-    }
+    // if (String(state.Title).length < 3) {
+    //   Toast.show('Title should contain min 4 characters');
+    // }
     setLoading(true);
-    await addContactDatatoFirestore();
+    // await addContactDatatoFirestore();
+    // dispatch(addpost(addPostData))
+    dispatch(addpost({...postData, catName, selectedImage:selectedImage}))
   };
 
   var catName = _.filter(items, item => {
@@ -99,80 +114,80 @@ const dispatch = useDispatch();
   });
 
   // console.log('catName', catName[0].label);
-  const addContactDatatoFirestore = async () => {
-    try {
-      var res = await firestore()
-        .collection('Contacts')
-        .add({
-          Title: state.Title,
-          Name: state.Name,
-          Description: state.Description,
-          Phone: state.Phone,
-          catName: catName[0].label,
-          catID: value,
-          timeCreated: Moment().unix(),
-          timeinHuman: Moment().format('DD-MM-YYYY'),
-        });
+  // const addContactDatatoFirestore = async () => {
+  //   try {
+  //     var res = await firestore()
+  //       .collection('Contacts')
+  //       .add({
+  //         Title: state.Title,
+  //         Name: state.Name,
+  //         Description: state.Description,
+  //         Phone: state.Phone,
+  //         catName: catName[0].label,
+  //         catID: value,
+  //         timeCreated: Moment().unix(),
+  //         timeinHuman: Moment().format('DD-MM-YYYY'),
+  //       });
 
-      if (res) {
-        if (selectedImage?.path) {
-          var extension = '';
-          if (selectedImage.mime === 'image/jpeg') {
-            extension = 'jpg';
-          } else if (selectedImage.mime === 'image/png') {
-            extension = 'png';
-          }
-          imagename = `${res.id}.${extension}`;
-          await storage().ref('sample.jpeg').putFile(selectedImage.path);
-          var url = await storage().ref('sample.jpeg').getDownloadURL();
-          await firestore()
-            .collection('Contacts')
-            .doc(res.id)
-            .update({Image: url});
-          setLoading(false);
-          Toast.show('Image updated successfully!!!');
+  //     if (res) {
+  //       if (selectedImage?.path) {
+  //         var extension = '';
+  //         if (selectedImage.mime === 'image/jpeg') {
+  //           extension = 'jpg';
+  //         } else if (selectedImage.mime === 'image/png') {
+  //           extension = 'png';
+  //         }
+  //         imagename = `${res.id}.${extension}`;
+  //         await storage().ref('sample.jpeg').putFile(selectedImage.path);
+  //         var url = await storage().ref('sample.jpeg').getDownloadURL();
+  //         await firestore()
+  //           .collection('Contacts')
+  //           .doc(res.id)
+  //           .update({Image: url});
+  //         setLoading(false);
+  //         Toast.show('Image updated successfully!!!');
 
-          //For push notification
-          axios
-            .post(`${API_URL}/sendPushToTopic`, {
-              topic: 'customers',
-              Title: state.Title,
-              Name: state.Name,
-            })
+  //         //For push notification
+  //         axios
+  //           .post(`${API_URL}/sendPushToTopic`, {
+  //             topic: 'customers',
+  //             Title: state.Title,
+  //             Name: state.Name,
+  //           })
 
-            .then(status => {
-              console.log('status::', status);
-            })
-            .catch(e => {
-              console.log('error::', e);
-            }),
-            setTimeout(() => {
-              navigation.navigate('Home');
-            }, 1500);
-        } else {
-          setLoading(false);
-          Toast.show('Uploaded Successfully');
-          navigation.navigate('Home');
-        }
-        imagename = `${res.id}.${extension}`;
-        await storage().ref('sample.jpeg').putFile(selectedImage.path);
-        var url = await storage().ref('sample.jpeg').getDownloadURL();
-        await firestore()
-          .collection('Contacts')
-          .doc(res.id)
-          .update({Image: url});
-        setLoading(false);
-        Toast.show('Image updated successfully!!!');
-        navigation.navigate('Home');
-      } else {
-        setLoading(false);
-        Toast.show('Image updated successfully!!!');
-        navigation.navigate('Home');
-      }
-    } catch (error) {
-      console.log('Image failed to upload', error);
-    }
-  };
+  //           .then(status => {
+  //             console.log('status::', status);
+  //           })
+  //           .catch(e => {
+  //             console.log('error::', e);
+  //           }),
+  //           setTimeout(() => {
+  //             navigation.navigate('Home');
+  //           }, 1500);
+  //       } else {
+  //         setLoading(false);
+  //         Toast.show('Uploaded Successfully');
+  //         navigation.navigate('Home');
+  //       }
+  //       imagename = `${res.id}.${extension}`;
+  //       await storage().ref('sample.jpeg').putFile(selectedImage.path);
+  //       var url = await storage().ref('sample.jpeg').getDownloadURL();
+  //       await firestore()
+  //         .collection('Contacts')
+  //         .doc(res.id)
+  //         .update({Image: url});
+  //       setLoading(false);
+  //       Toast.show('Image updated successfully!!!');
+  //       navigation.navigate('Home');
+  //     } else {
+  //       setLoading(false);
+  //       Toast.show('Image updated successfully!!!');
+  //       navigation.navigate('Home');
+  //     }
+  //   } catch (error) {
+  //     console.log('Image failed to upload', error);
+  //   }
+  // };
 
   //Function to opt Camera and Gallery
   const openActionSheet = () => {
@@ -227,13 +242,13 @@ const dispatch = useDispatch();
       .get()
       .then(response => {
         var categorylist = [];
-        console.log('response check::::::', response.docs);
+        // console.log('response check::::::', response.docs);
         response.docs.map(each => {
           // categorylist.push({...each.data(), id: each.id});
           categorylist.push({label: each.data().name, value: each.id});
         });
         categorylist.push({label: 'Select Category', value: null});
-        console.log('Category List::', categorylist);
+        // console.log('Category List::', categorylist);
         // setCategory(prev => ({...prev, data: categorylist}));
         setItems([...categorylist]); //?Adding to dropdownlist
       })
@@ -271,24 +286,23 @@ const dispatch = useDispatch();
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Title"
-          value={post.Title}
-          onChangeText={Title => dispatch({'Title':Title})}
+          value={postData.Title}
+          onChangeText={Title => dispatch(statechangeaction({Title:Title}))}
           style={styles.title}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Description"
-          value={post.Description}
+          value={postData.Description}
           onChangeText={Description =>
-            dispatch({'Description': Description})
-          }
+            dispatch(statechangeaction({Description:Description}))          }
           style={styles.name}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Name"
-          value={post.Name}
-          onChangeText={Name => dispatch({Name: Name})}
+          value={postData.Name}
+          onChangeText={Name => dispatch(statechangeaction({Name:Name}))}
           style={styles.name}
         />
 
@@ -296,8 +310,8 @@ const dispatch = useDispatch();
           placeholderTextColor={'grey'}
           placeholder="Phone"
           keyboardType="numeric"
-          value={post.Phone}
-          onChangeText={Phone => dispatch({Phone:Phone})}
+          value={postData.Phone}
+          onChangeText={Phone => dispatch(statechangeaction({Phone:Phone}))}
           style={styles.name}
         />
 

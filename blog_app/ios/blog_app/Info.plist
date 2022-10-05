@@ -90,6 +90,10 @@
 		<string>SourceSansPro-Regular.ttf</string>
 		<string>SourceSansPro-SemiBold.ttf</string>
 		<string>SourceSansPro-SemiBoldItalic.ttf</string>
+		<string>Amiri-Bold.ttf</string>
+		<string>Amiri-BoldItalic.ttf</string>
+		<string>Amiri-Italic.ttf</string>
+		<string>Amiri-Regular.ttf</string>
 	</array>
 </dict>
 </plist>

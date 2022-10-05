@@ -1,16 +1,25 @@
 import firestore from '@react-native-firebase/firestore';
-import {GETPOST, ADDPOST, EDITPOST, DELETEPOST} from '../types';
+import {GETPOST, ADDPOST, EDITPOST, DELETEPOST, STATECHANGE} from '../types';
 import {API_URL} from '@env';
 import axios from 'axios';
 import Moment from 'moment';
 
+// state change
+export const statechangeaction = payload => {
+  return dispatch => {
+    console.log('dcsdfsdvsdvfdbdfvdfvsdc payload:::', payload);
+    dispatch({type: STATECHANGE, payload: payload});
+  };
+};
+
 //get
 export const getpost = () => {
   return dispatch => {
+    console.log('getPost inside :::::::');
     axios
       .get(`${API_URL}/getData`)
       .then(response => {
-        console.log('response from getpost redux:', response.data);
+        // console.log('response from getpost redux:', response.data);
         dispatch({type: GETPOST, payload: response.data.data});
       })
       .catch(err => {
@@ -21,21 +30,23 @@ export const getpost = () => {
 
 //add
 export const addpost = state => {
+  // state = state.state
+  console.log('addpost::::::::', state);
   return dispatch => {
     firestore()
       .collection('Contacts')
       .add({
-        Title: state.Title,
-        Name: state.Name,
-        Description: state.Description,
-        Phone: state.Phone,
-        catName: catName[0].label,
-        catID: value,
+        Title: state.Title || "test",
+        Name: state.Name|| "test",
+        Description: state.Description|| "test",
+        Phone: state.Phone|| "test",
+        catName: state.label|| "test",
+        catID: state.value|| "test",
         timeCreated: Moment().unix(),
         timeinHuman: Moment().format('DD-MM-YYYY'),
       })
       .then(res => {
-        console.log('Get post in redux >>>', res);
+        // console.log('Get post in redux >>>', res);
         dispatch({type: ADDPOST, payload: {}});
       })
       .catch(err => {

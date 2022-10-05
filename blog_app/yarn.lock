@@ -3607,9 +3607,9 @@ flatted@^3.1.0:
   integrity sha512-5nqDSxl8nn5BSNxyR3n4I6eDmbolI6WT+QqR547RwxQapgjQBmtktdP+HTBb/a/zLsbzERTONyUB5pefh5TtjQ==
 
 flow-parser@0.*:
-  version "0.188.0"
-  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.188.0.tgz#e50b9204ba1dda77c2bf832c85923fc398c94004"
-  integrity sha512-yu/Tc3UOhE0lXZk02MO/69N8RLdZsBtz3R6pBS+GaHiaopAxRcfUHPkqOZnI2BtotaylYTLrZGkIqFC8KqVxXQ==
+  version "0.188.1"
+  resolved "https://registry.yarnpkg.com/flow-parser/-/flow-parser-0.188.1.tgz#eb2174271d817d012708c39eb018c166a52d7ca6"
+  integrity sha512-6PA9S1Dphgj5j61As1VkCw8xE0sBXd/ql/WYRQRT8kgORqclp5Eh/blAKvye2p/oIrCpWYwENs1khKqTZvd2UA==
 
 flow-parser@^0.121.0:
   version "0.121.0"
@@ -6488,10 +6488,10 @@ rc@^1.0.1, rc@^1.1.6:
     minimist "^1.2.0"
     strip-json-comments "~2.0.1"
 
-react-devtools-core@4.14.0, react-devtools-core@4.26.0, react-devtools-core@^4.23.0:
-  version "4.14.0"
-  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.14.0.tgz#4b9dc50937ed4cf4c04fa293430cac62d829fa8b"
-  integrity sha512-cE7tkSUkGCDxTA79pntDGJCBgzNN/XxA3kgPdXujdfSfEfVhzrItQIEsN0kCN/hJJACDvH2Q8p5+tJb/K4B3qA==
+react-devtools-core@4.26.0, react-devtools-core@^4.11.0, react-devtools-core@^4.23.0:
+  version "4.26.0"
+  resolved "https://registry.yarnpkg.com/react-devtools-core/-/react-devtools-core-4.26.0.tgz#d3d0f59d62ccf1ac03017a7e92f0fe71455019cc"
+  integrity sha512-OO0Q+vXtHYCXvRQ6elLiOUph3MjsCpuYktGTLnBpizYm46f8tAPuJKihGkwsceitHSJNpzNIjJaYHgX96CyTUQ==
   dependencies:
     shell-quote "^1.6.1"
     ws "^7"

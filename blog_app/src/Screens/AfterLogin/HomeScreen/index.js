@@ -30,7 +30,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import { getpost, deletepost, addpost } from '../../../Redux/Actions/postAction';
 
 const HomeScreen = ({navigation, route}) => {
-  const [data, setData] = useState({loading: true, data: []});
+  // const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
   // const [filter, setFilter] = useState(false);
 
@@ -44,19 +44,15 @@ const HomeScreen = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const post = useSelector(state => state.post.post)
-  console.log("Post in home screen check::::", post)
+  // console.log("Post in home screen check::::", post)
 
-  useEffect(() => {
-    getVisitedData();
-    // getData();
-  }, []);
+  // useEffect(() => {
+  //   // getVisitedData();
+  //   // getData();
+  // }, []);
 
   useEffect(()=>{
     dispatch(getpost());
-    // dispatch(deletepost());
-    // if(post?.length >0 ){
-      console.log("Post in Home Screen : ch:", post)
-    // }
   }, [])
 
   
@@ -129,7 +125,7 @@ const HomeScreen = ({navigation, route}) => {
             },
           ]}>
           {/* Delete icon */}
-          <TouchableOpacity onPress={() => deleteData(item.id)}>
+          <TouchableOpacity onPress={() => dispatch(deletepost(item.id))}>
             <View style={styles.deleteButton}>
               <AntDesign name="delete" color="red" size={18} />
             </View>
@@ -232,7 +228,7 @@ const HomeScreen = ({navigation, route}) => {
 
   return (
     <View style={styles.container}>
-      {data.loading && <ActivityIndicator size="large" color="blue" />}
+      {post.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
         {/* <TouchableOpacity style={styles.user_icon}> */}
         {/* <Icon name="filter" color={'#361614'} size={25} /> */}
