@@ -143,16 +143,7 @@ const HomeScreen = ({navigation, route}) => {
                 }),
               );
               navigation.navigate(
-                'Edit',
-                //   , {
-                //   id: item.id,
-                //   Title: item.Title,
-                //   Name: item.Name,
-                //   Description: item.Description,
-                //   timeinHuman: item.timeinHuman,
-                //   Image: item.Image,
-                //   // reload: getData(),
-                // }
+                'Edit'
               );
             }}>
             <View style={styles.editButton}>
@@ -288,8 +279,19 @@ const HomeScreen = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
+          dispatch(
+            statechangeaction({
+              
+              Title: '',
+              Name: '',
+              Description: '',
+              timeinHuman: '',
+              Image: '',
+              Phone:''
+            }),
+          );
           navigation.navigate('Add', {
-            // reload: getData(),
+            
           });
         }}>
         <AntDesign name="pluscircleo" color="blue" size={25} />

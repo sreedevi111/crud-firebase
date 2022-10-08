@@ -33,20 +33,22 @@ export const addpost = state => {
   // state = state.state
   console.log('addpost::::::::', state);
   return dispatch => {
+    var storedata = {
+      Title: state.Title, 
+      Name: state.Name,
+      Description: state.Description,
+      Phone: state.Phone,
+      catName: state.label,
+      catID: state.value,
+      timeCreated: Moment().unix(),
+      timeinHuman: Moment().format('DD-MM-YYYY'),
+    }
+    console.log("Stored val::", storedata)
     firestore()
       .collection('Contacts')
-      .add({
-        Title: state.Title || "test",
-        Name: state.Name|| "test",
-        Description: state.Description|| "test",
-        Phone: state.Phone|| "test",
-        catName: state.label|| "test",
-        catID: state.value|| "test",
-        timeCreated: Moment().unix(),
-        timeinHuman: Moment().format('DD-MM-YYYY'),
-      })
+      .add(storedata)
       .then(res => {
-        // console.log('Get post in redux >>>', res);
+        console.log('Add::::::: post in redux >>>', res);
         dispatch({type: ADDPOST, payload: {}});
       })
       .catch(err => {

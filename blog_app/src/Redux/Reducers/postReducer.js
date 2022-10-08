@@ -9,6 +9,8 @@ const initValue = {
   Description: '',
   Phone: '',
   Image: '',
+  catName:'',
+  catID:''
 };
 
 export const postReducer = (state = initValue, action) => {

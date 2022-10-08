@@ -100,13 +100,14 @@ const dispatch = useDispatch();
 
   // submit fuction
   const submit = async () => {
-    // if (String(state.Title).length < 3) {
-    //   Toast.show('Title should contain min 4 characters');
-    // }
+    
     setLoading(true);
     // await addContactDatatoFirestore();
     // dispatch(addpost(addPostData))
-    dispatch(addpost({...postData, catName, selectedImage:selectedImage}))
+    dispatch(addpost({...postData, catName:categorylist.label, selectedImage:selectedImage, catID: categorylist.value}))
+    dispatch(getpost())
+    navigation.navigate('Home')
+    
   };
 
   var catName = _.filter(items, item => {
