@@ -125,7 +125,8 @@ const HomeScreen = ({navigation, route}) => {
             },
           ]}>
           {/* Delete icon */}
-          <TouchableOpacity onPress={() => dispatch(deletepost(item.id))}>
+          <TouchableOpacity onPress={() => {dispatch(deletepost(item.id))
+          dispatch(getpost())}}>
             <View style={styles.deleteButton}>
               <AntDesign name="delete" color="red" size={18} />
             </View>

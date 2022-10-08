@@ -25,7 +25,7 @@ export const postReducer = (state = initValue, action) => {
   // }
   if (action.type == DELETEPOST) {
     console.log("DELETE RED::::", state, action)
-    return {...state, post: action.payload};
+    return {...state};
   }
   if (action.type === STATECHANGE) {
     // state.state => object

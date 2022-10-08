@@ -79,7 +79,7 @@ export const deletepost = id => {
       .delete()
       .then(res => {
         console.log('delete post in redux >>>', res);
-        dispatch({type: DELETEPOST, payload: 'success'});
+        dispatch({type: DELETEPOST, payload: []});
       })
       .catch(err => {
         dispatch({type: DELETEPOST, payload: 'error'});
