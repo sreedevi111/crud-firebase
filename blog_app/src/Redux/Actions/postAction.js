@@ -56,12 +56,21 @@ export const addpost = state => {
 };
 
 //edit
-export const editpost = () => {
+export const editpost = state => {
   return dispatch => {
     firestore()
       .collection('Contacts')
-      .doc(id)
-      .update.then(res => {
+      .doc(state.id)
+      .update({
+        Title: state.Title || "test",
+        Name: state.Name|| "test",
+        Description: state.Description|| "test",
+        Phone: state.Phone|| "test",
+        catName: state.label|| "test",
+        catID: state.value|| "test",
+        timeCreated: Moment().unix(),
+        timeinHuman: Moment().format('DD-MM-YYYY'),
+      }).then(res => {
         console.log('Edit post in redux >>>', res);
         dispatch({type: EDITPOST, payload: 'success'});
       })

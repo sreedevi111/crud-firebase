@@ -22,28 +22,24 @@ import {API_URL} from '@env';
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-
 //redux hooks
 import {useSelector, useDispatch} from 'react-redux';
 
 //redux action
-import { getpost, deletepost, addpost } from '../../../Redux/Actions/postAction';
+import {getpost, deletepost, addpost, statechangeaction} from '../../../Redux/Actions/postAction';
 
 const HomeScreen = ({navigation, route}) => {
   // const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
   // const [filter, setFilter] = useState(false);
 
- 
-
   //To Filter
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState([]);
   const [items, setItems] = useState([]);
 
-
   const dispatch = useDispatch();
-  const post = useSelector(state => state.post.post)
+  const post = useSelector(state => state.post.post);
   // console.log("Post in home screen check::::", post)
 
   // useEffect(() => {
@@ -51,11 +47,9 @@ const HomeScreen = ({navigation, route}) => {
   //   // getData();
   // }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     dispatch(getpost());
-  }, [])
-
-  
+  }, []);
 
   //Getting visited detail
   const getVisitedData = async () => {
@@ -125,8 +119,11 @@ const HomeScreen = ({navigation, route}) => {
             },
           ]}>
           {/* Delete icon */}
-          <TouchableOpacity onPress={() => {dispatch(deletepost(item.id))
-          dispatch(getpost())}}>
+          <TouchableOpacity
+            onPress={() => {
+              dispatch(deletepost(item.id));
+              dispatch(getpost());
+            }}>
             <View style={styles.deleteButton}>
               <AntDesign name="delete" color="red" size={18} />
             </View>
@@ -134,17 +131,30 @@ const HomeScreen = ({navigation, route}) => {
 
           {/* Edit icon  */}
           <TouchableOpacity
-            onPress={() =>
-              navigation.navigate('Edit', {
-                id: item.id,
-                Title: item.Title,
-                Name: item.Name,
-                Description: item.Description,
-                timeinHuman: item.timeinHuman,
-                Image: item.Image,
-                reload: getData(),
-              })
-            }>
+            onPress={() => {
+              dispatch(
+                statechangeaction({
+                  id: item.id,
+                  Title: item.Title,
+                  Name: item.Name,
+                  Description: item.Description,
+                  timeinHuman: item.timeinHuman,
+                  Image: item.Image,
+                }),
+              );
+              navigation.navigate(
+                'Edit',
+                //   , {
+                //   id: item.id,
+                //   Title: item.Title,
+                //   Name: item.Name,
+                //   Description: item.Description,
+                //   timeinHuman: item.timeinHuman,
+                //   Image: item.Image,
+                //   // reload: getData(),
+                // }
+              );
+            }}>
             <View style={styles.editButton}>
               <AntDesign name="edit" color="blue" size={20} />
             </View>
@@ -155,19 +165,19 @@ const HomeScreen = ({navigation, route}) => {
   };
 
   //Delete data function
-  const deleteData = id => {
-    firestore()
-      .collection('Contacts')
-      .doc(id)
-      .delete()
-      .then(() => {
-        Toast.show('Item deleted successfully!!');
-        getData();
-      })
-      .catch(error => {
-        Toast.show('Error to delete data', error);
-      });
-  };
+  // const deleteData = id => {
+  //   firestore()
+  //     .collection('Contacts')
+  //     .doc(id)
+  //     .delete()
+  //     .then(() => {
+  //       Toast.show('Item deleted successfully!!');
+  //       getData();
+  //     })
+  //     .catch(error => {
+  //       Toast.show('Error to delete data', error);
+  //     });
+  // };
 
   useEffect(() => {
     SelectCategories();

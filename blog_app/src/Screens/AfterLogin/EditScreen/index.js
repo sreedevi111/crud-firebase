@@ -13,18 +13,20 @@ import ActionSheet from 'react-native-action-sheet';
 import {useSelector, useDispatch} from 'react-redux';
 
 //redux action
-import { editpost } from '../../../Redux/Actions/postAction';
+import { editpost, statechangeaction, getpost } from '../../../Redux/Actions/postAction';
 
 
 const EditScreen = ({navigation, route}) => {
-  console.log('Route of edit:', route.params);
-  const [state, setState] = useState({
-    Title: route.params.Title,
-    Name: route.params.Name,
-    Description: route.params.Description,
-    Phone: route.params.Phone,
-    Image: route.params.Image
-  });
+  const state = useSelector(state=>state.post)
+  const dispatch = useDispatch();
+  // console.log('Route of edit:', route.params);
+  // const [state, setState] = useState({
+  //   Title: route.params.Title,
+  //   Name: route.params.Name,
+  //   Description: route.params.Description,
+  //   Phone: route.params.Phone,
+  //   Image: route.params.Image
+  // });
 //Image selection
 
 const openCamera = () => {
@@ -59,26 +61,29 @@ const openGallery = () => {
 
   // submit
   const submit = () => {
-    console.log('triggered');
-    firestore()
-      .collection('Contacts')
-      .doc(route.params.id)
-      .update({
-        Title: state.Title,
-        Name: state.Name,
-        Description: state.Description,
-        Phone: state.Phone,
-      })
-      .then(res => {
-        console.log('Data entered', res);
-        Toast.show('Item added successfully!');
-        route.params.reload();
-        navigation.navigate('Home');
-      })
-      .catch(error => {
-        console.log('Error occured', error);
-        Toast.show('OOPS!!');
-      });
+    // console.log('triggered');
+    // firestore()
+    //   .collection('Contacts')
+    //   .doc(route.params.id)
+    //   .update({
+    //     Title: state.Title,
+    //     Name: state.Name,
+    //     Description: state.Description,
+    //     Phone: state.Phone,
+    //   })
+    //   .then(res => {
+    //     console.log('Data entered', res);
+    //     Toast.show('Item added successfully!');
+    //     route.params.reload();
+    //     navigation.navigate('Home');
+    //   })
+    //   .catch(error => {
+    //     console.log('Error occured', error);
+    //     Toast.show('OOPS!!');
+    //   });
+    dispatch(editpost({...state}))
+    dispatch(getpost());
+    navigation.navigate('Home');
   };
 
   //Function to select image from camera or gallery
@@ -113,21 +118,21 @@ const openGallery = () => {
         placeholderTextColor={'grey'}
         placeholder="Title"
         value={state.Title}
-        onChangeText={Title => setState(prev => ({...prev, Title}))}
+        onChangeText={Title => dispatch(statechangeaction({Title:Title}))}
         style={styles.title}
       />
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Name"
         value={state.Name}
-        onChangeText={Name => setState(prev => ({...prev, Name}))}
+        onChangeText={Name => dispatch(statechangeaction({Name:Name}))}
         style={styles.name}
       />
       <TextInput
         placeholderTextColor={'grey'}
         placeholder="Description"
         value={state.Email}
-        onChangeText={Email => setState(prev => ({...prev, Email}))}
+        onChangeText={Email => dispatch(statechangeaction({Email:Email}))}
         style={styles.name}
       />
       <TextInput
@@ -135,7 +140,7 @@ const openGallery = () => {
         placeholder="Phone"
         keyboardType="numeric"
         value={state.Phone}
-        onChangeText={Phone => setState(prev => ({...prev, Phone}))}
+        onChangeText={Phone => dispatch(statechangeaction({Phone:Phone}))}
         style={styles.name}
       />
 

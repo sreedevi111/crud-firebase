@@ -39,7 +39,7 @@ const Navigation = () => {
               Alert.alert("A new FCM message arrived", JSON.stringify(remoteMessage))
             })
       
-      
+      //Background or close
             messaging().setBackgroundMessageHandler(async remoteMessage => {
               console.log('Message handled in the background!', remoteMessage);
             });
