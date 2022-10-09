@@ -28,13 +28,16 @@ import {useSelector, useDispatch} from 'react-redux';
 import {API_URL} from '@env';
 
 //reducer
-import { postReducer } from '../../../Redux/Reducers/postReducer';
-import { STATECHANGE } from '../../../Redux/types';
-import {addpost, statechangeaction, getpost} from '../../../Redux/Actions/postAction';
-
+import {postReducer} from '../../../Redux/Reducers/postReducer';
+import {STATECHANGE} from '../../../Redux/types';
+import {
+  addpost,
+  statechangeaction,
+  getpost,
+} from '../../../Redux/Actions/postAction';
 
 const AddPostScreen = ({navigation}) => {
-  const postData = useSelector(state=>state.post)
+  const postData = useSelector(state => state.post);
 
   // console.log("statechange:::", dispatch(getpost('dcsvdv')))
   // console.log("value:::::::::", titleCheck)
@@ -49,13 +52,13 @@ const AddPostScreen = ({navigation}) => {
   // const post = useSelector(state=>state.post.post)
   // const addPostData = useSelector(state=>state.post)
 
-  useEffect(()=>{
+  useEffect(() => {
     // console.log("Inside addPostData redux::", addPostData)
     // console.log("Title check in addpost::", titleCheck)
-  })
+  });
 
   // console.log("post::::: Addd", post)
-const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -100,14 +103,21 @@ const dispatch = useDispatch();
 
   // submit fuction
   const submit = async () => {
-    
     setLoading(true);
     // await addContactDatatoFirestore();
     // dispatch(addpost(addPostData))
-    dispatch(addpost({...postData, catName:categorylist.label, selectedImage:selectedImage, catID: categorylist.value}))
-    dispatch(getpost())
-    navigation.navigate('Home')
-    
+    dispatch(
+      addpost({
+        ...postData,
+        selectedImage: selectedImage,
+        catName: catName[0].label,
+        catID: value,
+        timeCreated: Moment().unix(),
+        timeinHuman: Moment().format('DD-MM-YYYY'),
+      }),
+    );
+    dispatch(getpost());
+    navigation.navigate('Home');
   };
 
   var catName = _.filter(items, item => {
@@ -288,7 +298,7 @@ const dispatch = useDispatch();
           placeholderTextColor={'grey'}
           placeholder="Title"
           value={postData.Title}
-          onChangeText={Title => dispatch(statechangeaction({Title:Title}))}
+          onChangeText={Title => dispatch(statechangeaction({Title: Title}))}
           style={styles.title}
         />
         <TextInput
@@ -296,14 +306,15 @@ const dispatch = useDispatch();
           placeholder="Description"
           value={postData.Description}
           onChangeText={Description =>
-            dispatch(statechangeaction({Description:Description}))          }
+            dispatch(statechangeaction({Description: Description}))
+          }
           style={styles.name}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Name"
           value={postData.Name}
-          onChangeText={Name => dispatch(statechangeaction({Name:Name}))}
+          onChangeText={Name => dispatch(statechangeaction({Name: Name}))}
           style={styles.name}
         />
 
@@ -312,7 +323,7 @@ const dispatch = useDispatch();
           placeholder="Phone"
           keyboardType="numeric"
           value={postData.Phone}
-          onChangeText={Phone => dispatch(statechangeaction({Phone:Phone}))}
+          onChangeText={Phone => dispatch(statechangeaction({Phone: Phone}))}
           style={styles.name}
         />
 

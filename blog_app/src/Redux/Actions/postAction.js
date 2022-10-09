@@ -38,8 +38,8 @@ export const addpost = state => {
       Name: state.Name,
       Description: state.Description,
       Phone: state.Phone,
-      catName: state.label,
-      catID: state.value,
+      catName: state.label ||'test',
+      catID: state.value ||'test',
       timeCreated: Moment().unix(),
       timeinHuman: Moment().format('DD-MM-YYYY'),
     }

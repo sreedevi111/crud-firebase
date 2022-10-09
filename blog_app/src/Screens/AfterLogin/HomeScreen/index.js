@@ -26,12 +26,16 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import {useSelector, useDispatch} from 'react-redux';
 
 //redux action
-import {getpost, deletepost, addpost, statechangeaction} from '../../../Redux/Actions/postAction';
+import {
+  getpost,
+  deletepost,
+  addpost,
+  statechangeaction,
+} from '../../../Redux/Actions/postAction';
 
 const HomeScreen = ({navigation, route}) => {
   // const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
-  // const [filter, setFilter] = useState(false);
 
   //To Filter
   const [open, setOpen] = useState(false);
@@ -40,12 +44,6 @@ const HomeScreen = ({navigation, route}) => {
 
   const dispatch = useDispatch();
   const post = useSelector(state => state.post.post);
-  // console.log("Post in home screen check::::", post)
-
-  // useEffect(() => {
-  //   // getVisitedData();
-  //   // getData();
-  // }, []);
 
   useEffect(() => {
     dispatch(getpost());
@@ -142,9 +140,7 @@ const HomeScreen = ({navigation, route}) => {
                   Image: item.Image,
                 }),
               );
-              navigation.navigate(
-                'Edit'
-              );
+              navigation.navigate('Edit');
             }}>
             <View style={styles.editButton}>
               <AntDesign name="edit" color="blue" size={20} />
@@ -154,21 +150,6 @@ const HomeScreen = ({navigation, route}) => {
       </View>
     );
   };
-
-  //Delete data function
-  // const deleteData = id => {
-  //   firestore()
-  //     .collection('Contacts')
-  //     .doc(id)
-  //     .delete()
-  //     .then(() => {
-  //       Toast.show('Item deleted successfully!!');
-  //       getData();
-  //     })
-  //     .catch(error => {
-  //       Toast.show('Error to delete data', error);
-  //     });
-  // };
 
   useEffect(() => {
     SelectCategories();
@@ -181,12 +162,9 @@ const HomeScreen = ({navigation, route}) => {
       .then(response => {
         var categorylist = [];
         response.docs.map(each => {
-          // categorylist.push({...each.data(), id: each.id});
           categorylist.push({label: each.data().name, value: each.id});
         });
-        // categorylist.push({label: 'Select Category', value: null});
-        // console.log('Category List::', categorylist);
-        // setCategory(prev => ({...prev, data: categorylist}));
+
         setItems([...categorylist]); //?Adding to dropdownlist
       })
       .catch(error => {
@@ -195,7 +173,6 @@ const HomeScreen = ({navigation, route}) => {
   };
 
   useEffect(() => {
-    // console.log('Valu:::', );
     if (value.length != 0) {
       categoryFilter();
       console.log('Value of Array:', value);
@@ -207,24 +184,14 @@ const HomeScreen = ({navigation, route}) => {
       .collection('Contacts')
       .where('catID', 'in', value)
       .get()
-      // .then(response => {
-      //   console.log('filtered dta:', response.data);
-      //   SelectArray.push(response.docs.data())
-
-      // });
 
       .then(querySnapshot => {
         var a = [];
         querySnapshot.forEach(doc => {
-          // doc.data() is never undefined for query doc snapshots
-          // console.log(doc.id, ' => ', doc.data());
           console.log('QQQQ::', [doc.data()]);
           a.push(doc.data());
-          // setData([doc.data()]);
         });
         setData(a);
-        // console.log("tesfvsd:::", querySnapshot.docs())
-        // setData(querySnapshot)
       });
   };
 
@@ -232,8 +199,6 @@ const HomeScreen = ({navigation, route}) => {
     <View style={styles.container}>
       {post.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
-        {/* <TouchableOpacity style={styles.user_icon}> */}
-        {/* <Icon name="filter" color={'#361614'} size={25} /> */}
         <View style={{width: 150}}>
           <DropDownPicker
             placeholder="Filter"
@@ -281,18 +246,15 @@ const HomeScreen = ({navigation, route}) => {
         onPress={() => {
           dispatch(
             statechangeaction({
-              
               Title: '',
               Name: '',
               Description: '',
               timeinHuman: '',
               Image: '',
-              Phone:''
+              Phone: '',
             }),
           );
-          navigation.navigate('Add', {
-            
-          });
+          navigation.navigate('Add', {});
         }}>
         <AntDesign name="pluscircleo" color="blue" size={25} />
       </TouchableOpacity>

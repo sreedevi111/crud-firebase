@@ -19,14 +19,7 @@ import { editpost, statechangeaction, getpost } from '../../../Redux/Actions/pos
 const EditScreen = ({navigation, route}) => {
   const state = useSelector(state=>state.post)
   const dispatch = useDispatch();
-  // console.log('Route of edit:', route.params);
-  // const [state, setState] = useState({
-  //   Title: route.params.Title,
-  //   Name: route.params.Name,
-  //   Description: route.params.Description,
-  //   Phone: route.params.Phone,
-  //   Image: route.params.Image
-  // });
+  
 //Image selection
 
 const openCamera = () => {
@@ -61,26 +54,7 @@ const openGallery = () => {
 
   // submit
   const submit = () => {
-    // console.log('triggered');
-    // firestore()
-    //   .collection('Contacts')
-    //   .doc(route.params.id)
-    //   .update({
-    //     Title: state.Title,
-    //     Name: state.Name,
-    //     Description: state.Description,
-    //     Phone: state.Phone,
-    //   })
-    //   .then(res => {
-    //     console.log('Data entered', res);
-    //     Toast.show('Item added successfully!');
-    //     route.params.reload();
-    //     navigation.navigate('Home');
-    //   })
-    //   .catch(error => {
-    //     console.log('Error occured', error);
-    //     Toast.show('OOPS!!');
-    //   });
+   
     dispatch(editpost({...state}))
     dispatch(getpost());
     navigation.navigate('Home');
