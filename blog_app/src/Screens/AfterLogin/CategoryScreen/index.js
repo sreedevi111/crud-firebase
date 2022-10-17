@@ -10,7 +10,7 @@ import styles from './styles';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
 //importing action and reducer
-// import {categoryReducer} from '../../../Redux/Reducers/categoryreducer';
+import {categoryReducer} from '../../../Redux/Reducers/categoryreducer';
 import {getcategories} from '../../../Redux/Actions/categoryAction';
 
 //redux hooks

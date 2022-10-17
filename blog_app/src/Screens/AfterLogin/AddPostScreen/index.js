@@ -1,13 +1,14 @@
 import {
   View,
   TextInput,
-  Button,
   TouchableOpacity,
   Text,
   Platform,
   Image,
   ActivityIndicator,
   ScrollView,
+  SafeAreaView,
+  LogBox,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -24,7 +25,6 @@ import Moment from 'moment';
 
 //redux hooks
 import {useSelector, useDispatch} from 'react-redux';
-
 import {API_URL} from '@env';
 
 //reducer
@@ -38,27 +38,14 @@ import {
 
 const AddPostScreen = ({navigation}) => {
   const postData = useSelector(state => state.post);
-
-  // console.log("statechange:::", dispatch(getpost('dcsvdv')))
-  // console.log("value:::::::::", titleCheck)
-  // const [state, setState] = useState({
-  //   Title: '',
-  //   Name: '',
-  //   Description: '',
-  //   Phone: '',
-  //   Image: '',
-  // });
-
-  // const post = useSelector(state=>state.post.post)
-  // const addPostData = useSelector(state=>state.post)
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log("Inside addPostData redux::", addPostData)
-    // console.log("Title check in addpost::", titleCheck)
-  });
+    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
+  }, []);
 
   // console.log("post::::: Addd", post)
-  const dispatch = useDispatch();
+
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -69,7 +56,6 @@ const AddPostScreen = ({navigation}) => {
 
   useEffect(() => {
     console.log('value', value);
-    // console.log("What is inside addPost::", addpost)
   }, [value]);
 
   //Function to select image from camera and gallery
@@ -104,25 +90,70 @@ const AddPostScreen = ({navigation}) => {
   // submit fuction
   const submit = async () => {
     setLoading(true);
-    // await addContactDatatoFirestore();
-    // dispatch(addpost(addPostData))
+    ImageAddition();
     dispatch(
       addpost({
         ...postData,
-        selectedImage: selectedImage,
         catName: catName[0].label,
         catID: value,
         timeCreated: Moment().unix(),
         timeinHuman: Moment().format('DD-MM-YYYY'),
       }),
     );
+
     dispatch(getpost());
-    navigation.navigate('Home');
+
+    pushNotification();
+  };
+
+  //For push notification
+  const pushNotification = () => {
+    axios
+      .post(`${API_URL}/sendPushToTopic`, {
+        topic: 'customers',
+        Title: postData.Title,
+        Name: postData.Name,
+      })
+
+      .then(status => {
+        console.log('status::', status);
+      })
+      .catch(e => {
+        console.log('error::', e);
+      }),
+      setTimeout(() => {
+        navigation.navigate('Home');
+      }, 1500);
   };
 
   var catName = _.filter(items, item => {
     return item.value == value;
   });
+
+  //Image adding
+  const ImageAddition = async () => {
+    if (selectedImage?.path) {
+      console.log('Yes selected image has path');
+      var extension = '';
+      const res = dispatch(addpost);
+      console.log('RESPONSE IN IMAGE ADDITION', res);
+      if (selectedImage.mime === 'image/jpeg') {
+        extension = 'jpg';
+      } else if (selectedImage.mime === 'image/png') {
+        extension = 'png';
+      }
+      imagename = `${res.id}.${extension}`;
+      await storage().ref('sample.jpeg').putFile(selectedImage.path);
+      var url = await storage().ref('sample.jpeg').getDownloadURL();
+      await firestore().collection('Contacts').doc(res.id).update({Image: url});
+      setLoading(false);
+      Toast.show('Image updated successfully!!!');
+    } else {
+      setLoading(false);
+      Toast.show('Uploaded Successfully');
+      navigation.navigate('Home');
+    }
+  };
 
   // console.log('catName', catName[0].label);
   // const addContactDatatoFirestore = async () => {
@@ -158,23 +189,6 @@ const AddPostScreen = ({navigation}) => {
   //         setLoading(false);
   //         Toast.show('Image updated successfully!!!');
 
-  //         //For push notification
-  //         axios
-  //           .post(`${API_URL}/sendPushToTopic`, {
-  //             topic: 'customers',
-  //             Title: state.Title,
-  //             Name: state.Name,
-  //           })
-
-  //           .then(status => {
-  //             console.log('status::', status);
-  //           })
-  //           .catch(e => {
-  //             console.log('error::', e);
-  //           }),
-  //           setTimeout(() => {
-  //             navigation.navigate('Home');
-  //           }, 1500);
   //       } else {
   //         setLoading(false);
   //         Toast.show('Uploaded Successfully');

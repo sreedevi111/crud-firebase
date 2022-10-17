@@ -261,9 +261,9 @@ const LoginScreen = () => {
     />
       }
       </View> */}
-
-      <View>
-        {currentUser == null && (
+      <View style={{alignItems:'center',marginTop:20}}>
+      <Text style={{color:'black'}}>OR</Text>
+      {currentUser == null && (
           <GoogleSigninButton
             style={{width: 192, height: 48}}
             size={GoogleSigninButton.Size.Wide}
@@ -273,6 +273,9 @@ const LoginScreen = () => {
           />
         )}
       </View>
+      
+
+     
     </View>
   );
 };

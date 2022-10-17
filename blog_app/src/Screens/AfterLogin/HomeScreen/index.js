@@ -6,6 +6,7 @@ import {
   Alert,
   Image,
   ActivityIndicator,
+  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import firestore from '@react-native-firebase/firestore';
@@ -104,7 +105,10 @@ const HomeScreen = ({navigation, route}) => {
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.catName}</Text>
           <Text style={styles.name}>{item.timeinHuman}</Text>
-          <Image style={styles.image} source={{uri: item.Image}} />
+          {/* {item.Image !== '' && (
+            <Image style={styles.image} source={{uri: item.Image}} />
+          )}
+          <Image style={styles.image} source={{uri: item.Image}} /> */}
         </View>
 
         <View
@@ -196,9 +200,13 @@ const HomeScreen = ({navigation, route}) => {
   };
 
   return (
+    
+
+    
     <View style={styles.container}>
       {post.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
+      
         <View style={{width: 150}}>
           <DropDownPicker
             placeholder="Filter"
@@ -224,6 +232,7 @@ const HomeScreen = ({navigation, route}) => {
             ]}
           />
         </View>
+       
 
         {/* </TouchableOpacity> */}
         <TouchableOpacity
@@ -235,12 +244,14 @@ const HomeScreen = ({navigation, route}) => {
           <AntDesign name="user" color={'blue'} size={25} />
         </TouchableOpacity>
       </View>
+      
 
       <FlatList
         data={post}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
+      
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
@@ -267,6 +278,7 @@ const HomeScreen = ({navigation, route}) => {
         <MaterialIcon name="category" color="blue" size={25} />
       </TouchableOpacity>
     </View>
+    
   );
 };
 

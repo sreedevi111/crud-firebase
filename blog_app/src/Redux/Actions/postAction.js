@@ -7,7 +7,6 @@ import Moment from 'moment';
 // state change
 export const statechangeaction = payload => {
   return dispatch => {
-    console.log('dcsdfsdvsdvfdbdfvdfvsdc payload:::', payload);
     dispatch({type: STATECHANGE, payload: payload});
   };
 };
@@ -15,11 +14,10 @@ export const statechangeaction = payload => {
 //get
 export const getpost = () => {
   return dispatch => {
-    console.log('getPost inside :::::::');
     axios
       .get(`${API_URL}/getData`)
       .then(response => {
-        // console.log('response from getpost redux:', response.data);
+        console.log('response from getpost redux:', response.data);
         dispatch({type: GETPOST, payload: response.data.data});
       })
       .catch(err => {
@@ -36,10 +34,12 @@ export const addpost = state => {
     var storedata = {
       Title: state.Title, 
       Name: state.Name,
+      Image,
+
       Description: state.Description,
       Phone: state.Phone,
-      catName: state.label ||'test',
-      catID: state.value ||'test',
+      catName: state.catName ||'test',
+      catID: state.catID ||'test',
       timeCreated: Moment().unix(),
       timeinHuman: Moment().format('DD-MM-YYYY'),
     }
