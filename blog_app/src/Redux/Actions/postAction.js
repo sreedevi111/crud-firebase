@@ -43,7 +43,6 @@ export const addpost = state => {
       Title: state.Title,
       Name: state.Name,
       Image,
-
       Description: state.Description,
       Phone: state.Phone,
       catName: state.catName ||'test',

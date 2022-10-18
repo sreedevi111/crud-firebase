@@ -3,41 +3,30 @@ import {
   View,
   FlatList,
   TouchableOpacity,
-  Alert,
   Image,
   ActivityIndicator,
-  SafeAreaView,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-import firestore from '@react-native-firebase/firestore';
+
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import Toast from 'react-native-simple-toast';
+
 import {styles} from './styles';
 import * as storage from '../../../Services/AsyncStorageConfig';
 import auth from '@react-native-firebase/auth';
 import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
-import axios from 'axios';
-import {API_URL} from '@env';
+
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
+// import Swipeout from 'react-native-swipeout';
 
 //redux hooks
 import {useSelector, useDispatch} from 'react-redux';
 
 //redux action
-import {
-  getpost,
-  deletepost,
-  addpost,
-  statechangeaction,
-} from '../../../Redux/Actions/postAction';
+import {getpost, deletepost} from '../../../Redux/Actions/postAction';
 
-import {
-  getcategories,
-  resetCategories,
-} from '../../../Redux/Actions/categoryAction';
+import {getcategories} from '../../../Redux/Actions/categoryAction';
 
 const HomeScreen = ({navigation, route}) => {
   // const [data, setData] = useState({loading: true, data: []});
@@ -69,20 +58,25 @@ const HomeScreen = ({navigation, route}) => {
       );
       set_filteredPosts([...filtered_posts]);
     }
+    else {
+      set_filteredPosts([...post]);
+    }
   }, [valuePicker]);
 
   useEffect(() => {
-    console.log('Visited current is >', visited);
     getVisitedData();
   }, [visited]);
 
-  console.log('Value Picker???', valuePicker, filteredPosts);
+  // var swipeoutBtns = [
+  //   {
+  //     text: 'Button'
+  //   }
+  // ]
 
   //Getting visited detail
   const getVisitedData = async () => {
     try {
       let jsonValue = await storage.getItem('@visited');
-      console.log('JSON VALUE', jsonValue);
       if (jsonValue != null) {
         jsonValue = JSON.parse(jsonValue);
         setVisited(jsonValue);
@@ -112,28 +106,40 @@ const HomeScreen = ({navigation, route}) => {
   const renderItem = ({item}) => {
     return (
       <View style={styles.renderContainer}>
+       
         <View style={styles.details}>
-          <Text
-            style={[
-              styles.title,
-              {color: visited.indexOf(item.id) !== -1 ? '#3e67ed' : 'black'},
-            ]}
-            onPress={() => {
-              visitDetail(item.id);
-              navigation.navigate('Detail', {
-                item,
-              });
-            }}>
-            {item.Title}
-          </Text>
+          <View style={{flexDirection: 'row'}}>
+            {typeof item.Image !== 'undefined' && item.Image !== '' && (
+              <Image style={styles.image} source={{uri: item.Image}} />
+            )}
+             {/* <Swipeout right={swipeoutBtns}> */}
+            <View>
+              <Text
+                style={[
+                  styles.title,
+                  {
+                    color:
+                      visited.indexOf(item.id) !== -1 ? '#3e67ed' : 'black',
+                  },
+                ]}
+                onPress={() => {
+                  visitDetail(item.id);
+                  navigation.navigate('Detail', {
+                    item,
+                  });
+                }}>
+                {item.Title}
+              </Text>
+              <Text style={styles.catName}>{item.catName}</Text>
+            </View>
+            {/* </Swipeout> */}
+          </View>
+
           <Text style={styles.name}>Author:{item.Name}</Text>
-          <Text style={styles.name}>{item.catName}</Text>
           <Text style={styles.name}>{item.time}</Text>
           <Text style={styles.name}>{item.timeinHuman}</Text>
-          {typeof item.Image !== 'undefined' && item.Image !== '' && (
-            <Image style={styles.image} source={{uri: item.Image}} />
-          )}
         </View>
+       
 
         <View
           style={[
@@ -219,16 +225,6 @@ const HomeScreen = ({navigation, route}) => {
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
-          dispatch(
-            statechangeaction({
-              Title: '',
-              Name: '',
-              Description: '',
-              timeinHuman: '',
-              Image: '',
-              Phone: '',
-            }),
-          );
           navigation.navigate('Add', {});
         }}>
         <AntDesign name="pluscircleo" color="blue" size={25} />

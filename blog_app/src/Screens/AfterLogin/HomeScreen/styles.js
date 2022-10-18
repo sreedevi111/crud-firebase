@@ -1,4 +1,8 @@
 import {StyleSheet} from 'react-native';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 const styles = StyleSheet.create({
   container: {
@@ -9,15 +13,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 18,
     fontWeight: 'bold',
+    justifyContent: 'flex-end',
+    flexWrap: 'wrap',
+    width: wp('40%'),
+    height: hp('30%'),
   },
   name: {
     color: 'black',
     fontStyle: 'italic',
     fontSize: 10,
   },
+  catName: {
+    color: 'purple',
+    fontSize: 14,
+  },
   image: {
-    width: 200,
-    height: 180,
+    width: wp('50%'),
+    height: hp('30%'),
     borderRadius: 20,
   },
   comments: {
@@ -31,11 +43,12 @@ const styles = StyleSheet.create({
     padding: 10,
     borderColor: 'grey',
     paddingVertical: 10,
-    flexDirection: 'row',
+    // flexDirection: 'row',
     marginBottom: 20,
   },
   details: {
     flex: 2,
+    // flexDirection:'row'
   },
   icons: {
     flex: 1,

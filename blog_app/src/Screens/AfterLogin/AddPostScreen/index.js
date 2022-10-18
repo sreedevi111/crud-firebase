@@ -7,8 +7,6 @@ import {
   Image,
   ActivityIndicator,
   ScrollView,
-  SafeAreaView,
-  LogBox,
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
@@ -17,7 +15,6 @@ import storage from '@react-native-firebase/storage'; // for storage
 import ImagePicker from 'react-native-image-crop-picker';
 import ActionSheet from 'react-native-action-sheet';
 import Toast from 'react-native-simple-toast';
-// import ModalCategory from '../../../Components/ModalCategory';
 import axios from 'axios';
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -27,31 +24,16 @@ import Moment from 'moment';
 import {useSelector, useDispatch} from 'react-redux';
 import {API_URL} from '@env';
 
-//reducer
-import {postReducer} from '../../../Redux/Reducers/postReducer';
-import {STATECHANGE} from '../../../Redux/types';
-import {
-  addpost,
-  statechangeaction,
-  getpost,
-  editpost,
-} from '../../../Redux/Actions/postAction';
-import {getcategories} from '../../../Redux/Actions/categoryAction';
+import {addpost, getpost, editpost} from '../../../Redux/Actions/postAction';
 
 const AddPostScreen = ({navigation}) => {
   const [postData, set_postData] = useState({
-    Title: 'Hello Title',
-    Description: 'Description',
-    Name: 'NeilAmit',
-    Phone: '12312312',
+    Title: '',
+    Description: '',
+    Name: '',
+    Phone: '',
   });
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
-  }, []);
-
-  // console.log("post::::: Addd", post)
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [loading, setLoading] = useState(false);
@@ -63,9 +45,7 @@ const AddPostScreen = ({navigation}) => {
 
   const categories = useSelector(state => state.category.newscategories);
 
-  useEffect(() => {
-    console.log('valuePicker', valuePicker);
-  }, [valuePicker]);
+  
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -166,8 +146,8 @@ const AddPostScreen = ({navigation}) => {
       extension = 'png';
     }
     let imagename = `${documentID}.${extension}`;
-    await storage().ref('sample.jpeg').putFile(selectedImage.path);
-    var url = await storage().ref('sample.jpeg').getDownloadURL();
+    await storage().ref(imagename).putFile(selectedImage.path);
+    var url = await storage().ref(imagename).getDownloadURL();
     await firestore()
       .collection('Contacts')
       .doc(documentID)
@@ -206,10 +186,12 @@ const AddPostScreen = ({navigation}) => {
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator animating size={'large'} />}
+
       <ScrollView>
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Title"
+          multiline={true}
           value={postData.Title}
           onChangeText={text => set_postData(prev => ({...prev, Title: text}))}
           style={styles.title}
@@ -217,6 +199,8 @@ const AddPostScreen = ({navigation}) => {
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Description"
+          multiline={true}
+          numberOfLines={5}
           value={postData.Description}
           onChangeText={text =>
             set_postData(prev => ({...prev, Description: text}))
@@ -242,17 +226,6 @@ const AddPostScreen = ({navigation}) => {
           style={styles.name}
         />
 
-        {/* <TouchableOpacity
-        style={styles.categorySelection}
-        onPress={() => {
-          toggleModal();
-          console.log('::', modalVisible);
-        }}>
-        <Text style={styles.categorySelectionText}>
-          {selectedCategory.name}
-        </Text>
-      </TouchableOpacity> */}
-
         <DropDownPicker
           style={{marginBottom: 10}}
           open={openPicker}
@@ -277,14 +250,6 @@ const AddPostScreen = ({navigation}) => {
         <TouchableOpacity style={styles.button} onPress={submit}>
           <Text>Submit</Text>
         </TouchableOpacity>
-
-        {/* <Button style={{borderRadius: 20}} onPress={submit} title="Submit" /> */}
-        {/* <ModalCategory
-        visible={modalVisible}
-        setModalVisible={setModalVisible}
-        data={category.data}
-        renderItem={renderItem}
-      /> */}
       </ScrollView>
     </View>
   );

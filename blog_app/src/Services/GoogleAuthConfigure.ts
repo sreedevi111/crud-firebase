@@ -1,8 +1,4 @@
-import {
-    GoogleSignin,
-    GoogleSigninButton,
-    statusCodes,
-  } from '@react-native-google-signin/google-signin';
+import {GoogleSignin } from '@react-native-google-signin/google-signin';
 
   GoogleSignin.configure({
     scopes: [], // what API you want to access on behalf of the user, default is email and profile

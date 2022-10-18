@@ -1,14 +1,14 @@
 import {StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import Lottie from 'lottie-react-native';
-// import LottieView = require("lottie-react-native");
 
 const SplashScreen = ({navigation}) => {
   return (
-    <View style={{
-      flex: 1,
-      backgroundColor: '#ffffff'
-  }}>
+    <View
+      style={{
+        flex: 1,
+        backgroundColor: '#ffffff',
+      }}>
       <Lottie
         source={require('../../Assets/blog2.json')}
         autoPlay
@@ -19,10 +19,9 @@ const SplashScreen = ({navigation}) => {
           navigation.navigate('Login');
         }}
       />
-      
     </View>
-  )
-}
+  );
+};
 
 export default SplashScreen;
 
