@@ -34,21 +34,49 @@ import {
   statechangeaction,
 } from '../../../Redux/Actions/postAction';
 
+import {
+  getcategories,
+  resetCategories,
+} from '../../../Redux/Actions/categoryAction';
+
 const HomeScreen = ({navigation, route}) => {
   // const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
 
   //To Filter
-  const [open, setOpen] = useState(false);
-  const [value, setValue] = useState([]);
-  const [items, setItems] = useState([]);
-
+  const [openPicker, set_openPicker] = useState(false);
+  const [valuePicker, set_valuePicker] = useState([]);
+  const items = useSelector(state => state.category.newscategories);
   const dispatch = useDispatch();
-  const post = useSelector(state => state.post.post);
+  const post = useSelector(state => state.post.post); //downloaded posts from server
+  const [filteredPosts, set_filteredPosts] = useState([]);
 
   useEffect(() => {
     dispatch(getpost());
+    dispatch(getcategories());
   }, []);
+
+  useEffect(() => {
+    if (post.length > 0) {
+      set_filteredPosts([...post]);
+    }
+  }, [post]);
+
+  useEffect(() => {
+    if (valuePicker.length > 0) {
+      let filtered_posts = _.filter(post, post =>
+        _.includes(valuePicker, post.catID),
+      );
+      set_filteredPosts([...filtered_posts]);
+    }
+  }, [valuePicker]);
+
+  useEffect(() => {
+    console.log('Visited current is >', visited);
+    getVisitedData();
+  }, [visited]);
+
+  console.log('Value Picker???', valuePicker, filteredPosts);
 
   //Getting visited detail
   const getVisitedData = async () => {
@@ -63,10 +91,6 @@ const HomeScreen = ({navigation, route}) => {
       console.log('ERROR:', e);
     }
   };
-
-  useEffect(() => {
-    console.log('Visited current is >', visited);
-  }, [visited]);
 
   //Storing visited detail
   const visitDetail = async id => {
@@ -104,11 +128,11 @@ const HomeScreen = ({navigation, route}) => {
           </Text>
           <Text style={styles.name}>Author:{item.Name}</Text>
           <Text style={styles.name}>{item.catName}</Text>
+          <Text style={styles.name}>{item.time}</Text>
           <Text style={styles.name}>{item.timeinHuman}</Text>
-          {/* {item.Image !== '' && (
+          {typeof item.Image !== 'undefined' && item.Image !== '' && (
             <Image style={styles.image} source={{uri: item.Image}} />
           )}
-          <Image style={styles.image} source={{uri: item.Image}} /> */}
         </View>
 
         <View
@@ -134,17 +158,7 @@ const HomeScreen = ({navigation, route}) => {
           {/* Edit icon  */}
           <TouchableOpacity
             onPress={() => {
-              dispatch(
-                statechangeaction({
-                  id: item.id,
-                  Title: item.Title,
-                  Name: item.Name,
-                  Description: item.Description,
-                  timeinHuman: item.timeinHuman,
-                  Image: item.Image,
-                }),
-              );
-              navigation.navigate('Edit');
+              navigation.navigate('Edit', item);
             }}>
             <View style={styles.editButton}>
               <AntDesign name="edit" color="blue" size={20} />
@@ -155,58 +169,10 @@ const HomeScreen = ({navigation, route}) => {
     );
   };
 
-  useEffect(() => {
-    SelectCategories();
-  }, []);
-
-  const SelectCategories = () => {
-    firestore()
-      .collection('Categories')
-      .get()
-      .then(response => {
-        var categorylist = [];
-        response.docs.map(each => {
-          categorylist.push({label: each.data().name, value: each.id});
-        });
-
-        setItems([...categorylist]); //?Adding to dropdownlist
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  };
-
-  useEffect(() => {
-    if (value.length != 0) {
-      categoryFilter();
-      console.log('Value of Array:', value);
-    }
-  });
-
-  const categoryFilter = () => {
-    firestore()
-      .collection('Contacts')
-      .where('catID', 'in', value)
-      .get()
-
-      .then(querySnapshot => {
-        var a = [];
-        querySnapshot.forEach(doc => {
-          console.log('QQQQ::', [doc.data()]);
-          a.push(doc.data());
-        });
-        setData(a);
-      });
-  };
-
   return (
-    
-
-    
     <View style={styles.container}>
       {post.loading && <ActivityIndicator size="large" color="blue" />}
       <View style={styles.tabIcon}>
-      
         <View style={{width: 150}}>
           <DropDownPicker
             placeholder="Filter"
@@ -214,12 +180,12 @@ const HomeScreen = ({navigation, route}) => {
             min={0}
             max={5}
             showBadgeDot={true}
-            open={open}
-            value={value}
+            open={openPicker}
+            value={valuePicker}
             items={items}
-            setOpen={setOpen}
-            setValue={setValue}
-            setItems={setItems}
+            setOpen={set_openPicker}
+            setValue={set_valuePicker}
+            setItems={() => dispatch(getcategories())}
             mode="BADGE"
             badgeDotColors={[
               '#e76f51',
@@ -232,7 +198,6 @@ const HomeScreen = ({navigation, route}) => {
             ]}
           />
         </View>
-       
 
         {/* </TouchableOpacity> */}
         <TouchableOpacity
@@ -244,14 +209,13 @@ const HomeScreen = ({navigation, route}) => {
           <AntDesign name="user" color={'blue'} size={25} />
         </TouchableOpacity>
       </View>
-      
 
       <FlatList
-        data={post}
+        data={filteredPosts}
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-      
+
       <TouchableOpacity
         style={styles.plus}
         onPress={() => {
@@ -278,7 +242,6 @@ const HomeScreen = ({navigation, route}) => {
         <MaterialIcon name="category" color="blue" size={25} />
       </TouchableOpacity>
     </View>
-    
   );
 };
 

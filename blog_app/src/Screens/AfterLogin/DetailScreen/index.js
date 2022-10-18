@@ -1,8 +1,11 @@
 import {Text, View, ScrollView, Image} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {styles} from './styles';
+import { useSelector } from 'react-redux';
 
-const DetailScreen = ({navigation, route}) => {
+const DetailScreen = ({route}) => {
+  // const post = useSelector(state => state.post.post)
+  // console.log("Post in detail page::", post)
   const [state, setState] = useState({
     Title: route.params.item.Title,
     Name: route.params.item.Name,

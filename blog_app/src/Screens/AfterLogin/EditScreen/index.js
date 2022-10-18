@@ -16,9 +16,20 @@ import {useSelector, useDispatch} from 'react-redux';
 import { editpost, statechangeaction, getpost } from '../../../Redux/Actions/postAction';
 
 
+// const EditScreen = ({navigation, route}) => {
+//   const state = useSelector(state=>state.post)
+//   const dispatch = useDispatch();
+
 const EditScreen = ({navigation, route}) => {
-  const state = useSelector(state=>state.post)
-  const dispatch = useDispatch();
+  console.log("Route in editscreen:::", route.params)
+  const [state, setState] = useState({
+    Title: route.params.Title,
+    Name: route.params.Name,
+    Email: route.params.Email,
+    Description: route.params.Description,
+    Phone: route.params.Phone,
+    Image: route.params.Image
+  });
   
 //Image selection
 
@@ -29,7 +40,7 @@ const openCamera = () => {
   })
     .then(image => {
       console.log(image);
-      setState(prev => ({...prev, image}))
+      // setState(prev => ({...prev, image}))
     })
     .catch(error => {
       console.log('Error in catching image', error);
@@ -43,7 +54,7 @@ const openGallery = () => {
   })
     .then(image => {
       console.log(image);
-      setState(prev => ({...prev, image}))
+      // setState(prev => ({...prev, image}))
     })
     .catch(error => {
       console.log('Error in catching image', error);

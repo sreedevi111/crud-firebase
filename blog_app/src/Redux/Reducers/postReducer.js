@@ -1,4 +1,4 @@
-import {GETPOST, ADDPOST, EDITPOST, DELETEPOST, STATECHANGE} from '../types';
+import {GETPOST, ADDPOST, EDITPOST, DELETEPOST, STATECHANGE, LOADER} from '../types';
 
 const initValue = {
   post: [],
@@ -39,6 +39,10 @@ export const postReducer = (state = initValue, action) => {
     // console.log("STATECHANGE:::", state)
     // return state;
     return {...state, ...action.payload};
+  }
+
+  if (action.type == LOADER) {
+    return { ...state, loading: true}
   }
 
   return state;

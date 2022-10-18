@@ -34,10 +34,17 @@ import {
   addpost,
   statechangeaction,
   getpost,
+  editpost,
 } from '../../../Redux/Actions/postAction';
+import {getcategories} from '../../../Redux/Actions/categoryAction';
 
 const AddPostScreen = ({navigation}) => {
-  const postData = useSelector(state => state.post);
+  const [postData, set_postData] = useState({
+    Title: 'Hello Title',
+    Description: 'Description',
+    Name: 'NeilAmit',
+    Phone: '12312312',
+  });
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -50,13 +57,22 @@ const AddPostScreen = ({navigation}) => {
   const [loading, setLoading] = useState(false);
 
   // For dropdown
-  const [open, setOpen] = useState(false); // status of dropdownload status = false, status = true
-  const [value, setValue] = useState(null); //to store select option of dropdown
-  const [items, setItems] = useState([]);
+  const [openPicker, set_openPicker] = useState(false); // status of dropdownload status = false, status = true
+  const [valuePicker, set_valuePicker] = useState(null); //to store select option of dropdown
+  const [itemsPicker, set_itemsPicker] = useState([]);
+
+  const categories = useSelector(state => state.category.newscategories);
 
   useEffect(() => {
-    console.log('value', value);
-  }, [value]);
+    console.log('valuePicker', valuePicker);
+  }, [valuePicker]);
+
+  useEffect(() => {
+    if (categories.length > 0) {
+      console.log('categories', categories);
+      set_itemsPicker([{label: 'Select Category', value: null}, ...categories]);
+    }
+  }, [categories]);
 
   //Function to select image from camera and gallery
   const openCamera = () => {
@@ -90,20 +106,28 @@ const AddPostScreen = ({navigation}) => {
   // submit fuction
   const submit = async () => {
     setLoading(true);
-    ImageAddition();
-    dispatch(
-      addpost({
-        ...postData,
-        catName: catName[0].label,
-        catID: value,
-        timeCreated: Moment().unix(),
-        timeinHuman: Moment().format('DD-MM-YYYY'),
-      }),
-    );
+    let res = firestore().collection('Contacts').doc(); //blank unique ID
+    console.log('res', res.id);
+    if (selectedImage?.path) {
+      ImageAddition(res.id);
+    }
 
-    dispatch(getpost());
+    let data = {
+      ...postData,
+      catName: catName[0].label,
+      catID: valuePicker,
+      timeCreated: Moment().unix(),
+      time: Moment().format('h:mm:ss a'),
+      timeinHuman: Moment().format('DD-MM-YYYY'),
+      id: res.id,
+    };
+    console.log('data', data);
+    dispatch(editpost(data));
 
-    pushNotification();
+    if (selectedImage == null) {
+      dispatch(getpost());
+      pushNotification();
+    }
   };
 
   //For push notification
@@ -126,93 +150,33 @@ const AddPostScreen = ({navigation}) => {
       }, 1500);
   };
 
-  var catName = _.filter(items, item => {
-    return item.value == value;
+  var catName = _.filter(itemsPicker, each => {
+    return each.value == valuePicker;
   });
 
   //Image adding
-  const ImageAddition = async () => {
-    if (selectedImage?.path) {
-      console.log('Yes selected image has path');
-      var extension = '';
-      const res = dispatch(addpost);
-      console.log('RESPONSE IN IMAGE ADDITION', res);
-      if (selectedImage.mime === 'image/jpeg') {
-        extension = 'jpg';
-      } else if (selectedImage.mime === 'image/png') {
-        extension = 'png';
-      }
-      imagename = `${res.id}.${extension}`;
-      await storage().ref('sample.jpeg').putFile(selectedImage.path);
-      var url = await storage().ref('sample.jpeg').getDownloadURL();
-      await firestore().collection('Contacts').doc(res.id).update({Image: url});
-      setLoading(false);
-      Toast.show('Image updated successfully!!!');
-    } else {
-      setLoading(false);
-      Toast.show('Uploaded Successfully');
-      navigation.navigate('Home');
+  const ImageAddition = async documentID => {
+    console.log('Yes selected image has path');
+    var extension = '';
+    const res = dispatch(addpost);
+    console.log('RESPONSE IN IMAGE ADDITION', res);
+    if (selectedImage.mime === 'image/jpeg') {
+      extension = 'jpg';
+    } else if (selectedImage.mime === 'image/png') {
+      extension = 'png';
     }
+    let imagename = `${documentID}.${extension}`;
+    await storage().ref('sample.jpeg').putFile(selectedImage.path);
+    var url = await storage().ref('sample.jpeg').getDownloadURL();
+    await firestore()
+      .collection('Contacts')
+      .doc(documentID)
+      .set({Image: url}, {merge: true});
+    setLoading(false);
+    Toast.show('Image updated successfully!!!');
+    dispatch(getpost());
+    pushNotification();
   };
-
-  // console.log('catName', catName[0].label);
-  // const addContactDatatoFirestore = async () => {
-  //   try {
-  //     var res = await firestore()
-  //       .collection('Contacts')
-  //       .add({
-  //         Title: state.Title,
-  //         Name: state.Name,
-  //         Description: state.Description,
-  //         Phone: state.Phone,
-  //         catName: catName[0].label,
-  //         catID: value,
-  //         timeCreated: Moment().unix(),
-  //         timeinHuman: Moment().format('DD-MM-YYYY'),
-  //       });
-
-  //     if (res) {
-  //       if (selectedImage?.path) {
-  //         var extension = '';
-  //         if (selectedImage.mime === 'image/jpeg') {
-  //           extension = 'jpg';
-  //         } else if (selectedImage.mime === 'image/png') {
-  //           extension = 'png';
-  //         }
-  //         imagename = `${res.id}.${extension}`;
-  //         await storage().ref('sample.jpeg').putFile(selectedImage.path);
-  //         var url = await storage().ref('sample.jpeg').getDownloadURL();
-  //         await firestore()
-  //           .collection('Contacts')
-  //           .doc(res.id)
-  //           .update({Image: url});
-  //         setLoading(false);
-  //         Toast.show('Image updated successfully!!!');
-
-  //       } else {
-  //         setLoading(false);
-  //         Toast.show('Uploaded Successfully');
-  //         navigation.navigate('Home');
-  //       }
-  //       imagename = `${res.id}.${extension}`;
-  //       await storage().ref('sample.jpeg').putFile(selectedImage.path);
-  //       var url = await storage().ref('sample.jpeg').getDownloadURL();
-  //       await firestore()
-  //         .collection('Contacts')
-  //         .doc(res.id)
-  //         .update({Image: url});
-  //       setLoading(false);
-  //       Toast.show('Image updated successfully!!!');
-  //       navigation.navigate('Home');
-  //     } else {
-  //       setLoading(false);
-  //       Toast.show('Image updated successfully!!!');
-  //       navigation.navigate('Home');
-  //     }
-  //   } catch (error) {
-  //     console.log('Image failed to upload', error);
-  //   }
-  // };
 
   //Function to opt Camera and Gallery
   const openActionSheet = () => {
@@ -239,71 +203,6 @@ const AddPostScreen = ({navigation}) => {
     );
   };
 
-  // For Modal category
-  // const [modalVisible, setModalVisible] = useState(false);
-  // const [category, setCategory] = useState({data: []});
-  // const [selectedCategory, setSelectedCategory] = useState({
-  //   name: 'Select Category',
-  //   id: null,
-  // });
-
-  useEffect(() => {
-    SelectCategories();
-  }, []);
-
-  // const onSelectItem = item => {
-  //   setSelectedCategory(item);
-  //   console.log('selected Category::', item);
-  //   toggleModal();
-  // };
-
-  // const toggleModal = () => {
-  //   setModalVisible(!modalVisible);
-  // };
-
-  const SelectCategories = () => {
-    firestore()
-      .collection('Categories')
-      .get()
-      .then(response => {
-        var categorylist = [];
-        // console.log('response check::::::', response.docs);
-        response.docs.map(each => {
-          // categorylist.push({...each.data(), id: each.id});
-          categorylist.push({label: each.data().name, value: each.id});
-        });
-        categorylist.push({label: 'Select Category', value: null});
-        // console.log('Category List::', categorylist);
-        // setCategory(prev => ({...prev, data: categorylist}));
-        setItems([...categorylist]); //?Adding to dropdownlist
-      })
-      .catch(error => {
-        console.log('error', error);
-      });
-  };
-
-  // //For modal flat list
-  //   const renderItem = ({item}) => {
-  //     console.log('Item inrender Item::', item);
-  //     return (
-  //       <View style={{backgroundColor: 'white'}}>
-  //         <TouchableOpacity
-  //           onPress={() => onSelectItem(item)}
-  //           style={{height: 60}}>
-  //           <Text
-  //             style={{
-  //               color: 'black',
-  //               padding: 10,
-  //               fontSize: 16,
-  //               marginLeft: 30,
-  //             }}>
-  //             {item.name}
-  //           </Text>
-  //         </TouchableOpacity>
-  //       </View>
-  //     );
-  //   };
-
   return (
     <View style={styles.container}>
       {loading && <ActivityIndicator animating size={'large'} />}
@@ -312,15 +211,15 @@ const AddPostScreen = ({navigation}) => {
           placeholderTextColor={'grey'}
           placeholder="Title"
           value={postData.Title}
-          onChangeText={Title => dispatch(statechangeaction({Title: Title}))}
+          onChangeText={text => set_postData(prev => ({...prev, Title: text}))}
           style={styles.title}
         />
         <TextInput
           placeholderTextColor={'grey'}
           placeholder="Description"
           value={postData.Description}
-          onChangeText={Description =>
-            dispatch(statechangeaction({Description: Description}))
+          onChangeText={text =>
+            set_postData(prev => ({...prev, Description: text}))
           }
           style={styles.name}
         />
@@ -328,7 +227,8 @@ const AddPostScreen = ({navigation}) => {
           placeholderTextColor={'grey'}
           placeholder="Name"
           value={postData.Name}
-          onChangeText={Name => dispatch(statechangeaction({Name: Name}))}
+          autoComplete={'off'}
+          onChangeText={text => set_postData(prev => ({...prev, Name: text}))}
           style={styles.name}
         />
 
@@ -337,7 +237,8 @@ const AddPostScreen = ({navigation}) => {
           placeholder="Phone"
           keyboardType="numeric"
           value={postData.Phone}
-          onChangeText={Phone => dispatch(statechangeaction({Phone: Phone}))}
+          autoComplete={'off'}
+          onChangeText={text => set_postData(prev => ({...prev, Phone: text}))}
           style={styles.name}
         />
 
@@ -354,12 +255,11 @@ const AddPostScreen = ({navigation}) => {
 
         <DropDownPicker
           style={{marginBottom: 10}}
-          open={open}
-          value={value}
-          items={items}
-          setOpen={setOpen}
-          setValue={setValue}
-          setItems={setItems}
+          open={openPicker}
+          value={valuePicker}
+          items={itemsPicker}
+          setOpen={set_openPicker}
+          setValue={set_valuePicker}
         />
 
         <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
