@@ -7,42 +7,58 @@ import {
   ActivityIndicator,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
-
-import {styles} from './styles';
-import * as storage from '../../../Services/AsyncStorageConfig';
-import auth from '@react-native-firebase/auth';
-import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
-
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
-// import Swipeout from 'react-native-swipeout';
+import {styles} from './styles';
+import * as storage from '../../../Services/AsyncStorageConfig';
+import {GoogleSignin} from '../../../Services/GoogleAuthConfigure';
+import auth from '@react-native-firebase/auth';
+import firestore from '@react-native-firebase/firestore';
+import {
+  widthPercentageToDP as wp,
+  heightPercentageToDP as hp,
+} from 'react-native-responsive-screen';
 
 //redux hooks
 import {useSelector, useDispatch} from 'react-redux';
 
 //redux action
 import {getpost, deletepost} from '../../../Redux/Actions/postAction';
-
 import {getcategories} from '../../../Redux/Actions/categoryAction';
 
 const HomeScreen = ({navigation, route}) => {
-  // const [data, setData] = useState({loading: true, data: []});
   const [visited, setVisited] = useState([]);
 
   //To Filter
   const [openPicker, set_openPicker] = useState(false);
   const [valuePicker, set_valuePicker] = useState([]);
+
   const items = useSelector(state => state.category.newscategories);
   const dispatch = useDispatch();
   const post = useSelector(state => state.post.post); //downloaded posts from server
+
   const [filteredPosts, set_filteredPosts] = useState([]);
+  const [mybookmarks, set_mybookmarks] = useState([]);
+  const [currentuser, set_currentuser] = useState(null);
 
   useEffect(() => {
     dispatch(getpost());
     dispatch(getcategories());
+
+    const currentUser = auth().currentUser;
+    set_currentuser(currentUser);
+    console.log('currentUser', currentUser._user.uid);
+
+    firestore()
+      .collection('users')
+      .doc(currentUser._user.uid)
+      .get()
+      .then(mydata => {
+        console.log('mybookmarkslist', mydata.data().bookmarks);
+        set_mybookmarks([...mydata.data().bookmarks]);
+      });
   }, []);
 
   useEffect(() => {
@@ -57,8 +73,7 @@ const HomeScreen = ({navigation, route}) => {
         _.includes(valuePicker, post.catID),
       );
       set_filteredPosts([...filtered_posts]);
-    }
-    else {
+    } else {
       set_filteredPosts([...post]);
     }
   }, [valuePicker]);
@@ -66,12 +81,6 @@ const HomeScreen = ({navigation, route}) => {
   useEffect(() => {
     getVisitedData();
   }, [visited]);
-
-  // var swipeoutBtns = [
-  //   {
-  //     text: 'Button'
-  //   }
-  // ]
 
   //Getting visited detail
   const getVisitedData = async () => {
@@ -102,18 +111,35 @@ const HomeScreen = ({navigation, route}) => {
     }
   };
 
+  const bookmarkToggle = itemID => {
+    let index = mybookmarks.indexOf(itemID);
+    let tmpbookmarks = [...mybookmarks];
+    if (index !== -1) {
+      tmpbookmarks.splice(index, 1);
+    } else {
+      tmpbookmarks.push(itemID);
+    }
+    firestore()
+      .collection('users')
+      .doc(currentuser._user.uid)
+      .update({bookmarks: tmpbookmarks});
+    set_mybookmarks([...tmpbookmarks]);
+  };
+
   //For displaying items in flatlist
   const renderItem = ({item}) => {
     return (
       <View style={styles.renderContainer}>
-       
-        <View style={styles.details}>
-          <View style={{flexDirection: 'row'}}>
-            {typeof item.Image !== 'undefined' && item.Image !== '' && (
-              <Image style={styles.image} source={{uri: item.Image}} />
-            )}
-             {/* <Swipeout right={swipeoutBtns}> */}
-            <View>
+        <View style={styles.imageRow}>
+          {typeof item.Image !== 'undefined' && item.Image !== '' && (
+            <Image
+              style={{width: wp(40), height: hp(20)}}
+              source={{uri: item.Image}}
+            />
+          )}
+
+          <View>
+            <View style={styles.textBox}>
               <Text
                 style={[
                   styles.title,
@@ -130,46 +156,45 @@ const HomeScreen = ({navigation, route}) => {
                 }}>
                 {item.Title}
               </Text>
-              <Text style={styles.catName}>{item.catName}</Text>
+              <Text style={styles.name}>Author:{item.Name}</Text>
+              <Text style={styles.name}>{item.time}</Text>
+              <Text style={styles.name}>{item.timeinHuman}</Text>
             </View>
-            {/* </Swipeout> */}
           </View>
-
-          <Text style={styles.name}>Author:{item.Name}</Text>
-          <Text style={styles.name}>{item.time}</Text>
-          <Text style={styles.name}>{item.timeinHuman}</Text>
         </View>
-       
+        <View style={styles.iconRow}>
+          <View style={styles.icons}>
+            <Text style={styles.catName}>{item.catName}</Text>
+            <TouchableOpacity
+              onPress={() => {
+                dispatch(deletepost(item.id));
+                dispatch(getpost());
+              }}>
+              <View style={styles.deleteButton}>
+                <AntDesign name="delete" color="red" size={18} />
+              </View>
+            </TouchableOpacity>
 
-        <View
-          style={[
-            styles.icons,
-            {
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-evenly',
-            },
-          ]}>
-          {/* Delete icon */}
-          <TouchableOpacity
-            onPress={() => {
-              dispatch(deletepost(item.id));
-              dispatch(getpost());
-            }}>
-            <View style={styles.deleteButton}>
-              <AntDesign name="delete" color="red" size={18} />
-            </View>
-          </TouchableOpacity>
-
-          {/* Edit icon  */}
-          <TouchableOpacity
-            onPress={() => {
-              navigation.navigate('Edit', item);
-            }}>
-            <View style={styles.editButton}>
-              <AntDesign name="edit" color="blue" size={20} />
-            </View>
-          </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate('Edit', item);
+              }}>
+              <View style={styles.editButton}>
+                <AntDesign name="edit" color="blue" size={20} />
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => bookmarkToggle(item.id)}>
+              <View style={styles.editButton}>
+                <AntDesign
+                  name={
+                    mybookmarks.indexOf(item.id) !== -1 ? 'heart' : 'hearto'
+                  }
+                  color="red"
+                  size={20}
+                />
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
       </View>
     );
@@ -205,7 +230,6 @@ const HomeScreen = ({navigation, route}) => {
           />
         </View>
 
-        {/* </TouchableOpacity> */}
         <TouchableOpacity
           style={styles.user_icon}
           onPress={() => {
@@ -221,8 +245,8 @@ const HomeScreen = ({navigation, route}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-
-      <TouchableOpacity
+{/* <View style={{flexDirection:'row', position:'absolute'}}>
+<TouchableOpacity
         style={styles.plus}
         onPress={() => {
           navigation.navigate('Add', {});
@@ -237,6 +261,15 @@ const HomeScreen = ({navigation, route}) => {
         }}>
         <MaterialIcon name="category" color="blue" size={25} />
       </TouchableOpacity>
+      <TouchableOpacity
+        style={{width: 30}}
+        onPress={() => {
+          navigation.navigate('Category');
+        }}>
+        <MaterialIcon name="category" color="blue" size={25} />
+      </TouchableOpacity>
+</View> */}
+    
     </View>
   );
 };

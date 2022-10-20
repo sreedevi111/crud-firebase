@@ -1,5 +1,12 @@
 import firestore from '@react-native-firebase/firestore';
-import {GETPOST, ADDPOST, EDITPOST, DELETEPOST, STATECHANGE, LOADER} from '../types';
+import {
+  GETPOST,
+  ADDPOST,
+  EDITPOST,
+  DELETEPOST,
+  STATECHANGE,
+  LOADER,
+} from '../types';
 import {API_URL} from '@env';
 import axios from 'axios';
 import Moment from 'moment';
@@ -11,11 +18,11 @@ export const statechangeaction = payload => {
   };
 };
 
-export const loadingchange = ()=> {
+export const loadingchange = () => {
   return dispatch => {
-    dispatch({ type: LOADER})
-  }
-}
+    dispatch({type: LOADER});
+  };
+};
 
 //get
 export const getpost = () => {
@@ -23,7 +30,6 @@ export const getpost = () => {
     axios
       .get(`${API_URL}/getData`)
       .then(response => {
-        // console.log('response from getpost redux:', response.data);
         dispatch({type: GETPOST, payload: response.data.data});
       })
       .catch(err => {
@@ -31,8 +37,6 @@ export const getpost = () => {
       });
   };
 };
-
-
 
 //add
 export const addpost = state => {
@@ -45,13 +49,13 @@ export const addpost = state => {
       Image,
       Description: state.Description,
       Phone: state.Phone,
-      catName: state.catName ||'test',
-      catID: state.catID ||'test',
+      catName: state.catName || 'test',
+      catID: state.catID || 'test',
       time: Moment().format('h:mm:ss a'),
       timeCreated: Moment().unix(),
       timeinHuman: Moment().format('DD-MM-YYYY'),
-    }
-    console.log("Stored val::", storedata)
+    };
+    console.log('Stored val::', storedata);
     firestore()
       .collection('Contacts')
       .add(storedata)
@@ -67,27 +71,31 @@ export const addpost = state => {
 
 //edit
 export const editpost = state => {
-  console.log('editting done',state)
+  console.log('editting done', state);
   return dispatch => {
     firestore()
       .collection('Contacts')
       .doc(state.id)
-      .set({
-        Title: state.Title || "test",
-        Name: state.Name|| "test",
-        Description: state.Description|| "test",
-        Phone: state.Phone|| "test",
-        catName: state.catName|| "test",
-        catID: state.catID || "test",
-        time: Moment().format('h:mm:ss a'),
-        timeCreated: Moment().unix(),
-        timeinHuman: Moment().format('DD-MM-YYYY'),
-      }, {merge: true}).then(() => {
+      .set(
+        {
+          Title: state.Title || 'test',
+          Name: state.Name || 'test',
+          Description: state.Description || 'test',
+          Phone: state.Phone || 'test',
+          catName: state.catName || 'test',
+          catID: state.catID || 'test',
+          time: Moment().format('h:mm:ss a'),
+          timeCreated: Moment().unix(),
+          timeinHuman: Moment().format('DD-MM-YYYY'),
+        },
+        {merge: true},
+      )
+      .then(() => {
         console.log('Edit post in redux >>>');
         dispatch({type: EDITPOST, payload: 'success'});
       })
       .catch(err => {
-        console.log('err',err)
+        console.log('err', err);
         dispatch({type: EDITPOST, payload: 'error'});
       });
   };

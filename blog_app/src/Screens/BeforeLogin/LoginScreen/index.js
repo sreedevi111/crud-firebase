@@ -64,7 +64,6 @@ const LoginScreen = () => {
   };
 
   const submitForm = () => {
-    //---------EMAIL VALIDATION--------------------
     const email = String(state.email).trim().toLowerCase();
     const pattern =
       /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
@@ -76,9 +75,7 @@ const LoginScreen = () => {
     if (email_test === true) {
       setState(prev => ({...prev, emailTestFail: false}));
     }
-    // -------------EMAIL VALIDATION-------------------
 
-    //------------PASSWORD VALIDATION--------------------
     const password = String(state.password).trim();
     if (password.length < 6) {
       setState(prev => ({...prev, passwordTestFail: true}));
@@ -97,22 +94,13 @@ const LoginScreen = () => {
         var uid = response.user.uid;
         Toast.show('You are logged in successfully!!');
         storage.setItem('@uid', uid);
-        // setTimeout(() => {
-        //   navigation.navigate('Home');
-        // }, 1500);
-        //console.log("type of response.user::", typeof(response.user));
       })
       .catch(error => {
         console.log('Error to login::', error);
       });
-
-    //------------PASSWORD VALIDATION--------------------
   };
 
   const isGoogleSigned = async () => {
-    // const isSignedIn = await GoogleSignin.isSignedIn();
-    // console.log("isSignedIn>>>" , isSignedIn);
-
     try {
       await GoogleSignin.hasPlayServices();
       const userInfo = await GoogleSignin.signIn();
@@ -243,27 +231,9 @@ const LoginScreen = () => {
         setModalVisible={setModalVisible}
       />
 
-      {/* <View>
-        {currentUser != null 
-      //   ? (
-      //     <>
-      //     <Button onPress={signout} title="sign out" />
-      //     </>
-
-      //   )
-      // :
-      <GoogleSigninButton
-      style={{ width: 192, height: 48 }}
-      size={GoogleSigninButton.Size.Wide}
-      color={GoogleSigninButton.Color.Dark}
-      onPress={isGoogleSigned}
-      //disabled={this.state.isSigninInProgress}
-    />
-      }
-      </View> */}
-      <View style={{alignItems:'center',marginTop:20}}>
-      <Text style={{color:'black'}}>OR</Text>
-      {currentUser == null && (
+      <View style={{alignItems: 'center', marginTop: 20}}>
+        <Text style={{color: 'black'}}>OR</Text>
+        {currentUser == null && (
           <GoogleSigninButton
             style={{width: 192, height: 48}}
             size={GoogleSigninButton.Size.Wide}
@@ -273,9 +243,6 @@ const LoginScreen = () => {
           />
         )}
       </View>
-      
-
-     
     </View>
   );
 };

@@ -10,31 +10,6 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     padding: 10,
   },
-  title: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    justifyContent: 'flex-end',
-    flexWrap: 'wrap',
-    width: wp('40%'),
-    height: hp('30%'),
-  },
-  name: {
-    color: 'black',
-    fontStyle: 'italic',
-    fontSize: 10,
-  },
-  catName: {
-    color: 'purple',
-    fontSize: 14,
-  },
-  image: {
-    width: wp('50%'),
-    height: hp('30%'),
-    borderRadius: 20,
-  },
-  comments: {
-    color: 'blue',
-  },
 
   renderContainer: {
     borderWidth: 1,
@@ -42,33 +17,50 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     padding: 10,
     borderColor: 'grey',
-    paddingVertical: 10,
-    // flexDirection: 'row',
-    marginBottom: 20,
+    paddingVertical: hp(5),
+    marginBottom: hp(2),
   },
-  details: {
-    flex: 2,
-    // flexDirection:'row'
+  imageRow: {
+    height: hp(20),
+    flexDirection: 'row',
+  },
+  textBox: {
+    height: hp(20),
+    width: wp(45),
+  },
+  title: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    flexWrap: 'wrap',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    padding: 10,
+  },
+  catName: {
+    color: 'purple',
+    fontSize: 14,
+  },
+  name: {
+    color: 'black',
+    fontStyle: 'italic',
+    fontSize: 10,
+    marginLeft: wp(5),
+  },
+  iconRow: {
+    height: hp(5),
+    marginTop: hp(2),
+    padding: hp(1),
   },
   icons: {
-    flex: 1,
-    alignItems: 'flex-end',
-    justifyContent: 'center',
-    // height:20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
   },
   plus: {
-    justifyContent: 'flex-end',
+    // justifyContent: 'flex-end',
     left: 300,
     bottom: 10,
-    position: 'absolute',
-  },
-  deleteButton: {
-    height: 20,
-    width: 20,
-  },
-  editButton: {
-    height: 20,
-    width: 20,
+    
   },
   user_icon: {
     width: 30,

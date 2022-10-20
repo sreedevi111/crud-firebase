@@ -2,6 +2,7 @@ import {StyleSheet, SafeAreaView, Alert} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import HomeScreen from '../Screens/AfterLogin/HomeScreen';
 import DetailScreen from '../Screens/AfterLogin/DetailScreen';
 import EditScreen from '../Screens/AfterLogin/EditScreen';
@@ -12,8 +13,11 @@ import auth from '@react-native-firebase/auth';
 import CategoryScreen from '../Screens/AfterLogin/CategoryScreen';
 import EditCategory from '../Screens/AfterLogin/EditCategory';
 import messaging from '@react-native-firebase/messaging';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
+import BookmarkScreen from '../Screens/AfterLogin/BookmarkScreen';
 
 const Stack = createNativeStackNavigator();
+const Tab = createBottomTabNavigator();
 
 const Navigation = () => {
   const [state, setState] = useState({loading: true, currentUser: null});
@@ -78,6 +82,51 @@ const Navigation = () => {
     setState(prev => ({...prev, currentUser: currentUser, loading: false}));
   };
 
+  const HomeTabs = () => {
+    return (
+      <Tab.Navigator
+        screenOptions={{headerShown: false}}
+        barStyle={{backgroundColor: 'black'}}>
+        <Tab.Screen
+          name="Home"
+          component={HomeScreen}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialIcon name="home" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Add"
+          component={AddPostScreen}
+          options={{
+            tabBarIcon: () => (
+              <MaterialIcon name="add-box" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Categories"
+          component={CategoryScreen}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialIcon name="category" size={24} color="black" />
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Bookmark"
+          component={BookmarkScreen}
+          options={{
+            tabBarIcon: ({color}) => (
+              <MaterialIcon name="bookmark" size={24} color="black" />
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.mainContainer}>
       <NavigationContainer>
@@ -100,8 +149,8 @@ const Navigation = () => {
             <>
               <Stack.Screen
                 options={{headerShown: false}}
-                name="Home"
-                component={HomeScreen}
+                name="HomeTabs"
+                component={HomeTabs}
               />
               <Stack.Screen
                 options={{headerShown: false}}
