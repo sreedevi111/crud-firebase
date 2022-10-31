@@ -4,7 +4,7 @@ import {styles} from './styles';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModalView from '../../../Components/ModalView';
 import auth from '@react-native-firebase/auth';
-import CheckBox from '@react-native-community/checkbox';
+// import CheckBox from '@react-native-community/checkbox';
 import Toast from 'react-native-simple-toast';
 import * as storage from '../../../Services/AsyncStorageConfig';
 
@@ -194,13 +194,13 @@ const LoginScreen = () => {
         </View>
 
         <View style={styles.checkboxContainer}>
-          <CheckBox
+          {/* <CheckBox
             value={selected}
             onValueChange={setSelected}
             boxType={'square'}
             tintColors={'black'}
             style={styles.checkbox}
-          />
+          /> */}
 
           {/* <CheckBox boxType={'square'}   animationDuration={0}  tintColors={'black'} disabled={false} value={each.checked} onValueChange={(newValue) => setToggleCheckBox(each.value, newValue, false, subid  )} /> */}
 
