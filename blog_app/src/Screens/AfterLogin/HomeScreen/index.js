@@ -5,10 +5,10 @@ import {
   TouchableOpacity,
   Image,
   ActivityIndicator,
+  LogBox,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import MaterialIcon from 'react-native-vector-icons/MaterialIcons';
 import _ from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {styles} from './styles';
@@ -59,7 +59,13 @@ const HomeScreen = ({navigation, route}) => {
         console.log('mybookmarkslist', mydata.data().bookmarks);
         set_mybookmarks([...mydata.data().bookmarks]);
       });
+
+   
   }, []);
+
+  useEffect(()=>{
+    LogBox.ignoreLogs(['Possilble Unhandled Promise']);
+  })
 
   useEffect(() => {
     if (post.length > 0) {
@@ -245,31 +251,6 @@ const HomeScreen = ({navigation, route}) => {
         renderItem={renderItem}
         keyExtractor={item => item.id}
       />
-{/* <View style={{flexDirection:'row', position:'absolute'}}>
-<TouchableOpacity
-        style={styles.plus}
-        onPress={() => {
-          navigation.navigate('Add', {});
-        }}>
-        <AntDesign name="pluscircleo" color="blue" size={25} />
-      </TouchableOpacity>
-
-      <TouchableOpacity
-        style={{width: 30}}
-        onPress={() => {
-          navigation.navigate('Category');
-        }}>
-        <MaterialIcon name="category" color="blue" size={25} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={{width: 30}}
-        onPress={() => {
-          navigation.navigate('Category');
-        }}>
-        <MaterialIcon name="category" color="blue" size={25} />
-      </TouchableOpacity>
-</View> */}
-    
     </View>
   );
 };
