@@ -22,7 +22,7 @@ const EditCategory = ({navigation, route}) => {
       return;
     }
     console.log('do we come here');
-    dispatch(editCategory({label, id: route.params.item.id}));
+    dispatch(editCategory({label, id: route.params.item.value}));
   };
 
   useEffect(() => {

@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
 import AntDesign from 'react-native-vector-icons/AntDesign';
-import _ from 'lodash';
+import _, { merge } from 'lodash';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {styles} from './styles';
 import * as storage from '../../../Services/AsyncStorageConfig';
@@ -40,8 +40,10 @@ const HomeScreen = ({navigation, route}) => {
   const post = useSelector(state => state.post.post); //downloaded posts from server
 
   const [filteredPosts, set_filteredPosts] = useState([]);
-  const [mybookmarks, set_mybookmarks] = useState([]);
+  const [mybookmarks, set_mybookmarks] = useState([]); // array of bookmark id
   const [currentuser, set_currentuser] = useState(null);
+
+  const userId = auth().currentUser._user.uid;
 
   useEffect(() => {
     dispatch(getpost());
@@ -53,19 +55,19 @@ const HomeScreen = ({navigation, route}) => {
 
     firestore()
       .collection('users')
-      .doc(currentUser._user.uid)
+      .doc(userId)
       .get()
       .then(mydata => {
+        console.log("My????", mydata)
         console.log('mybookmarkslist', mydata.data().bookmarks);
         set_mybookmarks([...mydata.data().bookmarks]);
       });
 
-   
   }, []);
 
-  useEffect(()=>{
+  useEffect(() => {
     LogBox.ignoreLogs(['Possilble Unhandled Promise']);
-  })
+  });
 
   useEffect(() => {
     if (post.length > 0) {
@@ -119,7 +121,10 @@ const HomeScreen = ({navigation, route}) => {
 
   const bookmarkToggle = itemID => {
     let index = mybookmarks.indexOf(itemID);
-    let tmpbookmarks = [...mybookmarks];
+    var tmpbookmarks = [...mybookmarks];
+     // Checking bookmark
+  console.log('What is my bookmark::::::', tmpbookmarks);
+  //
     if (index !== -1) {
       tmpbookmarks.splice(index, 1);
     } else {
@@ -127,10 +132,11 @@ const HomeScreen = ({navigation, route}) => {
     }
     firestore()
       .collection('users')
-      .doc(currentuser._user.uid)
-      .update({bookmarks: tmpbookmarks});
+      .doc(userId)
+      .set({bookmarks: tmpbookmarks}, {merge:true});
     set_mybookmarks([...tmpbookmarks]);
   };
+
 
   //For displaying items in flatlist
   const renderItem = ({item}) => {

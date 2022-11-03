@@ -40,7 +40,6 @@ export const getpost = () => {
 
 //add
 export const addpost = state => {
-  // state = state.state
   console.log('addpost::::::::', state);
   return dispatch => {
     var storedata = {
