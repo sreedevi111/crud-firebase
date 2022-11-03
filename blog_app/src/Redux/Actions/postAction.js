@@ -24,6 +24,7 @@ export const loadingchange = () => {
   };
 };
 
+
 //get
 export const getpost = () => {
   return dispatch => {
@@ -114,4 +115,5 @@ export const deletepost = id => {
         dispatch({type: DELETEPOST, payload: 'error'});
       });
   };
+
 };

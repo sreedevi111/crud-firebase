@@ -24,7 +24,11 @@ import Moment from 'moment';
 import {useSelector, useDispatch} from 'react-redux';
 import {API_URL} from '@env';
 
-import {addpost, getpost, editpost} from '../../../Redux/Actions/postAction';
+import {
+  addpost,
+  getpost,
+  editpost,
+} from '../../../Redux/Actions/postAction';
 
 const AddPostScreen = ({navigation}) => {
   const [postData, set_postData] = useState({
@@ -44,8 +48,6 @@ const AddPostScreen = ({navigation}) => {
   const [itemsPicker, set_itemsPicker] = useState([]);
 
   const categories = useSelector(state => state.category.newscategories);
-
-  
 
   useEffect(() => {
     if (categories.length > 0) {
@@ -107,6 +109,9 @@ const AddPostScreen = ({navigation}) => {
     if (selectedImage == null) {
       dispatch(getpost());
       pushNotification();
+     
+     
+     
     }
   };
 
@@ -156,6 +161,15 @@ const AddPostScreen = ({navigation}) => {
     Toast.show('Image updated successfully!!!');
     dispatch(getpost());
     pushNotification();
+    set_postData({
+      Title: '',
+      Description: '',
+      Name: '',
+      Phone: '',
+    })
+    setSelectedImage(null)
+    set_valuePicker(null)
+   
   };
 
   //Function to opt Camera and Gallery
@@ -187,54 +201,52 @@ const AddPostScreen = ({navigation}) => {
     <View style={styles.container}>
       {loading && <ActivityIndicator animating size={'large'} />}
 
+      <TextInput
+        placeholderTextColor={'grey'}
+        placeholder="Title"
+        multiline={true}
+        value={postData.Title}
+        onChangeText={text => set_postData(prev => ({...prev, Title: text}))}
+        style={styles.title}
+      />
+      <TextInput
+        placeholderTextColor={'grey'}
+        placeholder="Description"
+        multiline={true}
+        numberOfLines={5}
+        value={postData.Description}
+        onChangeText={text =>
+          set_postData(prev => ({...prev, Description: text}))
+        }
+        style={styles.name}
+      />
+      <TextInput
+        placeholderTextColor={'grey'}
+        placeholder="Name"
+        value={postData.Name}
+        autoComplete={'off'}
+        onChangeText={text => set_postData(prev => ({...prev, Name: text}))}
+        style={styles.name}
+      />
+
+      <TextInput
+        placeholderTextColor={'grey'}
+        placeholder="Phone"
+        keyboardType="numeric"
+        value={postData.Phone}
+        autoComplete={'off'}
+        onChangeText={text => set_postData(prev => ({...prev, Phone: text}))}
+        style={styles.name}
+      />
+      <DropDownPicker
+        style={{marginBottom: 20}}
+        open={openPicker}
+        value={valuePicker}
+        items={itemsPicker}
+        setOpen={set_openPicker}
+        setValue={set_valuePicker}
+      />
       <ScrollView>
-        <TextInput
-          placeholderTextColor={'grey'}
-          placeholder="Title"
-          multiline={true}
-          value={postData.Title}
-          onChangeText={text => set_postData(prev => ({...prev, Title: text}))}
-          style={styles.title}
-        />
-        <TextInput
-          placeholderTextColor={'grey'}
-          placeholder="Description"
-          multiline={true}
-          numberOfLines={5}
-          value={postData.Description}
-          onChangeText={text =>
-            set_postData(prev => ({...prev, Description: text}))
-          }
-          style={styles.name}
-        />
-        <TextInput
-          placeholderTextColor={'grey'}
-          placeholder="Name"
-          value={postData.Name}
-          autoComplete={'off'}
-          onChangeText={text => set_postData(prev => ({...prev, Name: text}))}
-          style={styles.name}
-        />
-
-        <TextInput
-          placeholderTextColor={'grey'}
-          placeholder="Phone"
-          keyboardType="numeric"
-          value={postData.Phone}
-          autoComplete={'off'}
-          onChangeText={text => set_postData(prev => ({...prev, Phone: text}))}
-          style={styles.name}
-        />
-
-        <DropDownPicker
-          style={{marginBottom: 10}}
-          open={openPicker}
-          value={valuePicker}
-          items={itemsPicker}
-          setOpen={set_openPicker}
-          setValue={set_valuePicker}
-        />
-
         <TouchableOpacity style={styles.imagePicker} onPress={openActionSheet}>
           <Text style={{color: 'black', zIndex: 0}}>
             Upload an Image &#128247;
