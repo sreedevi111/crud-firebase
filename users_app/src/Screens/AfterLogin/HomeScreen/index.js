@@ -11,7 +11,7 @@ import {API_URL} from "@env"
 
 
 
-const HomeScreen = ({navigation}) => {
+const HomeScreen = ({navigation, route}) => {
   const [data, setData] = useState([]);
   const [visited, setVisited] = useState([]);
 
@@ -20,22 +20,6 @@ const HomeScreen = ({navigation}) => {
     getVisitedData();
   }, []);
 
-  // const getData = () => {
-  //   const dataArray = [];
-  //   firestore()
-  //     .collection('Contacts')
-  //     .get()
-  //     .then(snapShot => {
-  //       console.log('Snapshot:::', snapShot);
-  //       snapShot.docs.map(each => {
-  //         dataArray.push({...each.data(), id: each.id});
-  //       });
-  //       setData(dataArray);
-  //     })
-  //     .catch(error => {
-  //       console.log('Some error in listing data', error);
-  //     });
-  // };
 
   const getVisitedData = async () => {
     try {
@@ -85,26 +69,10 @@ const HomeScreen = ({navigation}) => {
 
   const renderItem = ({item}) => {
     return (
-      // <View style={[styles.renderContainer, {backgroundColor: visited.indexOf(item.id) !== -1 ? '#3e67ed' : 'pink'}]}>
-      //   <TouchableOpacity
-      //     // style={styles.details  }
-      //     onPress={() =>
-      //       {navigation.navigate('Detail', {
-      //         item
-      //       })
-      //     setVisitedData(item.id);
-      //     }
-      //     }>
-      //     <Text style={[styles.title]}>{item.Title}</Text>
-      //     <Text style={styles.name}>Author:{item.Name}</Text>
-      //     <Text style={styles.name}>{item.Email}</Text>
-      //     <Text style={styles.name}>{item.Phone}</Text>
-      //   </TouchableOpacity>
-      // </View>
-      <View style={styles.container}>
+      <View style={styles.container} >
         <Image style={styles.imgContainer} source={{uri: item.Image}}/>
         <View>
-        <Text style={[styles.title]}>{item.Title}</Text>
+        <Text style={[styles.title]} onPress={() => {navigation.navigate('Detail', {item})}}>{item.Title}</Text>
         <View style={{flexDirection:'row', justifyContent:'space-around'}}>
 <Text style={styles.name}>{item.timeinHuman}</Text>
 <Text style={{color:'pink', fontStyle:'italic', fontSize:10,marginLeft:10}}>{item.catName}</Text>

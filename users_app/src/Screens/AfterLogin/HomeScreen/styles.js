@@ -8,7 +8,11 @@ const styles = StyleSheet.create({
   title: {
     color: 'black',
     fontSize:20,
-    fontWeight:'500'
+    fontWeight:'500',
+    width:wp(40),
+    height:hp(10),
+    // borderWidth:1,
+   
   },
 
   name: {
